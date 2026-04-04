@@ -2,17 +2,29 @@
   var toggle = document.querySelector(".nav-toggle");
   var nav = document.querySelector(".nav");
   var header = document.querySelector(".header");
+  var scrim = document.getElementById("nav-scrim");
 
   if (toggle && nav) {
     function setOpen(open) {
       nav.classList.toggle("is-open", open);
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       document.body.style.overflow = open ? "hidden" : "";
+      document.documentElement.classList.toggle("nav-menu-open", open);
+      if (scrim) {
+        scrim.classList.toggle("is-active", open);
+        scrim.setAttribute("aria-hidden", open ? "false" : "true");
+      }
     }
 
     toggle.addEventListener("click", function () {
       setOpen(!nav.classList.contains("is-open"));
     });
+
+    if (scrim) {
+      scrim.addEventListener("click", function () {
+        setOpen(false);
+      });
+    }
 
     nav.querySelectorAll("a").forEach(function (a) {
       a.addEventListener("click", function () {

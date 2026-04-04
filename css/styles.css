@@ -47,7 +47,9 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: clip;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -72,7 +74,10 @@ body {
   color: var(--color-text);
   background: var(--color-bg);
   text-rendering: optimizeLegibility;
-  overflow-x: clip;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
 }
 
 /* Touch & theme (Web Interface Guidelines) */
@@ -80,6 +85,9 @@ body {
   touch-action: manipulation;
   -webkit-tap-highlight-color: rgba(27, 111, 103, 0.12);
   color-scheme: only light;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 .site::after {
@@ -92,11 +100,56 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.site .header,
+/* 勿把 .header 写进此处：会覆盖 .header 的 position:fixed 与 z-index，导致菜单叠在正文下像「透明」 */
 .site main,
 .site .footer {
   position: relative;
   z-index: 1;
+}
+
+/* 主栏禁止横向撑出视口（避免左右拖动） */
+main#main {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 移动抽屉打开时：顶栏改为实底，避免 backdrop-filter 与下层叠在一起发「透」 */
+html.nav-menu-open .header {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(250, 250, 250, 0.98);
+}
+
+/* 抽屉背后的遮罩：在正文之上、顶栏之下，点击关闭 */
+.nav-scrim {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  .nav-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 180;
+    background: rgba(26, 26, 26, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.28s var(--ease),
+      visibility 0.28s var(--ease);
+  }
+
+  .nav-scrim.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
 }
 
 .skip {
@@ -129,7 +182,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 200;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,6 +204,8 @@ body {
 }
 
 .header__inner {
+  position: relative;
+  z-index: 2;
   width: min(100% - 2 * var(--wrap-pad), var(--max));
   margin-inline: auto;
   display: flex;
@@ -265,6 +320,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 1;
     flex-direction: column;
     align-items: stretch;
     padding: 1.5rem max(var(--wrap-pad), env(safe-area-inset-left, 0px)) calc(2rem + env(safe-area-inset-bottom, 0px))
@@ -274,16 +330,30 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    background: var(--color-surface);
+    /* 实色底，避免被父级毛玻璃或层叠误伤成「透明」 */
+    background-color: #ffffff;
+    background: #ffffff;
     border-top: 1px solid var(--color-border);
-    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.06);
+    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.1);
+    isolation: isolate;
     transform: translateX(100%);
     transition: transform 0.28s var(--ease);
     overscroll-behavior: contain;
+    will-change: transform;
   }
 
   .nav.is-open {
     transform: translateX(0);
+  }
+
+  .nav-toggle {
+    position: relative;
+    z-index: 3;
+  }
+
+  .brand {
+    position: relative;
+    z-index: 3;
   }
 
   .nav a {
