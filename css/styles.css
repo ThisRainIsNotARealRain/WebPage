@@ -1,4 +1,6 @@
-/* 非雨文化科技 — 实现自 DESIGN.md · 品牌 #1b6f67 */
+/* 非雨文化科技 — DESIGN.md #1b6f67
+   Typography/spatial: frontend-design · Breakpoints/clamp: responsive-design
+   A11y/focus/touch: Web Interface Guidelines */
 
 :root {
   --color-brand: #1b6f67;
@@ -7,11 +9,12 @@
   --color-brand-border: rgba(27, 111, 103, 0.25);
   --color-bg: #fafafa;
   --color-surface: #ffffff;
+  --color-band: #f4f7f6;
   --color-text: #1a1a1a;
   --color-text-muted: #5c5c5c;
   --color-border: rgba(0, 0, 0, 0.08);
   --font-sans: "Plus Jakarta Sans", "Noto Sans SC", system-ui, sans-serif;
-  --font-display: "Plus Jakarta Sans", "Noto Sans SC", system-ui, sans-serif;
+  --font-ui: "Plus Jakarta Sans", "Noto Sans SC", system-ui, sans-serif;
   --max: 72rem;
   --prose: 65ch;
   --radius: 12px;
@@ -52,6 +55,30 @@ body {
   background: var(--color-bg);
 }
 
+/* Touch & theme (Web Interface Guidelines) */
+.site {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(27, 111, 103, 0.12);
+  color-scheme: only light;
+}
+
+.site::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.site .header,
+.site main,
+.site .footer {
+  position: relative;
+  z-index: 1;
+}
+
 .skip {
   position: absolute;
   left: -9999px;
@@ -64,7 +91,7 @@ body {
   text-decoration: none;
 }
 
-.skip:focus {
+.skip:focus-visible {
   left: 1rem;
   top: 1rem;
   outline: 2px solid var(--color-text);
@@ -95,6 +122,8 @@ body {
   background: rgba(250, 250, 250, 0.88);
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  backdrop-filter: saturate(1.2) blur(10px);
+  -webkit-backdrop-filter: saturate(1.2) blur(10px);
 }
 
 .header.is-scrolled {
@@ -120,18 +149,61 @@ body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.65rem;
   text-decoration: none;
   color: var(--color-text);
   min-height: 44px;
   padding: 0.25rem 0;
+  min-width: 0;
 }
 
-.brand img {
-  height: clamp(2rem, 5vw, 2.5rem);
-  width: auto;
-  display: block;
+/* 顶栏：圆形标（Logo.png）+ 文字，不放 Combined 大图 */
+.brand__mark {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
   object-fit: contain;
+  display: block;
+}
+
+.brand__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.brand__line1 {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 46vw;
+}
+
+@media (min-width: 640px) {
+  .brand__line1 {
+    max-width: none;
+  }
+}
+
+.brand__line2 {
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 420px) {
+  .brand__line2 {
+    display: none;
+  }
 }
 
 .nav-toggle {
@@ -182,6 +254,7 @@ body {
     border-top: 1px solid var(--color-border);
     transform: translateX(100%);
     transition: transform 0.28s var(--ease);
+    overscroll-behavior: contain;
   }
 
   .nav.is-open {
@@ -228,6 +301,11 @@ body {
   background: var(--color-brand-muted);
 }
 
+.nav .lang:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+}
+
 /* —— Hero —— */
 .hero {
   padding-top: calc(var(--header-h) + clamp(3rem, 12vw, 6rem));
@@ -256,34 +334,80 @@ body {
   .hero__grid {
     grid-template-columns: 1fr 1fr;
   }
+
+  .hero__brandplate {
+    transform: rotate(-0.75deg);
+    transition: transform 0.35s var(--ease);
+  }
+
+  .hero__grid:hover .hero__brandplate {
+    transform: rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__brandplate,
+  .hero__grid:hover .hero__brandplate {
+    transform: none !important;
+  }
+}
+
+/* Display serif: zh / en (frontend-design pairing) */
+html[lang="zh-Hans"] .hero__title,
+html[lang="zh-Hans"] .section h2 {
+  font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+  font-weight: 700;
+}
+
+html[lang="zh-Hans"] .hero__title {
+  max-width: 24ch;
+}
+
+html[lang="en"] .hero__title,
+html[lang="en"] .section h2 {
+  font-family: "Fraunces", "Noto Serif SC", Georgia, serif;
+  font-weight: 600;
+}
+
+html[lang="en"] .hero__title {
+  max-width: min(20ch, 100%);
+}
+
+@media (min-width: 640px) {
+  html[lang="en"] .hero__title {
+    max-width: 28ch;
+  }
 }
 
 .hero__title {
-  font-family: var(--font-display);
-  font-weight: 700;
   font-size: clamp(2rem, 4.5vw + 1rem, 3.35rem);
   line-height: 1.12;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   margin: 0 0 1.25rem;
-  max-width: 15ch;
+  text-wrap: balance;
 }
 
 .hero__lede {
-  margin: 0 0 1.75rem;
+  margin: 0 0 1rem;
   font-size: clamp(1.05rem, 0.5vw + 1rem, 1.2rem);
   color: var(--color-text-muted);
   max-width: var(--prose);
   line-height: 1.65;
 }
 
+.hero__lede + .hero__lede {
+  margin-top: 0.25rem;
+}
+
 .hero__actions {
+  margin-top: 1.5rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
 
 .btn {
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: 0.02em;
@@ -296,7 +420,8 @@ body {
   min-height: 48px;
   border: none;
   cursor: pointer;
-  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease),
+    transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 
 .btn:focus-visible {
@@ -310,7 +435,13 @@ body {
 }
 
 .btn--primary:hover {
-  background: var(--color-brand-hover);
+  background-color: var(--color-brand-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(27, 111, 103, 0.22);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
 }
 
 .btn--ghost {
@@ -320,22 +451,66 @@ body {
 }
 
 .btn--ghost:hover {
-  background: var(--color-brand-muted);
+  background-color: var(--color-brand-muted);
+  border-color: var(--color-brand);
 }
 
-/* Minimal 3-system diagram (CSS + inline SVG) */
-.hero__viz {
+@media (prefers-reduced-motion: reduce) {
+  .btn--primary:hover,
+  .btn--primary:active {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Hero：英文花字 Script + 中文公司名 + 方形 Combined（仅此处放大展示） */
+.hero__brandplate {
   border-radius: var(--radius);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
-  padding: clamp(1.25rem, 3vw, 2rem);
+  padding: clamp(1.5rem, 4vw, 2.25rem);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
 }
 
-.hero__viz svg {
-  width: 100%;
+.hero__script {
+  width: min(260px, 88%);
   height: auto;
   display: block;
+  object-fit: contain;
+}
+
+.hero__brandplate-cn {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+}
+
+.hero__combined {
+  width: min(120px, 36vw);
+  height: auto;
+  display: block;
+  object-fit: contain;
+  opacity: 0.96;
+}
+
+/* 页脚：仅花字，体量小 */
+.footer__mark {
+  margin-bottom: 1.25rem;
+}
+
+.footer__script {
+  width: min(200px, 70%);
+  height: auto;
+  margin-inline: auto;
+  display: block;
+  opacity: 0.85;
 }
 
 /* —— Sections —— */
@@ -348,6 +523,7 @@ body {
 }
 
 .section__label {
+  font-family: var(--font-ui);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -357,11 +533,16 @@ body {
 }
 
 .section h2 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.65rem, 2vw + 1rem, 2.25rem);
+  font-size: clamp(1.65rem, 2vw + 1rem, 2.35rem);
   letter-spacing: -0.02em;
   margin: 0 0 1rem;
+  line-height: 1.18;
+  text-wrap: balance;
+}
+
+/* Anchor scroll under fixed header (Web Interface Guidelines) */
+.section[id] {
+  scroll-margin-top: calc(var(--header-h) + 0.75rem);
 }
 
 .section__prose {
@@ -373,6 +554,33 @@ body {
 
 .section__prose + .section__prose {
   margin-top: 1rem;
+}
+
+.section__prose--meta {
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.link-inline {
+  color: var(--color-brand-hover);
+  font-weight: 600;
+  text-underline-offset: 0.2em;
+}
+
+.link-inline:hover {
+  text-decoration: underline;
+}
+
+.link-inline:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Alternating band — rhythm & depth (frontend-design, restrained) */
+.section--band {
+  background: var(--color-band);
+  border-block: 1px solid var(--color-border);
 }
 
 /* Capability cards — container query */
@@ -404,9 +612,23 @@ body {
   border-radius: var(--radius);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+.cap-card:hover {
+  border-color: var(--color-brand-border);
+  box-shadow: 0 12px 32px rgba(27, 111, 103, 0.08);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cap-card:hover {
+    transform: none;
+  }
 }
 
 .cap-card h3 {
+  font-family: var(--font-ui);
   font-size: 1.05rem;
   font-weight: 700;
   margin: 0 0 0.5rem;
@@ -437,6 +659,18 @@ body {
   background: var(--color-brand-muted);
   color: var(--color-brand-hover);
   border: 1px solid transparent;
+  transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+.tag:hover {
+  border-color: var(--color-brand-border);
+  background: rgba(27, 111, 103, 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag:hover {
+    transform: none;
+  }
 }
 
 /* Edge list */
@@ -455,6 +689,10 @@ body {
   font-size: 0.98rem;
   color: var(--color-text-muted);
   line-height: 1.55;
+}
+
+.edge-list--mt {
+  margin-top: 2rem;
 }
 
 /* Team */
@@ -481,6 +719,12 @@ body {
   border-radius: var(--radius);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.face:hover {
+  border-color: var(--color-brand-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
 }
 
 .face__role {
@@ -504,43 +748,61 @@ body {
   color: var(--color-text-muted);
 }
 
-/* Contact */
-.contact-block {
-  margin-top: 1.5rem;
-  padding: clamp(1.5rem, 4vw, 2rem);
-  border-radius: var(--radius);
-  border: 1px solid var(--color-brand-border);
-  background: var(--color-brand-muted);
-  max-width: 32rem;
+/* Contact：与品牌竖排稿一致，无底色框 */
+.contact-stack {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
 }
 
-.contact-block a {
-  color: var(--color-brand-hover);
+.contact-stack__script {
+  width: min(280px, 88%);
+  height: auto;
+  display: block;
+}
+
+.contact-stack__cn {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.contact-stack__combined {
+  width: min(140px, 40vw);
+  height: auto;
+  display: block;
+}
+
+.contact-mail {
+  margin-top: 0.25rem;
+  font-family: var(--font-ui);
   font-weight: 700;
-  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  color: var(--color-brand);
   text-decoration: none;
   word-break: break-all;
 }
 
-.contact-block a:hover {
+.contact-mail:hover {
+  color: var(--color-brand-hover);
   text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
-.contact-block a:focus-visible {
+.contact-mail:focus-visible {
   outline: 2px solid var(--color-brand);
-  outline-offset: 3px;
+  outline-offset: 4px;
   border-radius: 4px;
-}
-
-.contact-block .hint {
-  margin: 0 0 0.35rem;
-  font-size: 0.8125rem;
-  color: var(--color-text-muted);
 }
 
 /* Footer */
 .footer {
-  padding: 2.5rem 0 3rem;
+  padding: 2.75rem 0 3rem;
   border-top: 1px solid var(--color-border);
   text-align: center;
 }

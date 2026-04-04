@@ -23,6 +23,10 @@
     window.addEventListener("resize", function () {
       if (window.matchMedia("(min-width: 900px)").matches) setOpen(false);
     });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && nav.classList.contains("is-open")) setOpen(false);
+    });
   }
 
   if (header) {
