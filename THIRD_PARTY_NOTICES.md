@@ -4,14 +4,13 @@ This website uses the following open-source front-end libraries. Runtime files a
 
 | Library | Version | Purpose | License | Source |
 | --- | --- | --- | --- | --- |
-| Anime.js | 4.5.0 | Hero and product-view motion | MIT | https://github.com/juliangarnier/anime |
+| Anime.js | 4.5.0 | Hero entrance motion | MIT | https://github.com/juliangarnier/anime |
 | Lenis | 1.3.25 | Desktop smooth scrolling | MIT | https://github.com/darkroomengineering/lenis |
-| Swiper | 14.0.6 | Accessible, touch-enabled work gallery | MIT | https://github.com/nolimits4web/swiper |
 
 The website also loads the following fonts through Google Fonts:
 
 - IBM Plex Mono
-- Instrument Serif
+- DM Serif Display
 - Manrope
 - Noto Sans SC
 - Noto Serif SC

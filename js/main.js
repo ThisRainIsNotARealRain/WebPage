@@ -5,6 +5,7 @@
   var body = document.body;
   var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var mobileNav = window.matchMedia("(max-width: 860px)");
   var animeApi = window.anime || null;
 
   root.classList.add("motion-ready");
@@ -17,16 +18,31 @@
     var toggle = document.querySelector("[data-nav-toggle]");
     var nav = document.querySelector("[data-nav]");
     var scrim = document.querySelector("[data-nav-scrim]");
+    var firstLink = nav ? nav.querySelector("a") : null;
+    var lastFocused = null;
 
     if (!toggle || !nav) return;
 
-    function setOpen(open) {
-      nav.classList.toggle("is-open", open);
-      body.classList.toggle("nav-open", open);
-      toggle.setAttribute("aria-expanded", String(open));
+    function updateMobileState(open) {
+      if (!mobileNav.matches) {
+        nav.removeAttribute("aria-hidden");
+        if ("inert" in nav) nav.inert = false;
+        return;
+      }
+
+      nav.setAttribute("aria-hidden", String(!open));
+      if ("inert" in nav) nav.inert = !open;
+    }
+
+    function setOpen(open, returnFocus) {
+      var shouldOpen = Boolean(open && mobileNav.matches);
+
+      nav.classList.toggle("is-open", shouldOpen);
+      body.classList.toggle("nav-open", shouldOpen);
+      toggle.setAttribute("aria-expanded", String(shouldOpen));
       toggle.setAttribute(
         "aria-label",
-        open
+        shouldOpen
           ? root.lang === "zh-Hans"
             ? "关闭导航"
             : "Close navigation"
@@ -34,35 +50,76 @@
             ? "打开导航"
             : "Open navigation"
       );
+
       if (scrim) {
-        scrim.classList.toggle("is-active", open);
-        scrim.setAttribute("aria-hidden", String(!open));
+        scrim.classList.toggle("is-active", shouldOpen);
+        scrim.setAttribute("aria-hidden", String(!shouldOpen));
+      }
+
+      updateMobileState(shouldOpen);
+
+      if (shouldOpen) {
+        lastFocused = document.activeElement;
+        window.setTimeout(function () {
+          if (firstLink) firstLink.focus();
+        }, reducedMotion ? 0 : 180);
+      } else if (returnFocus && lastFocused && typeof lastFocused.focus === "function") {
+        lastFocused.focus();
       }
     }
 
     toggle.addEventListener("click", function () {
-      setOpen(!nav.classList.contains("is-open"));
+      setOpen(!nav.classList.contains("is-open"), true);
     });
 
     nav.querySelectorAll("a").forEach(function (link) {
       link.addEventListener("click", function () {
-        setOpen(false);
+        setOpen(false, false);
       });
     });
 
     if (scrim) {
       scrim.addEventListener("click", function () {
-        setOpen(false);
+        setOpen(false, true);
       });
     }
 
     document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape" && nav.classList.contains("is-open")) {
+        setOpen(false, true);
+      }
+
+      if (event.key !== "Tab" || !nav.classList.contains("is-open")) return;
+
+      var focusable = Array.prototype.slice.call(
+        nav.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')
+      );
+      if (!focusable.length) return;
+
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        toggle.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        toggle.focus();
+      }
     });
 
-    window.addEventListener("resize", function () {
-      if (window.innerWidth >= 900) setOpen(false);
-    });
+    function handleBreakpointChange() {
+      setOpen(false, false);
+      updateMobileState(false);
+    }
+
+    if (typeof mobileNav.addEventListener === "function") {
+      mobileNav.addEventListener("change", handleBreakpointChange);
+    } else if (typeof mobileNav.addListener === "function") {
+      mobileNav.addListener(handleBreakpointChange);
+    }
+
+    updateMobileState(false);
   }
 
   function initScrollState() {
@@ -73,7 +130,8 @@
     function update() {
       var scrollTop = window.scrollY || document.documentElement.scrollTop;
       var scrollRange = document.documentElement.scrollHeight - window.innerHeight;
-      if (header) header.classList.toggle("is-scrolled", scrollTop > 24);
+
+      if (header) header.classList.toggle("is-scrolled", scrollTop > 28);
       if (progress) {
         var amount = scrollRange > 0 ? Math.min(scrollTop / scrollRange, 1) : 0;
         progress.style.transform = "scaleX(" + amount + ")";
@@ -84,15 +142,48 @@
     window.addEventListener(
       "scroll",
       function () {
-        if (!queued) {
-          queued = true;
-          window.requestAnimationFrame(update);
-        }
+        if (queued) return;
+        queued = true;
+        window.requestAnimationFrame(update);
       },
       { passive: true }
     );
 
     update();
+  }
+
+  function initActiveNavigation() {
+    if (!("IntersectionObserver" in window)) return;
+
+    var links = Array.prototype.slice.call(
+      document.querySelectorAll('.site-nav > a[href^="#"]')
+    );
+    if (!links.length) return;
+
+    var sections = links
+      .map(function (link) {
+        return document.querySelector(link.getAttribute("href"));
+      })
+      .filter(Boolean);
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          links.forEach(function (link) {
+            link.classList.toggle(
+              "is-active",
+              link.getAttribute("href") === "#" + entry.target.id
+            );
+          });
+        });
+      },
+      { rootMargin: "-35% 0px -58% 0px", threshold: 0 }
+    );
+
+    sections.forEach(function (section) {
+      observer.observe(section);
+    });
   }
 
   function initSmoothScroll() {
@@ -102,7 +193,7 @@
       var lenis = new window.Lenis({
         autoRaf: true,
         anchors: { offset: -72 },
-        duration: 1.05,
+        duration: 1,
         smoothWheel: true,
         syncTouch: false
       });
@@ -118,7 +209,8 @@
   function initHeroMotion() {
     var items = document.querySelectorAll("[data-hero-item]");
 
-    if (reducedMotion || !items.length) {
+    if (!items.length) return;
+    if (reducedMotion) {
       items.forEach(function (item) {
         item.style.opacity = "1";
       });
@@ -126,30 +218,21 @@
     }
 
     if (animeApi && typeof animeApi.animate === "function") {
-      var stagger = typeof animeApi.stagger === "function" ? animeApi.stagger(115) : 0;
-
       animeApi.animate("[data-hero-item]", {
         opacity: [0, 1],
-        y: [34, 0],
-        delay: stagger,
-        duration: 1050,
+        y: [28, 0],
+        delay: typeof animeApi.stagger === "function" ? animeApi.stagger(105, { start: 120 }) : 120,
+        duration: 1000,
         ease: "outExpo"
-      });
-
-      animeApi.animate(".hero__orbit span", {
-        scale: [0.8, 1],
-        opacity: [0, 1],
-        delay: typeof animeApi.stagger === "function" ? animeApi.stagger(100, { start: 360 }) : 360,
-        duration: 1400,
-        ease: "outQuart"
       });
       return;
     }
 
     items.forEach(function (item, index) {
       window.setTimeout(function () {
-        item.classList.add("is-visible");
-      }, index * 110);
+        item.style.opacity = "1";
+        item.style.transform = "none";
+      }, 100 + index * 100);
     });
   }
 
@@ -172,7 +255,7 @@
           observer.unobserve(entry.target);
         });
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
+      { rootMargin: "0px 0px -7% 0px", threshold: 0.1 }
     );
 
     revealItems.forEach(function (item) {
@@ -180,120 +263,25 @@
     });
   }
 
-  function initWorkGallery() {
-    var gallery = document.querySelector("[data-work-swiper]");
-    if (!gallery) return;
-
-    var current = document.querySelector("[data-work-current]");
-
-    if (typeof window.Swiper !== "function") {
-      gallery.classList.add("swiper-fallback");
-      return;
-    }
-
-    var swiper = new window.Swiper(gallery, {
-      slidesPerView: "auto",
-      spaceBetween: 16,
-      speed: reducedMotion ? 0 : 850,
-      grabCursor: finePointer,
-      keyboard: { enabled: true },
-      navigation: {
-        nextEl: ".work-next",
-        prevEl: ".work-prev"
-      },
-      breakpoints: {
-        760: { spaceBetween: 24 },
-        1180: { spaceBetween: 32 }
-      },
-      on: {
-        init: function (instance) {
-          if (current) current.textContent = String(instance.realIndex + 1).padStart(2, "0");
-        },
-        slideChange: function (instance) {
-          if (current) current.textContent = String(instance.realIndex + 1).padStart(2, "0");
-        }
-      }
-    });
-
-    gallery.addEventListener("keydown", function (event) {
-      if (event.key === "ArrowRight") swiper.slideNext();
-      if (event.key === "ArrowLeft") swiper.slidePrev();
-    });
-  }
-
-  function initProductTabs() {
-    var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-product-tab]"));
-    var panels = Array.prototype.slice.call(document.querySelectorAll("[data-product-panel]"));
-    if (!tabs.length || !panels.length) return;
-
-    function activate(name, focusTab) {
-      tabs.forEach(function (tab) {
-        var active = tab.dataset.productTab === name;
-        tab.setAttribute("aria-selected", String(active));
-        tab.tabIndex = active ? 0 : -1;
-        if (active && focusTab) tab.focus();
-      });
-
-      panels.forEach(function (panel) {
-        var active = panel.dataset.productPanel === name;
-        panel.hidden = !active;
-        panel.classList.toggle("is-active", active);
-
-        if (
-          active &&
-          !reducedMotion &&
-          animeApi &&
-          typeof animeApi.animate === "function"
-        ) {
-          animeApi.animate(panel.querySelectorAll(".product-panel__copy > *, .browser-frame"), {
-            opacity: [0, 1],
-            y: [22, 0],
-            delay:
-              typeof animeApi.stagger === "function"
-                ? animeApi.stagger(70)
-                : 0,
-            duration: 720,
-            ease: "outExpo"
-          });
-        }
-      });
-    }
-
-    tabs.forEach(function (tab, index) {
-      tab.addEventListener("click", function () {
-        activate(tab.dataset.productTab, false);
-      });
-
-      tab.addEventListener("keydown", function (event) {
-        var nextIndex = index;
-        if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
-        else if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
-        else if (event.key === "Home") nextIndex = 0;
-        else if (event.key === "End") nextIndex = tabs.length - 1;
-        else return;
-
-        event.preventDefault();
-        activate(tabs[nextIndex].dataset.productTab, true);
-      });
-    });
-  }
-
   function initParallax() {
-    if (reducedMotion) return;
+    if (reducedMotion || window.innerWidth < 700) return;
 
     var scenes = Array.prototype.slice.call(document.querySelectorAll("[data-parallax]"));
     if (!scenes.length) return;
+
     var queued = false;
 
     function update() {
       scenes.forEach(function (scene) {
         var image = scene.querySelector("img");
         if (!image) return;
+
         var rect = scene.getBoundingClientRect();
         if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-        var strength = Number(scene.dataset.parallax || 0.05);
+
+        var strength = Number(scene.dataset.parallax || 0.04);
         var offset = (rect.top + rect.height / 2 - window.innerHeight / 2) * strength;
-        image.style.transform = "translate3d(0," + offset.toFixed(2) + "px,0) scale(1.055)";
+        image.style.transform = "translate3d(0," + offset.toFixed(2) + "px,0) scale(1.035)";
       });
       queued = false;
     }
@@ -312,64 +300,15 @@
   function initPointerDetails() {
     if (!finePointer || reducedMotion) return;
 
-    var cursor = document.querySelector(".cursor");
-    if (cursor) {
-      var cursorLabel = cursor.querySelector("span");
-      var targetX = -100;
-      var targetY = -100;
-      var currentX = targetX;
-      var currentY = targetY;
-
-      document.addEventListener("mousemove", function (event) {
-        targetX = event.clientX;
-        targetY = event.clientY;
-      });
-
-      document.addEventListener("mouseleave", function () {
-        cursor.classList.remove("is-visible");
-      });
-
-      document.querySelectorAll("[data-cursor-label]").forEach(function (target) {
-        target.addEventListener("mouseenter", function () {
-          if (cursorLabel) cursorLabel.textContent = target.dataset.cursorLabel || "VIEW";
-          cursor.classList.add("is-visible");
-          cursor.classList.toggle("is-drag", target.dataset.cursorLabel === "DRAG");
-        });
-        target.addEventListener("mouseleave", function () {
-          cursor.classList.remove("is-visible", "is-drag");
-        });
-      });
-
-      function renderCursor() {
-        currentX += (targetX - currentX) * 0.18;
-        currentY += (targetY - currentY) * 0.18;
-        cursor.style.left = currentX + "px";
-        cursor.style.top = currentY + "px";
-        window.requestAnimationFrame(renderCursor);
-      }
-      renderCursor();
-    }
-
-    document.querySelectorAll("[data-magnetic]").forEach(function (element) {
-      element.addEventListener("mousemove", function (event) {
-        var rect = element.getBoundingClientRect();
-        var x = (event.clientX - rect.left - rect.width / 2) * 0.12;
-        var y = (event.clientY - rect.top - rect.height / 2) * 0.12;
-        element.style.transform = "translate3d(" + x + "px," + y + "px,0)";
-      });
-      element.addEventListener("mouseleave", function () {
-        element.style.transform = "";
-      });
-    });
-
     document.querySelectorAll("[data-tilt]").forEach(function (element) {
       element.addEventListener("mousemove", function (event) {
         var rect = element.getBoundingClientRect();
-        var rotateY = ((event.clientX - rect.left) / rect.width - 0.5) * 4;
-        var rotateX = (0.5 - (event.clientY - rect.top) / rect.height) * 4;
+        var rotateY = ((event.clientX - rect.left) / rect.width - 0.5) * 2.6;
+        var rotateX = (0.5 - (event.clientY - rect.top) / rect.height) * 2.6;
         element.style.transform =
-          "perspective(1000px) rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg)";
+          "perspective(1200px) rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg)";
       });
+
       element.addEventListener("mouseleave", function () {
         element.style.transform = "";
       });
@@ -378,11 +317,10 @@
 
   initNavigation();
   initScrollState();
+  initActiveNavigation();
   initSmoothScroll();
   initHeroMotion();
   initReveals();
-  initWorkGallery();
-  initProductTabs();
   initParallax();
   initPointerDetails();
 })();
