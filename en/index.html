@@ -1,325 +1,583 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="no-js">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Rain · RealRain · Rain Studio &amp; Rain Hub</title>
+    <title>RealRain — Narrative, visual production and IP development</title>
     <meta
       name="description"
-      content="From idea to world, from world to IP. Rain Studio generates anime visuals; Rain Hub organizes original worlds and IP materials. contact@realrain.co"
+      content="RealRain connects story development, visual production, narrative assets and cross-media extensions through RainStudio + RainHub."
     />
     <link rel="canonical" href="https://www.realrain.co/en/" />
     <link rel="alternate" hreflang="zh-Hans" href="https://www.realrain.co/" />
     <link rel="alternate" hreflang="en" href="https://www.realrain.co/en/" />
     <link rel="alternate" hreflang="x-default" href="https://www.realrain.co/" />
+
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Rain · RealRain" />
+    <meta property="og:site_name" content="RealRain" />
+    <meta property="og:title" content="RealRain — Narrative, visual production and IP development" />
     <meta
       property="og:description"
-      content="From idea to world, from world to IP. Rain Studio &amp; Rain Hub for creators building original worlds."
+      content="Turn a story into a complete work, then preserve what the next release needs."
     />
     <meta property="og:url" content="https://www.realrain.co/en/" />
-    <meta name="theme-color" content="#1b7f67" />
+    <meta property="og:image" content="https://www.realrain.co/assets/media/hero-world.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#0b0e0c" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600&display=swap"
       rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@14.0.6/swiper-bundle.min.css"
     />
     <link rel="stylesheet" href="../css/styles.css" />
     <link rel="icon" href="../assets/logo/Logo.png" type="image/png" />
   </head>
-  <body class="site">
-    <a class="skip" href="#main">Skip to main content</a>
-    <div id="nav-scrim" class="nav-scrim" aria-hidden="true"></div>
 
-    <header class="header" id="header">
-      <div class="header__inner">
-        <a class="brand" href="index.html" aria-label="RealRain home">
-          <img
-            class="brand__mark"
-            src="../assets/logo/Logo.png"
-            width="40"
-            height="40"
-            alt=""
-            decoding="async"
-          />
-          <span class="brand__text">
-            <span class="brand__line1">RealRain</span>
-          </span>
-        </a>
-        <button
-          type="button"
-          class="nav-toggle"
-          aria-expanded="false"
-          aria-controls="nav"
-          aria-label="Open menu"
-        >
-          <span class="bars" aria-hidden="true"></span>
-        </button>
-        <nav id="nav" class="nav" aria-label="Primary">
-          <a href="#vision">Vision</a>
-          <a href="#products">Products</a>
-          <a href="#workflow">Workflow</a>
-          <a href="#use-cases">Use cases</a>
-          <a href="#preview">Preview</a>
-          <a href="#contact">Contact</a>
-          <a class="lang" href="../index.html" lang="zh-Hans">ZH</a>
-        </nav>
-      </div>
+  <body>
+    <script>
+      document.documentElement.classList.remove("no-js");
+    </script>
+
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="page-progress" aria-hidden="true"><span></span></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="cursor" aria-hidden="true"><span>VIEW</span></div>
+    <div class="nav-scrim" data-nav-scrim aria-hidden="true"></div>
+
+    <header class="site-header" data-header>
+      <a class="site-brand" href="#top" aria-label="RealRain home">
+        <img src="../assets/logo/realrain-mark-white.svg" width="34" height="34" alt="" />
+        <span class="site-brand__name">REALRAIN</span>
+        <span class="site-brand__cn">非雨</span>
+      </a>
+
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav"
+        aria-label="Open navigation"
+        data-nav-toggle
+      >
+        <span></span><span></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Primary navigation" data-nav>
+        <a href="#work">Work</a>
+        <a href="#system">System</a>
+        <a href="#process">Approach</a>
+        <a href="#contact">Contact</a>
+        <a class="site-nav__lang" href="../index.html" lang="zh-Hans">中文</a>
+      </nav>
     </header>
 
     <main id="main">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="wrap hero__grid">
-          <div>
-            <p class="hero__eyebrow hero__anim">Rain · RealRain</p>
-            <h1 id="hero-title" class="hero__title hero__anim">
-              From idea to world,<br />from world to IP.
-            </h1>
-            <p class="hero__lede hero__anim">
-              Rain helps creators generate, manage, and extend their original worlds. With Rain Studio and Rain Hub, we
-              connect anime generation, world-building, and IP workflows—so a single spark of inspiration can grow into a
-              living universe.
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero__media" data-parallax="0.08">
+          <img
+            src="../assets/media/hero-world.webp"
+            alt="A creator overlooking a rain-soaked city and a world built from stories and images"
+            width="1672"
+            height="941"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="hero__veil" aria-hidden="true"></div>
+        <div class="hero__orbit" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+
+        <div class="hero__content">
+          <p class="hero__kicker" data-hero-item>
+            Narrative · Visual · Media Mix
+            <span>Shanghai / 2026</span>
+          </p>
+          <h1 id="hero-title" class="hero__title" data-hero-item>
+            From one story<br />
+            <em>to an IP built to keep growing.</em>
+          </h1>
+          <div class="hero__bottom" data-hero-item>
+            <p class="hero__lede">
+              RealRain is a narrative and visual company working across brand expression and IP development. We connect story development, production, narrative assets and cross-media extensions in one continuous workflow.
             </p>
-            <div class="hero__actions hero__anim">
-              <a class="btn btn--primary" href="#rain-studio">Explore Rain Studio</a>
-              <a class="btn btn--ghost" href="#rain-hub">Explore Rain Hub</a>
+            <div class="hero__actions">
+              <a class="round-link" href="#work" data-magnetic>
+                <span>View our work</span><b aria-hidden="true">↘</b>
+              </a>
+              <a class="text-link" href="#system">Explore RainStudio + RainHub</a>
             </div>
           </div>
-          <div class="hero__visual hero__anim" aria-hidden="true">
-            <div class="hero__panel hero__panel--studio">
-              <span class="hero__panel-label">Rain Studio</span>
-              <div class="hero__panel-frame">
-                <span class="hero__panel-shimmer"></span>
-              </div>
-              <span class="hero__panel-caption">Generate</span>
-            </div>
-            <div class="hero__panel hero__panel--hub">
-              <span class="hero__panel-label">Rain Hub</span>
-              <div class="hero__panel-nodes">
-                <span></span><span></span><span></span><span></span>
-              </div>
-              <span class="hero__panel-caption">Organize</span>
+        </div>
+
+        <div class="hero__index" aria-hidden="true">
+          <span>RR / 01</span>
+          <span>Scroll to enter</span>
+        </div>
+      </section>
+
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker__track">
+          <span>Story development</span><i></i>
+          <span>Visual production</span><i></i>
+          <span>Narrative assets</span><i></i>
+          <span>Media Mix</span><i></i>
+          <span>Story development</span><i></i>
+          <span>Visual production</span><i></i>
+          <span>Narrative assets</span><i></i>
+          <span>Media Mix</span><i></i>
+        </div>
+      </div>
+
+      <section class="statement section-shell" aria-labelledby="statement-title">
+        <div class="section-meta reveal">
+          <span>01</span>
+          <span>What we do</span>
+        </div>
+        <div class="statement__grid">
+          <h2 id="statement-title" class="statement__title reveal">
+            Make the story.<br />
+            Keep what makes it <strong>true.</strong>
+          </h2>
+          <div class="statement__copy reveal">
+            <p>
+              A project should not scatter when delivery ends. We preserve characters, worlds, visual rules, sources, versions, approvals and rights boundaries as reusable narrative assets, so the next release does not restart from zero.
+            </p>
+            <p>
+              RainStudio drives production and validation. RainHub maintains project understanding and continuity. Together, they support comics, animation, moving image, game visuals and other Media Mix formats.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="work-section" id="work" aria-labelledby="work-title">
+        <div class="section-shell work-section__head">
+          <div class="section-meta reveal">
+            <span>02</span>
+            <span>Selected work</span>
+          </div>
+          <div class="work-heading">
+            <h2 id="work-title" class="display-title reveal">Let the work speak first.</h2>
+            <p class="reveal">Brand narratives, characters, comics, animation, game worlds and knowledge visualisation.</p>
+          </div>
+        </div>
+
+        <div class="swiper work-swiper" data-work-swiper data-cursor-label="DRAG">
+          <div class="swiper-wrapper">
+            <article class="swiper-slide work-card work-card--wide">
+              <figure>
+                <img
+                  src="../assets/media/case-brand-narrative.webp"
+                  width="1500"
+                  height="844"
+                  loading="lazy"
+                  alt="Two characters by a waterfront, created as a narrative expression for a brand"
+                />
+                <figcaption>
+                  <span>Brand narrative</span>
+                  <strong>Turning brand ideas into characters and stories</strong>
+                  <small>Visual development · Campaign</small>
+                </figcaption>
+              </figure>
+            </article>
+
+            <article class="swiper-slide work-card work-card--portrait">
+              <figure>
+                <img
+                  src="../assets/media/case-character.webp"
+                  width="1024"
+                  height="1024"
+                  loading="lazy"
+                  alt="A complete character design for a white-feathered bird"
+                />
+                <figcaption>
+                  <span>Character design</span>
+                  <strong>From an idea to an extensible character asset</strong>
+                  <small>Character · Style guide</small>
+                </figcaption>
+              </figure>
+            </article>
+
+            <article class="swiper-slide work-card work-card--wide">
+              <figure>
+                <img
+                  src="../assets/media/case-game-cg.webp"
+                  width="1500"
+                  height="844"
+                  loading="lazy"
+                  alt="A fantasy city and characters created for game world development"
+                />
+                <figcaption>
+                  <span>Game & world</span>
+                  <strong>Characters, environments and worldbuilding</strong>
+                  <small>Key visual · Worldbuilding</small>
+                </figcaption>
+              </figure>
+            </article>
+
+            <article class="swiper-slide work-card work-card--wide">
+              <figure>
+                <img
+                  src="../assets/media/case-storyboard.webp"
+                  width="1500"
+                  height="837"
+                  loading="lazy"
+                  alt="A multi-shot storyboard for a teal-toned city narrative"
+                />
+                <figcaption>
+                  <span>Story to motion</span>
+                  <strong>Continuity, emotion and rhythm across shots</strong>
+                  <small>Storyboard · Animation</small>
+                </figcaption>
+              </figure>
+            </article>
+
+            <article class="swiper-slide work-card work-card--wide">
+              <figure>
+                <img
+                  src="../assets/media/case-earth-one-day.webp"
+                  width="1500"
+                  height="844"
+                  loading="lazy"
+                  alt="Key art for the original visual story A Day on Earth"
+                />
+                <figcaption>
+                  <span>Original story</span>
+                  <strong>Making a creative core into its first watchable work</strong>
+                  <small>Concept · Moving image</small>
+                </figcaption>
+              </figure>
+            </article>
+
+            <article class="swiper-slide work-card work-card--wide">
+              <figure>
+                <img
+                  src="../assets/media/case-science-comic.webp"
+                  width="1500"
+                  height="821"
+                  loading="lazy"
+                  alt="A science comic explaining stellar and orbital concepts"
+                />
+                <figcaption>
+                  <span>Knowledge visualisation</span>
+                  <strong>Complex information, clearly told</strong>
+                  <small>Science · Editorial</small>
+                </figcaption>
+              </figure>
+            </article>
+          </div>
+
+          <div class="work-controls section-shell">
+            <div class="work-progress"><span data-work-current>01</span><i></i><span>06</span></div>
+            <div class="work-arrows">
+              <button type="button" class="work-prev" aria-label="Previous work">←</button>
+              <button type="button" class="work-next" aria-label="Next work">→</button>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="vision" class="section section--scroll" aria-labelledby="vision-h">
-        <div class="wrap">
-          <p class="section__label">Vision</p>
-          <h2 id="vision-h">Building the creative infrastructure for original IP.</h2>
-          <p class="section__prose section__prose--lead">
-            We are building the creative infrastructure for original IP in the AI era.
+      <section class="continuity section-shell" aria-labelledby="continuity-title">
+        <div class="section-meta reveal">
+          <span>03</span>
+          <span>Continuity</span>
+        </div>
+        <div class="continuity__layout">
+          <div class="continuity__sticky">
+            <p class="eyebrow reveal">From frame to continuity</p>
+            <h2 id="continuity-title" class="display-title reveal">Every delivery should become the starting point for the next.</h2>
+            <p class="continuity__copy reveal">
+              We care about more than producing a single image or film. Characters, relationships, world rules and visual language need to hold together across releases and media.
+            </p>
+          </div>
+
+          <div class="continuity__visuals">
+            <figure class="continuity-card reveal" data-tilt>
+              <img
+                src="../assets/media/concept-media-continuity.webp"
+                width="1500"
+                height="844"
+                loading="lazy"
+                alt="One narrative world continuing across frames and media"
+              />
+              <figcaption><span>01</span>The same character and world remain legible in every form.</figcaption>
+            </figure>
+            <figure class="continuity-card continuity-card--offset reveal" data-tilt>
+              <img
+                src="../assets/media/concept-rain-aperture.webp"
+                width="1500"
+                height="844"
+                loading="lazy"
+                alt="A creative space composed of narrative references and moving-image frames"
+              />
+              <figcaption><span>02</span>Each production round leaves usable context for the next.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="system-section" id="system" aria-labelledby="system-title">
+        <div class="section-shell">
+          <div class="section-meta reveal">
+            <span>04</span>
+            <span>RainStudio + RainHub</span>
+          </div>
+          <div class="system-heading">
+            <h2 id="system-title" class="display-title reveal">Production and project understanding stay in sync.</h2>
+            <p class="reveal">
+              These are not two disconnected products. RainStudio advances the work; RainHub preserves approved project understanding. Reviewed output returns to the asset system and becomes context for what comes next.
+            </p>
+          </div>
+
+          <div class="product-tabs reveal">
+            <div class="product-tabs__list" role="tablist" aria-label="Product views">
+              <button
+                id="tab-studio"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="panel-studio"
+                data-product-tab="studio"
+              >
+                <span>01</span>RainStudio
+              </button>
+              <button
+                id="tab-hub"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="panel-hub"
+                data-product-tab="hub"
+              >
+                <span>02</span>RainHub
+              </button>
+            </div>
+
+            <div
+              class="product-panel is-active"
+              id="panel-studio"
+              role="tabpanel"
+              aria-labelledby="tab-studio"
+              data-product-panel="studio"
+            >
+              <div class="product-panel__copy">
+                <p class="eyebrow">Production & validation</p>
+                <h3>Turn an existing story into work that can be reviewed and delivered.</h3>
+                <p>
+                  RainStudio organises project context, creative tasks, agent calls, human production and review across visual development, comics, animation and moving image.
+                </p>
+                <ul>
+                  <li>Story, character and visual direction</li>
+                  <li>Storyboard, comic, animation and moving image</li>
+                  <li>Agent collaboration with human quality control</li>
+                </ul>
+              </div>
+              <div class="product-panel__screens">
+                <figure class="browser-frame browser-frame--main">
+                  <span class="browser-frame__bar"><i></i><i></i><i></i><b>RainStudio / Production</b></span>
+                  <img
+                    src="../assets/media/product-rainstudio-architecture.webp"
+                    width="1800"
+                    height="910"
+                    loading="lazy"
+                    alt="RainStudio production and agent collaboration interface"
+                  />
+                </figure>
+                <figure class="browser-frame browser-frame--float">
+                  <span class="browser-frame__bar"><i></i><i></i><i></i><b>Story context</b></span>
+                  <img
+                    src="../assets/media/product-rainstudio-story.webp"
+                    width="1500"
+                    height="1000"
+                    loading="lazy"
+                    alt="RainStudio concept view organising story context for production"
+                  />
+                </figure>
+              </div>
+            </div>
+
+            <div
+              class="product-panel"
+              id="panel-hub"
+              role="tabpanel"
+              aria-labelledby="tab-hub"
+              data-product-panel="hub"
+              hidden
+            >
+              <div class="product-panel__copy">
+                <p class="eyebrow">Context & narrative assets</p>
+                <h3>Keep project understanding alive after delivery.</h3>
+                <p>
+                  RainHub creates a shared space for characters, worlds, source material, versions, approvals and rights boundaries, so teams and agents continue from confirmed context.
+                </p>
+                <ul>
+                  <li>Characters, relationships and world rules</li>
+                  <li>Sources, versions and approval records</li>
+                  <li>Context for the next medium and release</li>
+                </ul>
+              </div>
+              <div class="product-panel__screens">
+                <figure class="browser-frame browser-frame--main">
+                  <span class="browser-frame__bar"><i></i><i></i><i></i><b>RainHub / Asset library</b></span>
+                  <img
+                    src="../assets/media/product-rainhub-library.webp"
+                    width="1800"
+                    height="908"
+                    loading="lazy"
+                    alt="RainHub narrative asset library"
+                  />
+                </figure>
+                <figure class="browser-frame browser-frame--float">
+                  <span class="browser-frame__bar"><i></i><i></i><i></i><b>Relationship graph</b></span>
+                  <img
+                    src="../assets/media/product-rainhub-graph.webp"
+                    width="1800"
+                    height="900"
+                    loading="lazy"
+                    alt="RainHub character and relationship view"
+                  />
+                </figure>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="process section-shell" id="process" aria-labelledby="process-title">
+        <div class="section-meta reveal">
+          <span>05</span>
+          <span>How we work</span>
+        </div>
+        <div class="process__heading">
+          <h2 id="process-title" class="display-title reveal">Start with the smallest complete work. Earn the next medium.</h2>
+          <p class="reveal">
+            We test a direction with a controlled production, then preserve every approved character, world, visual decision and response. Commitment grows with evidence instead of beginning with a full adaptation.
           </p>
-          <p class="section__prose">
-            Rain serves anime creators, OC artists, and original IP teams with tools from visual generation to world
-            management. We believe tomorrow's IP won't come from a single work alone—it will grow from characters,
-            lore, visual language, and continuous derivatives.
-          </p>
         </div>
-      </section>
 
-      <section id="products" class="section section--band section--scroll" aria-labelledby="products-h">
-        <div class="wrap">
-          <p class="section__label">Products</p>
-          <h2 id="products-h">Rain Studio &amp; Rain Hub</h2>
-          <p class="section__prose">
-            Two products, one goal: turn a single creative moment into a long-lived, collaborative, extensible IP.
-          </p>
-          <div class="product-grid">
-            <article id="rain-studio" class="product-card product-card--studio">
-              <div class="product-card__head">
-                <div>
-                  <h3 class="product-card__name">Rain Studio</h3>
-                  <p class="product-card__tagline-en">Generate anime stories from your imagination.</p>
-                </div>
-                <span class="badge">Internal Beta</span>
-              </div>
-              <div class="product-card__mock product-card__mock--studio" aria-hidden="true">
-                <div class="mock-frame"></div>
-                <div class="mock-timeline"><span></span><span></span><span></span></div>
-              </div>
-              <ul class="product-card__features">
-                <li>Anime video generation</li>
-                <li>Character &amp; style-driven creation</li>
-                <li>Short-form IP derivative content</li>
-              </ul>
-              <p class="product-card__desc">
-                Built for anime, characters, shorts, and IP derivatives. Go from character design and visual style to
-                watchable clips—turn the world in your head into motion you can share.
-              </p>
-            </article>
-
-            <article id="rain-hub" class="product-card product-card--hub">
-              <div class="product-card__head">
-                <div>
-                  <h3 class="product-card__name">Rain Hub</h3>
-                  <p class="product-card__tagline-en">Organize your original world into a living IP.</p>
-                </div>
-                <span class="badge badge--muted">Product Preview</span>
-              </div>
-              <div class="product-card__mock product-card__mock--hub" aria-hidden="true">
-                <div class="mock-node mock-node--root"></div>
-                <div class="mock-node mock-node--child"></div>
-                <div class="mock-node mock-node--child mock-node--alt"></div>
-              </div>
-              <ul class="product-card__features">
-                <li>Original world workspace</li>
-                <li>Character, lore &amp; story management</li>
-                <li>IP materials, versions &amp; publishing prep</li>
-              </ul>
-              <p class="product-card__desc">
-                A creative workspace for original worlds and IP. Organize characters, lore, visual assets, storylines,
-                versions, and release materials—so scattered inspiration becomes a world you can keep building on.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="workflow" class="section section--scroll" aria-labelledby="workflow-h">
-        <div class="wrap">
-          <p class="section__label">Workflow</p>
-          <h2 id="workflow-h">One pipeline from spark to IP</h2>
-          <p class="section__prose">Rain Studio and Rain Hub aren't separate tools—they're one connected creative loop.</p>
-          <ol class="workflow" aria-label="Creative workflow">
-            <li class="workflow__step">
-              <span class="workflow__dot"></span>
-              <span class="workflow__label-en">Idea</span>
-            </li>
-            <li class="workflow__step">
-              <span class="workflow__dot"></span>
-              <span class="workflow__label-en">Character</span>
-            </li>
-            <li class="workflow__step">
-              <span class="workflow__dot"></span>
-              <span class="workflow__label-en">World</span>
-            </li>
-            <li class="workflow__step">
-              <span class="workflow__dot"></span>
-              <span class="workflow__label-en">Animation</span>
-            </li>
-            <li class="workflow__step">
-              <span class="workflow__dot"></span>
-              <span class="workflow__label-en">IP</span>
-            </li>
-          </ol>
-          <div class="workflow-bridge">
-            <div class="workflow-bridge__item">
-              <strong>Rain Studio</strong>
-              <p>Visualize and animate fast—character showcases, concept films, derivative animation.</p>
+        <ol class="process-list">
+          <li class="process-item reveal">
+            <span class="process-item__index">01</span>
+            <div>
+              <h3>Existing story</h3>
+              <p>Start from a brand idea, product concept, character, world or established IP.</p>
             </div>
-            <div class="workflow-bridge__item">
-              <strong>Rain Hub</strong>
-              <p>Capture characters, lore, assets, and stories—your original world workspace and IP home base.</p>
+            <b>Source</b>
+          </li>
+          <li class="process-item reveal">
+            <span class="process-item__index">02</span>
+            <div>
+              <h3>First complete work</h3>
+              <p>Make a comic, animation, film or visual unit ready for review, release or a real business moment.</p>
             </div>
-          </div>
-        </div>
+            <b>Release</b>
+          </li>
+          <li class="process-item reveal">
+            <span class="process-item__index">03</span>
+            <div>
+              <h3>Narrative assets</h3>
+              <p>Preserve characters, worlds, visual rules, sources, versions, approvals and rights boundaries.</p>
+            </div>
+            <b>Canon</b>
+          </li>
+          <li class="process-item reveal">
+            <span class="process-item__index">04</span>
+            <div>
+              <h3>Media Mix</h3>
+              <p>Use response and partnership conditions to decide the next release, medium or commercial window.</p>
+            </div>
+            <b>Next medium</b>
+          </li>
+        </ol>
       </section>
 
-      <section id="use-cases" class="section section--band section--scroll" aria-labelledby="use-cases-h">
-        <div class="wrap">
-          <p class="section__label">Use cases</p>
-          <h2 id="use-cases-h">Built for</h2>
-          <div class="use-case-grid">
-            <article class="use-case">
-              <h3>OC creators</h3>
-              <p>Manage characters, lore, commissions, story beats, and visual style—grow an OC from a sketch into a world.</p>
-            </article>
-            <article class="use-case">
-              <h3>Anime &amp; ACG IP teams</h3>
-              <p>Organize worldbuilding, character bibles, derivatives, and release packs across ongoing production.</p>
-            </article>
-            <article class="use-case">
-              <h3>AI &amp; video creators</h3>
-              <p>Generate animation clips, concept shorts, and character content—turn ideas into watchable motion fast.</p>
-            </article>
-            <article class="use-case">
-              <h3>Publishing &amp; licensing partners</h3>
-              <p>See IP lore, assets, versions, and derivative directions clearly—lower friction before deals and approvals.</p>
-            </article>
-          </div>
+      <section class="collaboration section-shell" aria-labelledby="collaboration-title">
+        <div class="section-meta reveal">
+          <span>06</span>
+          <span>Who we work with</span>
         </div>
-      </section>
-
-      <section id="preview" class="section section--scroll section--preview" aria-labelledby="preview-h">
-        <div class="wrap">
-          <p class="section__label">Preview</p>
-          <h2 id="preview-h">Product Preview</h2>
-          <p class="section__prose">Concept interfaces and internal prototypes—not a public release yet.</p>
-        </div>
-        <div class="gallery-wrap">
-          <div class="gallery" role="list" aria-label="Product preview">
-            <article class="gallery__item gallery__item--gen" role="listitem">
-              <span class="gallery__badge">Concept</span>
-              <p class="gallery__caption">Character generation</p>
-            </article>
-            <article class="gallery__item gallery__item--story" role="listitem">
-              <span class="gallery__badge">Concept</span>
-              <p class="gallery__caption">Storyboard / animation</p>
-            </article>
-            <article class="gallery__item gallery__item--sheet" role="listitem">
-              <span class="gallery__badge">Preview</span>
-              <p class="gallery__caption">Character sheet</p>
-            </article>
-            <article class="gallery__item gallery__item--lore" role="listitem">
-              <span class="gallery__badge">Preview</span>
-              <p class="gallery__caption">World lore nodes</p>
-            </article>
-            <article class="gallery__item gallery__item--ip" role="listitem">
-              <span class="gallery__badge">Prototype</span>
-              <p class="gallery__caption">IP home concept</p>
-            </article>
-            <article class="gallery__item gallery__item--hub" role="listitem">
-              <span class="gallery__badge">Internal</span>
-              <p class="gallery__caption">Rain Hub workspace</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" class="section section--contact" aria-labelledby="contact-h">
-        <div class="wrap">
-          <p class="section__label">Contact</p>
-          <h2 id="contact-h">Work with Rain</h2>
-          <p class="section__prose">
-            Building original IP, anime content, character worlds, or AI visual work? We'd like to hear from you.
+        <div class="collaboration__top">
+          <h2 id="collaboration-title" class="display-title reveal">We work with people who already have a creative core.</h2>
+          <p class="reveal">
+            We are most useful when a proposition, story, character, world or body of knowledge already exists and needs to become clear, coherent and extensible.
           </p>
-          <div class="contact-actions">
-            <a class="btn btn--primary" href="mailto:contact@realrain.co">Contact Us</a>
-            <a class="btn btn--ghost" href="mailto:contact@realrain.co?subject=Business%20Inquiry">Business Inquiry</a>
-            <a class="btn btn--ghost" href="mailto:contact@realrain.co?subject=Waitlist">Join Waitlist</a>
-          </div>
-          <div class="contact-cta">
-            <a class="contact-cta__mail" href="mailto:contact@realrain.co">contact@realrain.co</a>
-            <p class="contact-cta__note">Copy the address or open in your mail client</p>
+        </div>
+        <div class="collaboration-list">
+          <article class="collaboration-row reveal">
+            <span>01</span>
+            <h3>Brand expression & product launches</h3>
+            <p>Develop brand propositions and product concepts into characters, scenes, comics, animation and moving image.</p>
+          </article>
+          <article class="collaboration-row reveal">
+            <span>02</span>
+            <h3>Established IP development</h3>
+            <p>Enter new formats and communication moments while preserving the core setting and recognisable identity.</p>
+          </article>
+          <article class="collaboration-row reveal">
+            <span>03</span>
+            <h3>Games, animation, publishing & cultural destinations</h3>
+            <p>Organise continuous visual development and cross-media production around characters, worlds and narrative assets.</p>
+          </article>
+          <article class="collaboration-row reveal">
+            <span>04</span>
+            <h3>Science, education & complex knowledge</h3>
+            <p>Reduce the cost of understanding through structured narrative, diagrams, comics and moving image.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="contact" id="contact" aria-labelledby="contact-title">
+        <div class="contact__media" data-parallax="0.05">
+          <img
+            src="../assets/media/case-gamebug-pair.webp"
+            width="1500"
+            height="844"
+            loading="lazy"
+            alt="Two original characters in an emotionally charged close-up"
+          />
+        </div>
+        <div class="contact__veil" aria-hidden="true"></div>
+        <div class="contact__content section-shell">
+          <p class="eyebrow reveal">Start a story with us</p>
+          <h2 id="contact-title" class="reveal">If you already have a story, we can begin with its first complete work.</h2>
+          <div class="contact__bottom reveal">
+            <p>Brand narratives, IP development, visual production, comics, animation, game visuals and knowledge visualisation.</p>
+            <a class="contact__mail" href="mailto:contact@realrain.co" data-magnetic>
+              contact@realrain.co <span aria-hidden="true">↗</span>
+            </a>
           </div>
         </div>
       </section>
     </main>
 
-    <footer class="footer">
-      <div class="wrap">
-        <div class="footer__mark">
-          <img
-            class="footer__script"
-            src="../assets/logo/Script.png"
-            width="200"
-            height="62"
-            alt="RealRain"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-        <p>© <span id="y"></span> RealRain</p>
-        <p class="poem">This rain is not a real rain · @realrain</p>
+    <footer class="site-footer">
+      <div class="site-footer__brand">
+        <img src="../assets/logo/realrain-mark-white.svg" width="58" height="58" alt="" />
+        <span>REALRAIN / 非雨</span>
       </div>
+      <p>Narrative · Visual · IP development</p>
+      <div class="site-footer__links">
+        <a href="#top">Back to top ↑</a>
+        <a href="../index.html" lang="zh-Hans">中文</a>
+        <a href="mailto:contact@realrain.co">Contact</a>
+      </div>
+      <small>© <span data-year></span> RealRain Culture & Technology</small>
     </footer>
-    <script>
-      document.getElementById("y").textContent = new Date().getFullYear();
-    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/bundles/anime.umd.min.js"
+      defer
+    ></script>
+    <script src="https://unpkg.com/lenis@1.3.25/dist/lenis.min.js" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/swiper@14.0.6/swiper-bundle.min.js"
+      defer
+    ></script>
     <script src="../js/main.js" defer></script>
   </body>
 </html>
