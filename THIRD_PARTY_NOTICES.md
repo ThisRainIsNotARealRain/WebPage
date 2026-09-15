@@ -5,7 +5,8 @@ This website uses the following open-source front-end libraries. Runtime files a
 | Library | Version | Purpose | License | Source |
 | --- | --- | --- | --- | --- |
 | Anime.js | 4.5.0 | Hero entrance motion | MIT | https://github.com/juliangarnier/anime |
-| Lenis | 1.3.25 | Desktop smooth scrolling | MIT | https://github.com/darkroomengineering/lenis |
+
+Lenis（桌面平滑滚动）已于 2026-08-21 移除。它接管滚轮事件，会跟本站的 CSS scroll-snap 分屏对齐打架，现在用浏览器原生滚动。
 
 The website also loads the following fonts through Google Fonts:
 

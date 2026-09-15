@@ -186,26 +186,6 @@
     });
   }
 
-  function initSmoothScroll() {
-    if (reducedMotion || window.innerWidth < 900 || typeof window.Lenis !== "function") return;
-
-    try {
-      var lenis = new window.Lenis({
-        autoRaf: true,
-        anchors: { offset: -72 },
-        duration: 1,
-        smoothWheel: true,
-        syncTouch: false
-      });
-
-      window.addEventListener("pagehide", function () {
-        lenis.destroy();
-      });
-    } catch (error) {
-      root.classList.add("lenis-fallback");
-    }
-  }
-
   function initHeroMotion() {
     var items = document.querySelectorAll("[data-hero-item]");
 
@@ -318,7 +298,6 @@
   initNavigation();
   initScrollState();
   initActiveNavigation();
-  initSmoothScroll();
   initHeroMotion();
   initReveals();
   initParallax();
