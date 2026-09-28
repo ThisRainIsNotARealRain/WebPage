@@ -489,31 +489,9 @@ html[lang="en"] .display em {
 .hero__content {
   display: flex;
   min-height: max(40rem, 100svh);
-  padding-top: calc(var(--header-h) + clamp(2.4rem, 8vh, 6.5rem));
+  padding-top: calc(var(--header-h) + clamp(2.8rem, 10vh, 7.5rem));
   padding-bottom: clamp(2rem, 6vh, 4rem);
   flex-direction: column;
-}
-
-.hero__kicker {
-  display: flex;
-  width: min(40rem, 100%);
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  color: var(--text-soft);
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-/* The category is the half of the kicker a first-time visitor must not miss */
-.hero__kicker span:last-child {
-  color: var(--celadon-700);
-  font-family: var(--font-body);
-  font-size: 0.86rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
 }
 
 /* News: the latest release, one line above the headline */
@@ -522,7 +500,6 @@ html[lang="en"] .display em {
   align-self: flex-start;
   align-items: center;
   gap: 0.75rem;
-  margin-top: clamp(1.4rem, 4vh, 2.8rem);
   padding: 0.3rem 0.95rem 0.3rem 0.35rem;
   border: 1px solid rgba(66, 99, 89, 0.26);
   border-radius: 999px;
@@ -1297,6 +1274,13 @@ html[lang="en"] .contact__grid > div {
   .close__content {
     padding-block: 0;
   }
+
+  /* On wide screens the centred shell drifts into the art; scene copy keeps
+     to the header's gutter so it stays over the open sky */
+  .scene .section-shell {
+    width: auto;
+    margin-inline: 4vw;
+  }
 }
 
 /* Short viewports: keep the one-screen rule on laptop-height windows */
@@ -1310,10 +1294,6 @@ html[lang="en"] .contact__grid > div {
   .hero__content {
     padding-top: calc(var(--header-h) + clamp(1.4rem, 5vh, 3rem));
     padding-bottom: clamp(1.4rem, 4vh, 2.4rem);
-  }
-
-  .hero__news {
-    margin-top: clamp(0.9rem, 2.6vh, 1.6rem);
   }
 
   .hero h1 {
@@ -1787,11 +1767,6 @@ html[lang="en"] .contact__grid > div {
     padding-bottom: 1.8rem;
   }
 
-  .hero__kicker {
-    display: grid;
-    gap: 0.4rem;
-  }
-
   /* The line breaks are set in the markup; a ch cap would halve a CJK line */
   .hero h1,
   html[lang="en"] .hero h1 {
@@ -1902,10 +1877,6 @@ html[lang="en"] .contact__grid > div {
 
   .site-brand__wordmark {
     font-size: 0.7rem;
-  }
-
-  .hero__kicker span:last-child {
-    font-size: 0.8rem;
   }
 
   .button {
