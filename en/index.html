@@ -6,7 +6,7 @@
     <title>RealRain | IP publishing platform · Physical products</title>
     <meta
       name="description"
-      content="RealRain is an IP commercialisation and publishing platform built for open creation. Consumer goods are the medium; rights holders, creators and consumers meet on one distribution network."
+      content="RealRain is an IP commercialisation and publishing platform built for open creation. Consumer goods are the medium, connecting rights holders, creators, manufacturers and consumers. Its platform, Crossroads: realrain.art."
     />
     <link rel="canonical" href="https://realrain.co/en/" />
     <link rel="alternate" hreflang="zh-Hans" href="https://realrain.co/" />
@@ -21,20 +21,28 @@
       content="An IP publishing platform built for open creation, with consumer goods as the medium."
     />
     <meta property="og:url" content="https://realrain.co/en/" />
-    <meta
-      property="og:image"
-      content="https://realrain.co/assets/media/hero-world-cel-v2-2048.webp"
-    />
+    <meta property="og:image" content="https://realrain.co/assets/media/art/dusk-terrace-og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#0f1e1a" />
+    <meta name="theme-color" content="#f7f8f5" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Latin fonts load without blocking the page: fonts.googleapis.com is unreliable from mainland China -->
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
-    <link rel="stylesheet" href="../css/styles.css?v=20260915-2" />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+    <link rel="stylesheet" href="../css/styles.css?v=20260929-2" />
     <link rel="icon" href="../assets/logo/realrain-favicon-celadon.png" type="image/png" />
   </head>
 
@@ -49,8 +57,7 @@
 
     <header class="site-header" data-header>
       <a class="site-brand" href="#top" aria-label="RealRain home">
-        <img class="site-brand__mark site-brand__mark--reverse" src="../assets/logo/realrain-logo-rain-celadon-reverse.svg" width="34" height="34" alt="" />
-        <img class="site-brand__mark site-brand__mark--layered" src="../assets/logo/realrain-logo-rain-celadon-layered.svg" width="34" height="34" alt="" />
+        <img class="site-brand__mark" src="../assets/logo/realrain-logo-rain-celadon-layered.svg" width="34" height="34" alt="" />
         <span class="site-brand__wordmark">REALRAIN</span>
         <span class="site-brand__cn">非雨</span>
       </a>
@@ -59,8 +66,8 @@
         <div class="site-nav__head" aria-hidden="true">
           <span>Navigation</span><span>RealRain / 非雨</span>
         </div>
-        <a href="#publishing"><span>01</span>Publishing</a>
-        <a href="#products"><span>02</span>Products</a>
+        <a href="#product"><span>01</span>Product</a>
+        <a href="#publishing"><span>02</span>Publishing</a>
         <a href="#partners"><span>03</span>Partners</a>
         <a href="#team"><span>04</span>Team</a>
         <a href="#contact"><span>05</span>Contact</a>
@@ -75,6 +82,9 @@
 
       <div class="site-header__actions">
         <a class="header-lang" href="../index.html" lang="zh-Hans">中文</a>
+        <a class="header-cta" href="https://realrain.art/">
+          <span>Open Crossroads</span><b aria-hidden="true">↗</b>
+        </a>
         <button
           class="nav-toggle"
           type="button"
@@ -90,54 +100,106 @@
     </header>
 
     <main id="main">
-      <section class="hero" id="top" aria-labelledby="hero-title">
-        <picture class="hero__media" data-parallax="0.045">
+      <section class="hero scene" id="top" aria-labelledby="hero-title">
+        <picture class="scene__art" data-parallax="0.04">
           <source
-            media="(max-width: 720px)"
-            srcset="
-              ../assets/media/hero-world-cel-v2-768.webp   768w,
-              ../assets/media/hero-world-cel-v2-1280.webp 1280w
-            "
-            sizes="100vw"
+            media="(max-width: 860px)"
+            srcset="../assets/media/art/dusk-terrace-m-768.webp"
+            width="768"
+            height="576"
           />
           <source
             srcset="
-              ../assets/media/hero-world-cel-v2-1280.webp 1280w,
-              ../assets/media/hero-world-cel-v2-2048.webp 2048w
+              ../assets/media/art/dusk-terrace-1280.webp 1280w,
+              ../assets/media/art/dusk-terrace-2048.webp 2048w
             "
             sizes="100vw"
           />
           <img
-            src="../assets/media/hero-world-cel-v2-2048.webp"
+            src="../assets/media/art/dusk-terrace-2048.webp"
             width="2048"
             height="1152"
-            alt="A figure stands above a city of lighthouses and sea"
+            alt="A brass telescope on a terrace at dusk, turned towards floating islands lit above a sea of clouds."
             fetchpriority="high"
           />
         </picture>
-        <div class="hero__veil" aria-hidden="true"></div>
+        <div class="scene__veil" aria-hidden="true"></div>
 
         <div class="hero__content section-shell">
           <div class="hero__kicker" data-hero-item>
             <span>RealRain 非雨</span>
             <span>IP publishing platform · Physical products</span>
           </div>
+          <a class="hero__news" href="#product" data-hero-item>
+            <b>News</b><span>Crossroads 1.0 launches on 30 September</span><i aria-hidden="true">→</i>
+          </a>
           <h1 id="hero-title" data-hero-item>
             Imagined worlds,<br />
-            <em>brought into daily life.</em>
+            <em>brought into<br />daily life.</em>
           </h1>
           <div class="hero__summary" data-hero-item>
             <p>
               RealRain is an IP commercialisation platform built for open creation. We publish
-              through consumer goods: characters and works are licensed, developed and produced
-              into things people can buy, on one distribution network shared by rights holders,
-              creators and consumers.
+              through consumer goods, connecting rights holders, creators, manufacturers and
+              consumers, and support the development, publishing and commercialisation of IP.
             </p>
             <div class="hero__actions">
-              <a class="button button--primary" href="#publishing">
-                <span>How it works</span><b aria-hidden="true">↓</b>
+              <a class="button button--primary" href="https://realrain.art/">
+                <span>Open Crossroads</span><b aria-hidden="true">↗</b>
               </a>
               <a class="button button--ghost" href="#partners">Work with us</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="platform scene" id="product" aria-labelledby="product-title">
+        <picture class="scene__art">
+          <source
+            media="(max-width: 860px)"
+            srcset="../assets/media/art/arrival-bridge-m-768.webp"
+            width="768"
+            height="576"
+          />
+          <source
+            srcset="
+              ../assets/media/art/arrival-bridge-1280.webp 1280w,
+              ../assets/media/art/arrival-bridge-2048.webp 2048w
+            "
+            sizes="100vw"
+          />
+          <img
+            src="../assets/media/art/arrival-bridge-2048.webp"
+            width="2048"
+            height="1152"
+            loading="lazy"
+            alt="A long bridge over a sea of clouds leads to a lit city in the sky, the illustration that opens Crossroads."
+          />
+        </picture>
+        <div class="scene__veil" aria-hidden="true"></div>
+
+        <div class="section-shell">
+          <div class="platform__content">
+            <div>
+              <p class="release reveal"><b>Crossroads 1.0</b><span>30 September 2026</span></p>
+              <h2 id="product-title" class="display reveal">Crossroads, a platform for <em>developing and releasing IP.</em></h2>
+            </div>
+            <p class="lede reveal">
+              Crossroads is the online platform RealRain runs. Rights holders build and run their IP
+              there, creators develop content and merchandise under licence, and goods are released in
+              the platform's market.
+            </p>
+            <ul class="features reveal">
+              <li><b>IP spaces</b><span>Characters, worlds, assets and works for each IP in one place, with versions and publishing status on record.</span></li>
+              <li><b>Licensed co-creation</b><span>Canon and assets are published by version with a creative licence; work made under it keeps its source and credits.</span></li>
+              <li><b>Workshop</b><span>Derivative content, and physical merchandise such as badges, designed from an IP's assets.</span></li>
+              <li><b>Market</b><span>Merchandise is shown and released in the market, where consumers find goods through characters and works.</span></li>
+            </ul>
+            <div class="platform__cta reveal">
+              <a class="button button--primary" href="https://realrain.art/">
+                <span>Open Crossroads</span><b aria-hidden="true">↗</b>
+              </a>
+              <span>realrain.art</span>
             </div>
           </div>
         </div>
@@ -164,13 +226,13 @@
               <p class="chain__meta"><span>01</span><b>Rights holders</b></p>
               <h3>Canon and rights</h3>
               <p class="chain__desc">Characters, worlds, works and assets are recorded together with what may be licensed and how revenue is shared.</p>
-              <p class="chain__sys"><span class="sys-rain">RainOntology</span> · <span class="sys-hub">RainHub</span></p>
+              <p class="chain__sys">Crossroads · IP space</p>
             </li>
             <li class="reveal">
               <p class="chain__meta"><span>02</span><b>Creators · Brands</b></p>
               <h3>Licensed development</h3>
               <p class="chain__desc">Content and products are developed from the canon and assets, inside the licence. Every derivative work is recorded.</p>
-              <p class="chain__sys"><span class="sys-studio">RainStudio</span></p>
+              <p class="chain__sys">Crossroads · Workshop</p>
             </li>
             <li class="reveal">
               <p class="chain__meta"><span>03</span><b>Manufacturers</b></p>
@@ -181,119 +243,18 @@
             <li class="reveal">
               <p class="chain__meta"><span>04</span><b>Consumers</b></p>
               <h3>Release</h3>
-              <p class="chain__desc">Products are shown and released on RainFair. What consumers buy and tell us adjusts the direction of the next run.</p>
-              <p class="chain__sys"><span class="sys-fair">RainFair</span></p>
+              <p class="chain__desc">Products are shown and released in the Crossroads Market. What consumers buy and tell us adjusts the direction of the next run.</p>
+              <p class="chain__sys">Crossroads · Market</p>
             </li>
           </ol>
 
           <div class="model__rule reveal">
             <b>Open creation, governed commercialisation.</b>
             <p>
-              AI has widened what can be developed from an IP, and made the rights around it more
-              tangled. Creators work with whatever tools and communities they choose; once a work
-              goes commercial, scope of use, review responsibility and revenue rules are made
-              explicit first.
+              Creators work with whatever tools and communities they choose; once a work goes
+              commercial, scope of use, review responsibility and revenue rules are made explicit
+              first.
             </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="showcase" id="products" aria-labelledby="products-title">
-        <div class="section-shell">
-          <div class="section-head">
-            <div>
-              <p class="slate reveal">RainStudio / RainHub</p>
-              <h2 id="products-title" class="display reveal">Making and <em>managing work</em></h2>
-            </div>
-            <p class="showcase__note reveal">Product demo · Assets, product specs and prices shown are test data</p>
-          </div>
-
-          <div class="showcase__grid">
-            <article class="product reveal" data-product="studio">
-              <div class="product__head">
-                <h3>RainStudio</h3>
-                <p class="product__role">Content and product development</p>
-              </div>
-              <p class="product__desc">Content creation, merchandise design and the commercial development of IP.</p>
-              <figure class="product__shot">
-                <img
-                  src="../assets/media/product-studio-merch.webp"
-                  width="1280"
-                  height="720"
-                  loading="lazy"
-                  alt="RainStudio merchandise workspace: product, size and finish on the left, a round badge design in the centre, style options on the right"
-                />
-                <figcaption>Merchandise design workspace. The same project also opens into text, image, video and audio.</figcaption>
-              </figure>
-            </article>
-
-            <article class="product reveal" data-product="hub">
-              <div class="product__head">
-                <h3>RainHub</h3>
-                <p class="product__role">Workspace for creators and IP</p>
-              </div>
-              <p class="product__desc">Organises characters, worlds and works, and connects collaboration, showcase and release.</p>
-              <figure class="product__shot">
-                <img
-                  src="../assets/media/product-hub-assets.webp"
-                  width="1280"
-                  height="720"
-                  loading="lazy"
-                  alt="RainHub project asset library: folders for characters and worlds, stories and boards, business and licensing, with versioned asset cards and publishing status"
-                />
-                <figcaption>Project asset library: content categories, work versions and publishing status.</figcaption>
-              </figure>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="showcase showcase--release" id="release" aria-labelledby="release-title">
-        <div class="section-shell">
-          <div class="section-head">
-            <div>
-              <p class="slate reveal">RainOntology / RainFair</p>
-              <h2 id="release-title" class="display reveal">Rights and <em>product release</em></h2>
-            </div>
-            <p class="showcase__note reveal">Product demo · Sample works in a test environment, not actual clients or transactions</p>
-          </div>
-
-          <div class="showcase__grid">
-            <article class="product reveal" data-product="ontology">
-              <div class="product__head">
-                <h3>RainOntology</h3>
-                <p class="product__role">Facts, assets and rights infrastructure</p>
-              </div>
-              <p class="product__desc">Records the facts of an IP and its creative assets, and manages derivative relationships and commercial licences.</p>
-              <figure class="product__shot">
-                <img
-                  src="../assets/media/product-hub-rights.webp"
-                  width="1280"
-                  height="720"
-                  loading="lazy"
-                  alt="A canon page in a co-creation workspace: character profile on the left, the usage rules for this version on the right, commercial use allowed with attribution"
-                />
-                <figcaption>Canon, assets and usage rules as they appear in a RainHub co-creation workspace.</figcaption>
-              </figure>
-            </article>
-
-            <article class="product reveal" data-product="fair">
-              <div class="product__head">
-                <h3>RainFair</h3>
-                <p class="product__role">Original-work market and product release</p>
-              </div>
-              <p class="product__desc">Hosts standard merchandise, and supports the licensing and release of merchandise.</p>
-              <figure class="product__shot">
-                <img
-                  src="../assets/media/product-fair-worlds.webp"
-                  width="1265"
-                  height="712"
-                  loading="lazy"
-                  alt="RainFair original works discovery page with cards for three original works"
-                />
-                <figcaption>Original works discovery page: from characters and works into the consumer market.</figcaption>
-              </figure>
-            </article>
           </div>
         </div>
       </section>
@@ -317,9 +278,14 @@
 
           <ul class="partners__grid">
             <li class="reveal">
-              <p class="partners__tag"><b>Product release</b><span>Rights holders</span></p>
+              <p class="partners__tag"><b>Original IP</b><span>Original creators</span></p>
+              <h3>Turn original characters and works into products</h3>
+              <p>Original creators can have RealRain publish their characters and works. RealRain organises product development, production and release, with rights and revenue shared as agreed.</p>
+            </li>
+            <li class="reveal">
+              <p class="partners__tag"><b>Merchandise hosting</b><span>Rights holders</span></p>
               <h3>Turn characters and works into products people can buy</h3>
-              <p>Rights holders can host standard merchandise on RainFair. The platform organises showcase, release and production, and adjusts product direction on what consumers buy and say.</p>
+              <p>Rights holders can host standard merchandise in the Crossroads Market. The platform organises showcase, release and production, and adjusts product direction on what consumers buy and say.</p>
             </li>
             <li class="reveal">
               <p class="partners__tag"><b>Licensed co-creation</b><span>Creators</span></p>
@@ -384,17 +350,30 @@
         </div>
       </section>
 
-      <section class="close" id="contact" aria-labelledby="close-title">
-        <div class="close__media" aria-hidden="true">
+      <section class="close scene" id="contact" aria-labelledby="close-title">
+        <picture class="scene__art">
+          <source
+            media="(max-width: 860px)"
+            srcset="../assets/media/art/welcome-loggia-m-768.webp"
+            width="768"
+            height="768"
+          />
+          <source
+            srcset="
+              ../assets/media/art/welcome-loggia-1280.webp 1280w,
+              ../assets/media/art/welcome-loggia-2048.webp 2048w
+            "
+            sizes="100vw"
+          />
           <img
-            src="../assets/media/concept-rain-aperture.webp"
-            width="1500"
-            height="844"
+            src="../assets/media/art/welcome-loggia-2048.webp"
+            width="2048"
+            height="1152"
             loading="lazy"
             alt=""
           />
-        </div>
-        <div class="close__veil" aria-hidden="true"></div>
+        </picture>
+        <div class="scene__veil" aria-hidden="true"></div>
 
         <div class="close__content section-shell">
           <div class="close__vision">
@@ -414,6 +393,16 @@
                   <a href="mailto:contact@realrain.co">contact@realrain.co <b aria-hidden="true">↗</b></a>
                 </dd>
               </div>
+              <div class="reveal">
+                <dt>Platform</dt>
+                <dd>
+                  <a href="https://realrain.art/">realrain.art <b aria-hidden="true">↗</b></a>
+                </dd>
+              </div>
+              <div class="reveal">
+                <dt>Office</dt>
+                <dd class="contact__address">U-Center, 28 Chengfu Road, Haidian District, Beijing</dd>
+              </div>
             </dl>
           </div>
         </div>
@@ -428,16 +417,14 @@
       <p>IP publishing platform. Consumer goods as the medium.</p>
       <div class="site-footer__links">
         <a href="#top">Back to top ↑</a>
+        <a href="https://realrain.art/">Open Crossroads ↗</a>
         <a href="../index.html" lang="zh-Hans">中文</a>
         <a href="mailto:contact@realrain.co">Contact</a>
       </div>
       <small>© <span data-year></span> RealRain / 非雨</small>
     </footer>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/bundles/anime.umd.min.js"
-      defer
-    ></script>
-    <script src="../js/main.js?v=20260915-2" defer></script>
+    <script src="../js/vendor/anime.umd.min.js?v=4.5.0" defer></script>
+    <script src="../js/main.js?v=20260929-2" defer></script>
   </body>
 </html>

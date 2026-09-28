@@ -6,7 +6,7 @@
     <title>非雨 RealRain｜IP 出版平台 · 实体商业化出版</title>
     <meta
       name="description"
-      content="非雨是面向开放创作的 IP 商业化发行平台，以消费品为出版媒介，连接 IP 方、创作者与消费者，支持 IP 的开发、出版与商业化。"
+      content="非雨是面向开放创作的 IP 商业化发行平台，以消费品为出版媒介，连接 IP 方、创作者、生产方与消费者。交汇地：realrain.art。"
     />
     <link rel="canonical" href="https://realrain.co/" />
     <link rel="alternate" hreflang="zh-Hans" href="https://realrain.co/" />
@@ -18,23 +18,32 @@
     <meta property="og:title" content="非雨 RealRain｜让想象世界，进入现实生活" />
     <meta
       property="og:description"
-      content="面向开放创作的 IP 商业化发行平台。以消费品为出版媒介，连接 IP 方、创作者与消费者。"
+      content="面向开放创作的 IP 商业化发行平台。以消费品为出版媒介，连接 IP 方、创作者、生产方与消费者。"
     />
     <meta property="og:url" content="https://realrain.co/" />
-    <meta
-      property="og:image"
-      content="https://realrain.co/assets/media/hero-world-cel-v2-2048.webp"
-    />
+    <meta property="og:image" content="https://realrain.co/assets/media/art/dusk-terrace-og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#0f1e1a" />
+    <meta name="theme-color" content="#f7f8f5" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="assets/fonts/noto-serif-sc-500.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- Latin fonts load without blocking the page: fonts.googleapis.com is unreliable from mainland China -->
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
-    <link rel="stylesheet" href="css/styles.css?v=20260915-2" />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+    <link rel="stylesheet" href="css/styles.css?v=20260929-2" />
     <link rel="icon" href="assets/logo/realrain-favicon-celadon.png" type="image/png" />
   </head>
 
@@ -49,8 +58,7 @@
 
     <header class="site-header" data-header>
       <a class="site-brand" href="#top" aria-label="RealRain 非雨首页">
-        <img class="site-brand__mark site-brand__mark--reverse" src="assets/logo/realrain-logo-rain-celadon-reverse.svg" width="34" height="34" alt="" />
-        <img class="site-brand__mark site-brand__mark--layered" src="assets/logo/realrain-logo-rain-celadon-layered.svg" width="34" height="34" alt="" />
+        <img class="site-brand__mark" src="assets/logo/realrain-logo-rain-celadon-layered.svg" width="34" height="34" alt="" />
         <span class="site-brand__wordmark">REALRAIN</span>
         <span class="site-brand__cn">非雨</span>
       </a>
@@ -59,8 +67,8 @@
         <div class="site-nav__head" aria-hidden="true">
           <span>Navigation</span><span>RealRain / 非雨</span>
         </div>
-        <a href="#publishing"><span>01</span>出版</a>
-        <a href="#products"><span>02</span>产品</a>
+        <a href="#product"><span>01</span>产品</a>
+        <a href="#publishing"><span>02</span>出版</a>
         <a href="#partners"><span>03</span>合作</a>
         <a href="#team"><span>04</span>团队</a>
         <a href="#contact"><span>05</span>联系</a>
@@ -75,6 +83,9 @@
 
       <div class="site-header__actions">
         <a class="header-lang" href="en/index.html" lang="en">EN</a>
+        <a class="header-cta" href="https://realrain.art/">
+          <span>进入交汇地</span><b aria-hidden="true">↗</b>
+        </a>
         <button
           class="nav-toggle"
           type="button"
@@ -90,51 +101,102 @@
     </header>
 
     <main id="main">
-      <section class="hero" id="top" aria-labelledby="hero-title">
-        <picture class="hero__media" data-parallax="0.045">
+      <section class="hero scene" id="top" aria-labelledby="hero-title">
+        <picture class="scene__art" data-parallax="0.04">
           <source
-            media="(max-width: 720px)"
-            srcset="
-              assets/media/hero-world-cel-v2-768.webp   768w,
-              assets/media/hero-world-cel-v2-1280.webp 1280w
-            "
-            sizes="100vw"
+            media="(max-width: 860px)"
+            srcset="assets/media/art/dusk-terrace-m-768.webp"
+            width="768"
+            height="576"
           />
           <source
             srcset="
-              assets/media/hero-world-cel-v2-1280.webp 1280w,
-              assets/media/hero-world-cel-v2-2048.webp 2048w
+              assets/media/art/dusk-terrace-1280.webp 1280w,
+              assets/media/art/dusk-terrace-2048.webp 2048w
             "
             sizes="100vw"
           />
           <img
-            src="assets/media/hero-world-cel-v2-2048.webp"
+            src="assets/media/art/dusk-terrace-2048.webp"
             width="2048"
             height="1152"
-            alt="一个人站在高处，面前是由灯塔与海构成的城市"
+            alt="黄昏的观景台上，一架黄铜望远镜朝向云海，远处的浮岛亮起灯火。"
             fetchpriority="high"
           />
         </picture>
-        <div class="hero__veil" aria-hidden="true"></div>
+        <div class="scene__veil" aria-hidden="true"></div>
 
         <div class="hero__content section-shell">
           <div class="hero__kicker" data-hero-item>
             <span>非雨 RealRain</span>
             <span>IP 出版平台 · 实体商业化出版</span>
           </div>
+          <a class="hero__news" href="#product" data-hero-item>
+            <b>动态</b><span>交汇地 1.0 于 9 月 30 日发布</span><i aria-hidden="true">→</i>
+          </a>
           <h1 id="hero-title" data-hero-item>
             让想象世界，<br />
             <em>进入现实生活。</em>
           </h1>
           <div class="hero__summary" data-hero-item>
             <p>
-              非雨是面向开放创作的 IP 商业化发行平台。我们以消费品为出版媒介，让角色与作品经过授权、开发与生产，成为可以买到的商品；IP 方、创作者与消费者，在这里连成一张发行网络。
+              非雨是面向开放创作的 IP 商业化发行平台。我们以消费品为出版媒介，连接 IP 方、创作者、生产方与消费者，支持 IP 的开发、出版与商业化。
             </p>
             <div class="hero__actions">
-              <a class="button button--primary" href="#publishing">
-                <span>怎样出版</span><b aria-hidden="true">↓</b>
+              <a class="button button--primary" href="https://realrain.art/">
+                <span>进入交汇地</span><b aria-hidden="true">↗</b>
               </a>
               <a class="button button--ghost" href="#partners">合作方式</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="platform scene" id="product" aria-labelledby="product-title">
+        <picture class="scene__art">
+          <source
+            media="(max-width: 860px)"
+            srcset="assets/media/art/arrival-bridge-m-768.webp"
+            width="768"
+            height="576"
+          />
+          <source
+            srcset="
+              assets/media/art/arrival-bridge-1280.webp 1280w,
+              assets/media/art/arrival-bridge-2048.webp 2048w
+            "
+            sizes="100vw"
+          />
+          <img
+            src="assets/media/art/arrival-bridge-2048.webp"
+            width="2048"
+            height="1152"
+            loading="lazy"
+            alt="云海上的长桥通往一座亮灯的浮空城，这是交汇地首页的插画。"
+          />
+        </picture>
+        <div class="scene__veil" aria-hidden="true"></div>
+
+        <div class="section-shell">
+          <div class="platform__content">
+            <div>
+              <p class="release reveal"><b>交汇地 1.0</b><span>2026 年 9 月 30 日发布</span></p>
+              <h2 id="product-title" class="display reveal">交汇地，<br /><span class="nw">IP 的开发与<em>发行平台。</em></span></h2>
+            </div>
+            <p class="lede reveal">
+              交汇地是非雨运营的线上平台。IP 方在这里建立和经营 IP，创作者在授权范围内开发内容与周边，商品在平台市集发行。
+            </p>
+            <ul class="features reveal">
+              <li><b>IP 空间</b><span>为每个 IP 集中管理角色、世界观、素材与作品，版本与发布状态都可查。</span></li>
+              <li><b>授权共创</b><span>设定与素材连同创作许可按版本发布，创作者取得授权后开发，作品保留来源与署名。</span></li>
+              <li><b>工房</b><span>加工内容衍生品，设计吧唧等实体周边。</span></li>
+              <li><b>市集</b><span>周边商品在平台市集展示与发行，消费者从角色与作品找到商品。</span></li>
+            </ul>
+            <div class="platform__cta reveal">
+              <a class="button button--primary" href="https://realrain.art/">
+                <span>进入交汇地</span><b aria-hidden="true">↗</b>
+              </a>
+              <span>realrain.art</span>
             </div>
           </div>
         </div>
@@ -146,7 +208,7 @@
             <div>
               <p class="slate reveal">How IP gets published</p>
               <h2 id="publishing-title" class="display reveal">
-                消费品，是新的<em>出版媒介。</em>
+                消费品，<br /><span class="nw">是新的<em>出版媒介。</em></span>
               </h2>
             </div>
             <p class="lede reveal">
@@ -159,13 +221,13 @@
               <p class="chain__meta"><span>01</span><b>IP 方</b></p>
               <h3>设定与权利</h3>
               <p class="chain__desc">角色、世界观、作品与素材，连同可以授权的范围和收益规则，一起记录在案。</p>
-              <p class="chain__sys"><span class="sys-rain">RainOntology</span> · <span class="sys-hub">RainHub</span></p>
+              <p class="chain__sys">交汇地 · IP 空间</p>
             </li>
             <li class="reveal">
               <p class="chain__meta"><span>02</span><b>创作者 · 品牌方</b></p>
               <h3>授权开发</h3>
               <p class="chain__desc">在授权范围内，围绕设定与素材开发内容和商品。每一件作品的衍生关系都有记录。</p>
-              <p class="chain__sys"><span class="sys-studio">RainStudio</span></p>
+              <p class="chain__sys">交汇地 · 工房</p>
             </li>
             <li class="reveal">
               <p class="chain__meta"><span>03</span><b>生产方</b></p>
@@ -176,116 +238,16 @@
             <li class="reveal">
               <p class="chain__meta"><span>04</span><b>消费者</b></p>
               <h3>发行</h3>
-              <p class="chain__desc">商品在 RainFair 展示与发行。消费者的购买与反馈，用来调整下一批商品的方向。</p>
-              <p class="chain__sys"><span class="sys-fair">RainFair</span></p>
+              <p class="chain__desc">商品在交汇地市集展示与发行。消费者的购买与反馈，用来调整下一批商品的方向。</p>
+              <p class="chain__sys">交汇地 · 市集</p>
             </li>
           </ol>
 
           <div class="model__rule reveal">
             <b>开放创作，治理商业化。</b>
             <p>
-              AI 扩大了 IP 的开发空间，也让权利关系更加复杂。创作者可以用不同的工具、在不同的社区里创作；作品进入商业化时，使用范围、审核责任与收益规则都要先明确。
+              创作者可以用不同的工具、在不同的社区里创作；作品进入商业化时，使用范围、审核责任与收益规则都要先明确。
             </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="showcase" id="products" aria-labelledby="products-title">
-        <div class="section-shell">
-          <div class="section-head">
-            <div>
-              <p class="slate reveal">RainStudio / RainHub</p>
-              <h2 id="products-title" class="display reveal">创作与<em>作品管理</em></h2>
-            </div>
-            <p class="showcase__note reveal">产品演示 · 图中素材、商品规格与价格为测试数据</p>
-          </div>
-
-          <div class="showcase__grid">
-            <article class="product reveal" data-product="studio">
-              <div class="product__head">
-                <h3>RainStudio</h3>
-                <p class="product__role">内容与商品开发工具</p>
-              </div>
-              <p class="product__desc">支持内容创作、周边设计，以及 IP 的商业化开发。</p>
-              <figure class="product__shot">
-                <img
-                  src="assets/media/product-studio-merch.webp"
-                  width="1280"
-                  height="720"
-                  loading="lazy"
-                  alt="RainStudio 周边设计工作区：左侧选择商品、规格与材质，中间是圆形吧唧的设计稿，右侧是可选款式"
-                />
-                <figcaption>周边设计工作区。同一个项目还可以进入文本、图片、视频与音频创作。</figcaption>
-              </figure>
-            </article>
-
-            <article class="product reveal" data-product="hub">
-              <div class="product__head">
-                <h3>RainHub</h3>
-                <p class="product__role">创作者与 IP 的工作空间</p>
-              </div>
-              <p class="product__desc">组织角色、世界观与作品，连接协作、展示和发行。</p>
-              <figure class="product__shot">
-                <img
-                  src="assets/media/product-hub-assets.webp"
-                  width="1280"
-                  height="720"
-                  loading="lazy"
-                  alt="RainHub 项目资产库：左侧按角色与世界、故事与分镜、商业与授权等分类，右侧是带版本号与发布状态的资产卡片"
-                />
-                <figcaption>项目资产库：内容分类、作品版本与发布状态。</figcaption>
-              </figure>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="showcase showcase--release" id="release" aria-labelledby="release-title">
-        <div class="section-shell">
-          <div class="section-head">
-            <div>
-              <p class="slate reveal">RainOntology / RainFair</p>
-              <h2 id="release-title" class="display reveal">权利与<em>商品发行</em></h2>
-            </div>
-            <p class="showcase__note reveal">产品演示 · 测试环境中的示例作品，不代表实际客户与交易</p>
-          </div>
-
-          <div class="showcase__grid">
-            <article class="product reveal" data-product="ontology">
-              <div class="product__head">
-                <h3>RainOntology</h3>
-                <p class="product__role">事实、资产与权利基础设施</p>
-              </div>
-              <p class="product__desc">记录 IP 事实与创作资产，管理衍生关系与商业授权。</p>
-              <figure class="product__shot">
-                <img
-                  src="assets/media/product-hub-rights.webp"
-                  width="1280"
-                  height="720"
-                  loading="lazy"
-                  alt="共创工作区中的设定集页面：左侧是角色设定，右侧列出这一版的使用规则，可商用、需署名"
-                />
-                <figcaption>设定、素材与使用规则，在 RainHub 共创工作区中的呈现。</figcaption>
-              </figure>
-            </article>
-
-            <article class="product reveal" data-product="fair">
-              <div class="product__head">
-                <h3>RainFair</h3>
-                <p class="product__role">原创市集与商品发行平台</p>
-              </div>
-              <p class="product__desc">提供标准品周边托管，支持周边商品授权与发行。</p>
-              <figure class="product__shot">
-                <img
-                  src="assets/media/product-fair-worlds.webp"
-                  width="1265"
-                  height="712"
-                  loading="lazy"
-                  alt="RainFair 原创作品发现页，标题为「每个喜欢，都有一个世界」，下方是三部原创作品的卡片"
-                />
-                <figcaption>原创作品发现页：从角色与作品进入消费者市集。</figcaption>
-              </figure>
-            </article>
           </div>
         </div>
       </section>
@@ -296,7 +258,7 @@
             <div>
               <p class="slate reveal">Partnerships</p>
               <h2 id="partners-title" class="display reveal">
-                与非雨合作，<em>开展 IP 商业化。</em>
+                与非雨合作，<br /><span class="nw"><em>开展 IP 商业化。</em></span>
               </h2>
             </div>
             <div class="section-head__aside reveal">
@@ -309,18 +271,23 @@
 
           <ul class="partners__grid">
             <li class="reveal">
-              <p class="partners__tag"><b>商品发行</b><span>IP 方</span></p>
-              <h3>让角色与作品成为可购买的商品</h3>
-              <p>IP 方可以通过 RainFair 托管标准品周边，由平台组织商品展示、发行与生产协作，并结合消费者的购买与反馈调整商品方向。</p>
+              <p class="partners__tag"><b>原创 IP 发行</b><span>原创作者</span></p>
+              <h3><span class="nw">把原创角色与作品</span><span class="nw">做成商品</span></h3>
+              <p>原创作者可以把角色与作品交由非雨发行。非雨组织商品开发、生产与发行，权利与收益按约定划分。</p>
+            </li>
+            <li class="reveal">
+              <p class="partners__tag"><b>标准品周边托管</b><span>IP 方</span></p>
+              <h3><span class="nw">让角色与作品</span><span class="nw">成为可购买的商品</span></h3>
+              <p>IP 方可以通过交汇地市集托管标准品周边，由平台组织商品展示、发行与生产协作，并结合消费者的购买与反馈调整商品方向。</p>
             </li>
             <li class="reveal">
               <p class="partners__tag"><b>授权共创</b><span>创作者</span></p>
-              <h3>参与 IP 开发，让作品进入商业化</h3>
+              <h3><span class="nw">参与 IP 开发，</span><span class="nw">让作品进入商业化</span></h3>
               <p>创作者可以在授权范围内，围绕 IP 的设定与素材开发内容及商品。平台记录作品与衍生关系，明确商业使用与收益规则。</p>
             </li>
             <li class="reveal">
               <p class="partners__tag"><b>品牌授权</b><span>品牌方</span></p>
-              <h3>将 IP 引入品牌商品，拓展更多消费品类</h3>
+              <h3><span class="nw">将 IP 引入品牌商品，</span><span class="nw">拓展更多消费品类</span></h3>
               <p>品牌方可以围绕自身的受众、品类与渠道，与 IP 方开展品牌授权合作，把角色与作品用于商品，并协同后续发行。</p>
             </li>
             <li class="reveal">
@@ -337,7 +304,7 @@
           <div class="section-head section-head--single">
             <div>
               <p class="slate reveal">Team</p>
-              <h2 id="team-title" class="display reveal">技术、创作者运营<em>与权利协作</em></h2>
+              <h2 id="team-title" class="display reveal"><span class="nw">技术、创作者运营</span><em class="nw">与权利协作</em></h2>
             </div>
           </div>
 
@@ -376,17 +343,30 @@
         </div>
       </section>
 
-      <section class="close" id="contact" aria-labelledby="close-title">
-        <div class="close__media" aria-hidden="true">
+      <section class="close scene" id="contact" aria-labelledby="close-title">
+        <picture class="scene__art">
+          <source
+            media="(max-width: 860px)"
+            srcset="assets/media/art/welcome-loggia-m-768.webp"
+            width="768"
+            height="768"
+          />
+          <source
+            srcset="
+              assets/media/art/welcome-loggia-1280.webp 1280w,
+              assets/media/art/welcome-loggia-2048.webp 2048w
+            "
+            sizes="100vw"
+          />
           <img
-            src="assets/media/concept-rain-aperture.webp"
-            width="1500"
-            height="844"
+            src="assets/media/art/welcome-loggia-2048.webp"
+            width="2048"
+            height="1152"
             loading="lazy"
             alt=""
           />
-        </div>
-        <div class="close__veil" aria-hidden="true"></div>
+        </picture>
+        <div class="scene__veil" aria-hidden="true"></div>
 
         <div class="close__content section-shell">
           <div class="close__vision">
@@ -406,6 +386,16 @@
                   <a href="mailto:contact@realrain.co">contact@realrain.co <b aria-hidden="true">↗</b></a>
                 </dd>
               </div>
+              <div class="reveal">
+                <dt>平台</dt>
+                <dd>
+                  <a href="https://realrain.art/">realrain.art <b aria-hidden="true">↗</b></a>
+                </dd>
+              </div>
+              <div class="reveal">
+                <dt>地址</dt>
+                <dd class="contact__address">北京市海淀区成府路 28 号 优盛大厦</dd>
+              </div>
             </dl>
           </div>
         </div>
@@ -420,16 +410,14 @@
       <p>IP publishing platform. Consumer goods as the medium.</p>
       <div class="site-footer__links">
         <a href="#top">回到顶部 ↑</a>
+        <a href="https://realrain.art/">进入交汇地 ↗</a>
         <a href="en/index.html" lang="en">English</a>
         <a href="mailto:contact@realrain.co">联系</a>
       </div>
       <small>© <span data-year></span> RealRain / 非雨</small>
     </footer>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/bundles/anime.umd.min.js"
-      defer
-    ></script>
-    <script src="js/main.js?v=20260915-2" defer></script>
+    <script src="js/vendor/anime.umd.min.js?v=4.5.0" defer></script>
+    <script src="js/main.js?v=20260929-2" defer></script>
   </body>
 </html>

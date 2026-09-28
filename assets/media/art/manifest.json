@@ -1,0 +1,182 @@
+[
+  {
+    "name": "dusk-terrace",
+    "title": "黄昏观景台",
+    "source": "RealRain_Homepage_DuskTerrace_v9_2026-09-27/RealRain_Homepage_DuskTerrace_v9.svg",
+    "sourceSha256": "4e0b6473aa89bc67553363393b01332ff210024b66b0b6422b0053327cb94aa5",
+    "files": [
+      {
+        "file": "dusk-terrace-768.webp",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "width": 768,
+        "height": 432,
+        "bytes": 23722
+      },
+      {
+        "file": "dusk-terrace-1280.webp",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "width": 1280,
+        "height": 720,
+        "bytes": 56264
+      },
+      {
+        "file": "dusk-terrace-2048.webp",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "width": 2048,
+        "height": 1152,
+        "bytes": 115320
+      },
+      {
+        "file": "dusk-terrace-m-768.webp",
+        "box": [
+          740,
+          70,
+          1140,
+          855
+        ],
+        "width": 768,
+        "height": 576,
+        "bytes": 36698
+      },
+      {
+        "file": "dusk-terrace-og.jpg",
+        "box": [
+          0,
+          36,
+          1920,
+          1008
+        ],
+        "width": 1200,
+        "height": 630,
+        "bytes": 94690
+      }
+    ]
+  },
+  {
+    "name": "arrival-bridge",
+    "title": "抵达长桥",
+    "source": "RealRain_Jiaohui_Background_Options_v1_2026-09-27/A_抵达长桥.svg",
+    "sourceSha256": "d8da575c178608b3a81ba3958c8f1a6f65b76c19c73fdcf30af7dc424a89534c",
+    "files": [
+      {
+        "file": "arrival-bridge-768.webp",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "width": 768,
+        "height": 432,
+        "bytes": 23250
+      },
+      {
+        "file": "arrival-bridge-1280.webp",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "width": 1280,
+        "height": 720,
+        "bytes": 47108
+      },
+      {
+        "file": "arrival-bridge-2048.webp",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "width": 2048,
+        "height": 1152,
+        "bytes": 96238
+      },
+      {
+        "file": "arrival-bridge-m-768.webp",
+        "box": [
+          900,
+          70,
+          1020,
+          765
+        ],
+        "width": 768,
+        "height": 576,
+        "bytes": 36950
+      }
+    ]
+  },
+  {
+    "name": "welcome-loggia",
+    "title": "迎宾凉廊",
+    "source": "RealRain_Jiaohui_Background_Options_v1_2026-09-27/C_迎宾凉廊.svg",
+    "sourceSha256": "e233004792194fd8b3ed76629ab8ecb1e5c83af0e62a98f7f77e49f7f3499c5c",
+    "files": [
+      {
+        "file": "welcome-loggia-768.webp",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "width": 768,
+        "height": 432,
+        "bytes": 24532
+      },
+      {
+        "file": "welcome-loggia-1280.webp",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "width": 1280,
+        "height": 720,
+        "bytes": 55946
+      },
+      {
+        "file": "welcome-loggia-2048.webp",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "width": 2048,
+        "height": 1152,
+        "bytes": 113354
+      },
+      {
+        "file": "welcome-loggia-m-768.webp",
+        "box": [
+          900,
+          60,
+          1020,
+          1020
+        ],
+        "width": 768,
+        "height": 768,
+        "bytes": 45768
+      }
+    ]
+  }
+]

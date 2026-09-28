@@ -1,0 +1,39 @@
+{
+  "sourceRoot": "C:/Users/BeichenXu/Documents/ChatGPT/BP/outputs/Brand",
+  "art": [
+    {
+      "name": "dusk-terrace",
+      "title": "黄昏观景台",
+      "source": "RealRain_Homepage_DuskTerrace_v9_2026-09-27/RealRain_Homepage_DuskTerrace_v9.svg",
+      "outputs": [
+        { "suffix": "768", "box": [0, 0, 1920, 1080], "width": 768 },
+        { "suffix": "1280", "box": [0, 0, 1920, 1080], "width": 1280 },
+        { "suffix": "2048", "box": [0, 0, 1920, 1080], "width": 2048 },
+        { "suffix": "m-768", "box": [740, 70, 1140, 855], "width": 768 },
+        { "suffix": "og", "box": [0, 36, 1920, 1008], "width": 1200, "format": "jpg" }
+      ]
+    },
+    {
+      "name": "arrival-bridge",
+      "title": "抵达长桥",
+      "source": "RealRain_Jiaohui_Background_Options_v1_2026-09-27/A_抵达长桥.svg",
+      "outputs": [
+        { "suffix": "768", "box": [0, 0, 1920, 1080], "width": 768 },
+        { "suffix": "1280", "box": [0, 0, 1920, 1080], "width": 1280 },
+        { "suffix": "2048", "box": [0, 0, 1920, 1080], "width": 2048 },
+        { "suffix": "m-768", "box": [900, 70, 1020, 765], "width": 768 }
+      ]
+    },
+    {
+      "name": "welcome-loggia",
+      "title": "迎宾凉廊",
+      "source": "RealRain_Jiaohui_Background_Options_v1_2026-09-27/C_迎宾凉廊.svg",
+      "outputs": [
+        { "suffix": "768", "box": [0, 0, 1920, 1080], "width": 768 },
+        { "suffix": "1280", "box": [0, 0, 1920, 1080], "width": 1280 },
+        { "suffix": "2048", "box": [0, 0, 1920, 1080], "width": 2048 },
+        { "suffix": "m-768", "box": [900, 60, 1020, 1020], "width": 768 }
+      ]
+    }
+  ]
+}
