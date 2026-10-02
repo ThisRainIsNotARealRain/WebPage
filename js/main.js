@@ -295,6 +295,19 @@
     });
   }
 
+  // A clicked language link becomes the saved choice read by the entry script in <head>.
+  function initLanguageChoice() {
+    var domain = /(^|\.)realrain\.co$/.test(location.hostname) ? "; Domain=realrain.co" : "";
+    var secure = location.protocol === "https:" ? "; Secure" : "";
+
+    document.querySelectorAll("a[hreflang]").forEach(function (link) {
+      link.addEventListener("click", function () {
+        var choice = link.getAttribute("hreflang") === "en" ? "en" : "zh";
+        document.cookie = "rr_lang=" + choice + "; Max-Age=31536000; Path=/; SameSite=Lax" + domain + secure;
+      });
+    });
+  }
+
   initNavigation();
   initScrollState();
   initActiveNavigation();
@@ -302,4 +315,5 @@
   initReveals();
   initParallax();
   initPointerDetails();
+  initLanguageChoice();
 })();

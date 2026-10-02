@@ -3,6 +3,34 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- Language entry, before anything renders: arriving from outside the site, a saved choice
+         (rr_lang, written when a language link is clicked) wins; otherwise / follows the browser
+         language. Links within the site and crawlers are never redirected, so hreflang indexing holds. -->
+    <script>
+      (function () {
+        var page = "en";
+        var otherPage = "../";
+        if (/bot|crawl|spider|slurp|archiver|inspectiontool|mediapartners|facebookexternalhit|embedly|preview|lighthouse|headless/i.test(navigator.userAgent || "")) return;
+        try {
+          if (document.referrer && new URL(document.referrer).origin === location.origin) return;
+        } catch (error) {}
+
+        var saved = /(?:^|;\s*)rr_lang=(zh|en)(?:;|$)/.exec(document.cookie);
+        var wanted = saved ? saved[1] : null;
+
+        if (!wanted && page === "zh") {
+          var languages = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
+          for (var i = 0; i < languages.length && !wanted; i++) {
+            var tag = String(languages[i]).toLowerCase();
+            if (tag.indexOf("zh") === 0) wanted = "zh";
+            else if (tag.indexOf("en") === 0) wanted = "en";
+          }
+          if (!wanted && languages.join("")) wanted = "en";
+        }
+
+        if (wanted && wanted !== page) location.replace(otherPage + location.search + location.hash);
+      })();
+    </script>
     <title>RealRain | IP publishing platform · Physical products</title>
     <meta
       name="description"
@@ -72,7 +100,7 @@
         <a href="#team"><span>04</span>Team</a>
         <a href="#contact"><span>05</span>Contact</a>
         <div class="site-nav__foot">
-          <a class="site-nav__mobile-lang" href="../index.html" lang="zh-Hans">
+          <a class="site-nav__mobile-lang" href="../" hreflang="zh-Hans" lang="zh-Hans">
             中文网站 <b aria-hidden="true">↗</b>
           </a>
           <a href="mailto:contact@realrain.co">contact@realrain.co</a>
@@ -81,7 +109,7 @@
       </nav>
 
       <div class="site-header__actions">
-        <a class="header-lang" href="../index.html" lang="zh-Hans">中文</a>
+        <a class="header-lang" href="../" hreflang="zh-Hans" lang="zh-Hans">中文</a>
         <a class="header-cta" href="https://realrain.art/">
           <span>Open Crossroads</span><b aria-hidden="true">↗</b>
         </a>
@@ -414,13 +442,13 @@
       <div class="site-footer__links">
         <a href="#top">Back to top ↑</a>
         <a href="https://realrain.art/">Open Crossroads ↗</a>
-        <a href="../index.html" lang="zh-Hans">中文</a>
+        <a href="../" hreflang="zh-Hans" lang="zh-Hans">中文</a>
         <a href="mailto:contact@realrain.co">Contact</a>
       </div>
       <small>© <span data-year></span> RealRain / 非雨</small>
     </footer>
 
     <script src="../js/vendor/anime.umd.min.js?v=4.5.0" defer></script>
-    <script src="../js/main.js?v=20260929-2" defer></script>
+    <script src="../js/main.js?v=20261002-1" defer></script>
   </body>
 </html>
