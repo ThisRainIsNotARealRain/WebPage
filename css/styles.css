@@ -1487,8 +1487,24 @@ html[lang="en"] .contact__grid > div {
     padding-inline: 5vw;
   }
 
+  /* The drawer and scrim are fixed children of the header. A backdrop-filter on
+     the header would become their containing block and squeeze the open drawer
+     into the header bar, so the glass blur sits on a layer behind the content. */
   .site-header.is-scrolled {
     min-height: 58px;
+    backdrop-filter: none;
+  }
+
+  .site-header.is-scrolled::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    content: "";
+    backdrop-filter: blur(18px) saturate(130%);
+  }
+
+  body.nav-open .page-progress {
+    visibility: hidden;
   }
 
   .header-lang {
@@ -1570,6 +1586,7 @@ html[lang="en"] .contact__grid > div {
     transform: rotate(-45deg);
   }
 
+  /* Lives inside the header, so it stacks below the drawer and toggle */
   .nav-scrim {
     position: fixed;
     z-index: calc(var(--z-nav) - 1);
