@@ -869,8 +869,8 @@ html[lang="en"] .features b {
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 1px;
   background: var(--line);
-  border-top: 3p solid var(--celadon-500);
-  border-bottom: 1p solid var(--line);
+  border-top: 3px solid var(--celadon-500);
+  border-bottom: 1px solid var(--line);
   list-style: none;
 }
 
@@ -1210,22 +1210,6 @@ html[lang="en"] .contact__grid > div {
   transform: none;
 }
 
-.motion-ready .chain li:nth-child(1) {
-  transition-delay: 40ms;
-}
-
-.motion-ready .chain li:nth-child(2) {
-  transition-delay: 200ms;
-}
-
-.motion-ready .chain li:nth-child(3) {
-  transition-delay: 360ms;
-}
-
-.motion-ready .chain li:nth-child(4) {
-  transition-delay: 520ms;
-}
-
 .motion-ready .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
@@ -1239,6 +1223,236 @@ html[lang="en"] .contact__grid > div {
 .no-js [data-hero-item] {
   opacity: 1;
   transform: none;
+}
+
+/* Motion, second pass (2026-10-05). On desktop each section is one screen and
+   the page snaps between them, so a screen composes itself as it arrives:
+   headings rise out of a mask line by line, then the rest follows in reading
+   order. js/main.js numbers each section's reveals (--i) and marks the section
+   .is-in when it snaps into view. */
+
+.has-lines .line {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.06em 0.14em;
+  margin-block: -0.06em -0.14em;
+}
+
+.has-lines .line__inner {
+  display: block;
+}
+
+.motion-ready .reveal.has-lines {
+  opacity: 1;
+  transform: none;
+}
+
+.motion-ready .has-lines .line__inner {
+  transform: translateY(112%);
+  transition: transform 1100ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 80ms + var(--line, 0) * 110ms + 60ms);
+}
+
+.motion-ready .has-lines.is-visible .line__inner {
+  transform: none;
+}
+
+/* The rule under each section heading draws in from the left */
+.motion-ready .section-head {
+  position: relative;
+  border-bottom-color: transparent;
+}
+
+.motion-ready .section-head::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  background: var(--line);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 1400ms var(--ease-out) 150ms;
+}
+
+.motion-ready .is-in .section-head::after {
+  transform: scaleX(1);
+}
+
+/* The four steps are drawn rather than switched on: each segment of the line
+   runs left to right, then its node appears and the arrow to the next step */
+.motion-ready .chain li {
+  --chain-delay: 40ms;
+  border-top-color: transparent;
+  background: linear-gradient(var(--celadon-500), var(--celadon-500)) no-repeat 0 0 / 0% 2px;
+  background-clip: border-box;
+  background-origin: border-box;
+  transition:
+    opacity 560ms var(--ease-out) var(--chain-delay),
+    background-size 700ms var(--ease-out) var(--chain-delay);
+}
+
+.motion-ready .chain li:nth-child(2) {
+  --chain-delay: 200ms;
+}
+
+.motion-ready .chain li:nth-child(3) {
+  --chain-delay: 360ms;
+}
+
+.motion-ready .chain li:nth-child(4) {
+  --chain-delay: 520ms;
+}
+
+.motion-ready .chain li.is-visible {
+  background-size: 100% 2px;
+}
+
+.motion-ready .chain li::before {
+  transform: scale(0);
+  transition: transform 500ms var(--ease-out) calc(var(--chain-delay) + 120ms);
+}
+
+.motion-ready .chain li.is-visible::before {
+  transform: scale(1);
+}
+
+.motion-ready .chain li:not(:last-child)::after {
+  opacity: 0;
+  transition: opacity 400ms ease calc(var(--chain-delay) + 520ms);
+}
+
+.motion-ready .chain li.is-visible:not(:last-child)::after {
+  opacity: 1;
+}
+
+/* The partner grid draws its separators with its own background showing through
+   1px gaps; hold that back until the cards are in, so half-faded cards never
+   sit on a grey-green block */
+.motion-ready .partners__grid {
+  background-color: transparent;
+  transition: background-color 600ms ease 700ms;
+}
+
+.motion-ready .is-in .partners__grid {
+  background-color: var(--line);
+}
+
+/* The product and contact scenes settle as they arrive; the hero keeps its parallax */
+.motion-ready .platform .scene__art img,
+.motion-ready .close .scene__art img {
+  transform: scale(1.06);
+  transition: transform 2200ms var(--ease-out);
+}
+
+.motion-ready .platform.is-in .scene__art img,
+.motion-ready .close.is-in .scene__art img {
+  transform: none;
+}
+
+/* Arrows lean the way they point */
+.button b,
+.header-cta b,
+.hero__news i,
+.contact__grid a b {
+  display: inline-block;
+  transition: transform 400ms var(--ease-out);
+}
+
+.button:hover b,
+.header-cta:hover b,
+.hero__news:hover i,
+.contact__grid a:hover b {
+  transform: translateX(3px);
+}
+
+/* Section index: one mark per screen on the right edge, the current one longer */
+.section-index {
+  position: fixed;
+  z-index: calc(var(--z-header) - 1);
+  top: 50%;
+  right: 1rem;
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  transform: translateY(-50%);
+}
+
+.section-index a {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  height: 1.45rem;
+  color: var(--celadon-600);
+}
+
+.section-index i {
+  display: block;
+  width: 0.8rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.45;
+  transition:
+    width 600ms var(--ease-out),
+    opacity 300ms ease;
+}
+
+.section-index__label {
+  color: var(--celadon-700);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(0.4rem);
+  transition:
+    opacity 300ms ease,
+    transform 500ms var(--ease-out);
+}
+
+.section-index a.is-active i {
+  width: 1.6rem;
+  opacity: 1;
+}
+
+.section-index a:hover i {
+  opacity: 1;
+}
+
+.section-index a:hover .section-index__label {
+  opacity: 1;
+  transform: none;
+}
+
+@media (min-width: 1200px) and (min-height: 621px) {
+  .section-index {
+    display: flex;
+  }
+}
+
+/* In the one-screen layout, time each screen's items from its arrival */
+@media (min-width: 861px) and (min-height: 621px) {
+  .motion-ready .reveal {
+    transition-delay: calc(var(--i, 0) * 80ms + 60ms);
+  }
+
+  .motion-ready .chain li {
+    --chain-delay: 380ms;
+  }
+
+  .motion-ready .chain li:nth-child(2) {
+    --chain-delay: 560ms;
+  }
+
+  .motion-ready .chain li:nth-child(3) {
+    --chain-delay: 740ms;
+  }
+
+  .motion-ready .chain li:nth-child(4) {
+    --chain-delay: 920ms;
+  }
 }
 
 /* One screen per section: every block aligns to the viewport like the hero does */
@@ -1273,6 +1487,12 @@ html[lang="en"] .contact__grid > div {
 
   .close__content {
     padding-block: 0;
+  }
+
+  /* Without its own snap position the footer sat below the last screen and
+     mandatory snapping pulled the page back before it could be seen */
+  .site-footer {
+    scroll-snap-align: end;
   }
 
   /* On wide screens the centred shell drifts into the art; scene copy keeps
@@ -1982,6 +2202,29 @@ html[lang="en"] .contact__grid > div {
 
   .hero .scene__art img {
     transform: none !important;
+  }
+
+  .motion-ready .has-lines .line__inner,
+  .motion-ready .scene__art img,
+  .motion-ready .section-head::after,
+  .motion-ready .chain li::before {
+    transform: none !important;
+  }
+
+  .motion-ready .chain li {
+    background-size: 100% 2px !important;
+  }
+
+  .motion-ready .chain li:not(:last-child)::after {
+    opacity: 1 !important;
+  }
+
+  .motion-ready .partners__grid {
+    background-color: var(--line) !important;
+  }
+
+  .section-index {
+    display: none !important;
   }
 }
 

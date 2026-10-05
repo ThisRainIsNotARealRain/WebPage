@@ -186,6 +186,8 @@
     });
   }
 
+  // The headline itself rises line by line (see splitHeadingLines); anime.js
+  // brings in the news chip first and the summary once the headline has landed.
   function initHeroMotion() {
     var items = document.querySelectorAll("[data-hero-item]");
 
@@ -201,7 +203,9 @@
       animeApi.animate("[data-hero-item]", {
         opacity: [0, 1],
         y: [28, 0],
-        delay: typeof animeApi.stagger === "function" ? animeApi.stagger(105, { start: 120 }) : 120,
+        delay: function (target, index) {
+          return index === 0 ? 60 : 460 + (index - 1) * 105;
+        },
         duration: 1000,
         ease: "outExpo"
       });
@@ -212,34 +216,156 @@
       window.setTimeout(function () {
         item.style.opacity = "1";
         item.style.transform = "none";
-      }, 100 + index * 100);
+      }, index === 0 ? 60 : 460 + (index - 1) * 100);
     });
   }
 
-  function initReveals() {
+  // Headings rise out of a mask one line at a time. The lines are the breaks
+  // already written in the markup (<br>, or a block child such as <small>),
+  // so the phrase-level line breaking is untouched.
+  function splitHeadingLines() {
+    if (reducedMotion) return;
+
+    document.querySelectorAll(".display.reveal, .hero h1.reveal, .close h2.reveal").forEach(function (heading) {
+      var groups = [[]];
+
+      Array.prototype.slice.call(heading.childNodes).forEach(function (node) {
+        if (node.nodeName === "BR") {
+          groups.push([]);
+        } else if (node.nodeType === 1 && window.getComputedStyle(node).display === "block") {
+          groups.push([node], []);
+        } else {
+          groups[groups.length - 1].push(node);
+        }
+      });
+
+      groups = groups.filter(function (nodes) {
+        return nodes.some(function (node) {
+          return node.nodeType === 1 || node.textContent.trim();
+        });
+      });
+
+      heading.textContent = "";
+      groups.forEach(function (nodes, index) {
+        var line = document.createElement("span");
+        var inner = document.createElement("span");
+        line.className = "line";
+        inner.className = "line__inner";
+        inner.style.setProperty("--line", index);
+        nodes.forEach(function (node) {
+          inner.appendChild(node);
+        });
+        line.appendChild(inner);
+        heading.appendChild(line);
+      });
+      heading.classList.add("has-lines");
+    });
+  }
+
+  // On desktop every section is one screen and the page snaps between them, so
+  // a screen composes itself as it arrives: its items come in reading order,
+  // timed from the snap rather than from each item crossing the fold. Phones
+  // scroll freely, so there items still appear one by one as they enter.
+  function initChoreography() {
+    var sections = Array.prototype.slice.call(document.querySelectorAll("main > section[id]"));
     var revealItems = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
-    if (!revealItems.length) return;
+    var oneScreen = window.matchMedia("(min-width: 861px) and (min-height: 621px)");
+
+    function show(item) {
+      item.classList.add("is-visible");
+    }
 
     if (reducedMotion || !("IntersectionObserver" in window)) {
-      revealItems.forEach(function (item) {
-        item.classList.add("is-visible");
+      sections.forEach(function (section) {
+        section.classList.add("is-in");
       });
+      revealItems.forEach(show);
       return;
     }
 
-    var observer = new IntersectionObserver(
+    sections.forEach(function (section) {
+      section.querySelectorAll(".reveal").forEach(function (item, index) {
+        item.style.setProperty("--i", index);
+      });
+    });
+
+    var sectionObserver = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
+          entry.target.classList.add("is-in");
+          if (oneScreen.matches) entry.target.querySelectorAll(".reveal").forEach(show);
+          sectionObserver.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -14% 0px", threshold: 0 }
+    );
+
+    var itemObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          show(entry.target);
+          itemObserver.unobserve(entry.target);
         });
       },
       { rootMargin: "0px 0px -7% 0px", threshold: 0.1 }
     );
 
+    sections.forEach(function (section) {
+      sectionObserver.observe(section);
+    });
     revealItems.forEach(function (item) {
-      observer.observe(item);
+      itemObserver.observe(item);
+    });
+  }
+
+  // A quiet index on the right edge: one mark per screen, the current one
+  // drawn longer. It mirrors the header navigation, so it stays out of the
+  // tab order and the accessibility tree.
+  function initSectionIndex() {
+    if (!("IntersectionObserver" in window)) return;
+
+    var sections = Array.prototype.slice.call(document.querySelectorAll("main > section[id]"));
+    if (sections.length < 2) return;
+
+    var index = document.createElement("nav");
+    index.className = "section-index";
+    index.setAttribute("aria-hidden", "true");
+
+    var marks = sections.map(function (section, i) {
+      var navLink = document.querySelector('.site-nav > a[href="#' + section.id + '"]');
+      var label = navLink ? navLink.lastChild.textContent.trim() : root.lang === "zh-Hans" ? "首页" : "Top";
+      var mark = document.createElement("a");
+      var text = document.createElement("span");
+
+      mark.href = "#" + section.id;
+      mark.tabIndex = -1;
+      text.className = "section-index__label";
+      text.textContent = ("0" + (i + 1)).slice(-2) + "\u2002" + label;
+      mark.appendChild(text);
+      mark.appendChild(document.createElement("i"));
+      index.appendChild(mark);
+      return mark;
+    });
+
+    document.body.appendChild(index);
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var position = sections.indexOf(entry.target);
+          marks.forEach(function (mark, i) {
+            mark.classList.toggle("is-active", i === position);
+          });
+        });
+      },
+      { rootMargin: "-45% 0px -54% 0px", threshold: 0 }
+    );
+
+    sections.forEach(function (section) {
+      observer.observe(section);
     });
   }
 
@@ -311,8 +437,10 @@
   initNavigation();
   initScrollState();
   initActiveNavigation();
+  splitHeadingLines();
   initHeroMotion();
-  initReveals();
+  initChoreography();
+  initSectionIndex();
   initParallax();
   initPointerDetails();
   initLanguageChoice();
