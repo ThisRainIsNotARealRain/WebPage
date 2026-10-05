@@ -403,6 +403,114 @@
     requestUpdate();
   }
 
+  // Rain over the first screen: sparse, slow hairlines in Rain Celadon. It
+  // pauses when the hero is off screen or the tab is hidden, and stays off
+  // under reduced motion.
+  function initRain() {
+    var canvas = document.querySelector("[data-rain]");
+    if (!canvas || reducedMotion || !canvas.getContext) return;
+
+    var ctx = canvas.getContext("2d");
+    var slant = 0.16;
+    var width = 0;
+    var height = 0;
+    var color = "#426359";
+    var drops = [];
+    var frame = 0;
+    var last = 0;
+    var running = false;
+    var inView = true;
+
+    function spawn(anywhere) {
+      var length = 24 + Math.random() * 90;
+      return {
+        x: Math.random() * (width + height * slant),
+        y: anywhere ? Math.random() * height : -length - Math.random() * height * 0.4,
+        length: length,
+        speed: 0.05 + Math.random() * 0.12,
+        alpha: 0.05 + Math.random() * 0.17
+      };
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      drops.forEach(function (drop) {
+        ctx.globalAlpha = drop.alpha;
+        ctx.beginPath();
+        ctx.moveTo(drop.x, drop.y);
+        ctx.lineTo(drop.x - drop.length * slant, drop.y + drop.length);
+        ctx.stroke();
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    function size() {
+      var ratio = Math.min(window.devicePixelRatio || 1, 2);
+      width = canvas.clientWidth;
+      height = canvas.clientHeight;
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      color = window.getComputedStyle(canvas).color;
+      drops = [];
+      for (var i = Math.round((width * height) / 14000); i > 0; i--) drops.push(spawn(true));
+      draw();
+    }
+
+    function tick(time) {
+      var step = last ? Math.min(time - last, 50) : 16;
+      last = time;
+      drops.forEach(function (drop) {
+        drop.y += drop.speed * step;
+        drop.x -= drop.speed * step * slant;
+        if (drop.y > height) {
+          var fresh = spawn(false);
+          drop.x = fresh.x;
+          drop.y = fresh.y;
+          drop.length = fresh.length;
+          drop.speed = fresh.speed;
+          drop.alpha = fresh.alpha;
+        }
+      });
+      draw();
+      frame = window.requestAnimationFrame(tick);
+    }
+
+    function start() {
+      if (running || !inView || document.hidden) return;
+      running = true;
+      last = 0;
+      frame = window.requestAnimationFrame(tick);
+    }
+
+    function stop() {
+      running = false;
+      window.cancelAnimationFrame(frame);
+    }
+
+    size();
+    start();
+
+    var resizeTimer = 0;
+    window.addEventListener("resize", function () {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(size, 150);
+    });
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) stop();
+      else start();
+    });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        inView = entries[0].isIntersecting;
+        if (inView) start();
+        else stop();
+      }).observe(canvas);
+    }
+  }
+
   function initPointerDetails() {
     if (!finePointer || reducedMotion) return;
 
@@ -442,6 +550,7 @@
   initChoreography();
   initSectionIndex();
   initParallax();
+  initRain();
   initPointerDetails();
   initLanguageChoice();
 })();
