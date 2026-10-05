@@ -431,8 +431,9 @@
   // advances once a flick would carry past half a screen, which on Android
   // takes a hard throw. Here a quick swipe, or a drag past a quarter of the
   // screen, turns the page; a slow peek settles back, and that snap is the
-  // resistance. Speed is taken over the whole gesture: once a page scrolls,
-  // Chrome sends touchmove only every 200ms or so.
+  // resistance. Speed is taken over the whole gesture by the touch events'
+  // own clocks: once a page scrolls, Chrome sends touchmove only every 200ms
+  // or so, and a busy page runs handlers late.
   function initPhonePaging() {
     var paging = window.matchMedia("(max-width: 600px) and (min-height: 621px)");
     var screens = Array.prototype.slice.call(document.querySelectorAll("main > section[id]"));
@@ -442,6 +443,24 @@
 
     function topOf(element) {
       return element.getBoundingClientRect().top + window.pageYOffset;
+    }
+
+    // While a page turns, snapping steps aside: the browser's own snap,
+    // landing a moment after the finger lifts, would otherwise pull it back
+    function turnTo(top) {
+      var started = Date.now();
+
+      function settle() {
+        if (Math.abs(window.pageYOffset - top) < 2 || Date.now() - started > 1500) {
+          root.style.scrollSnapType = "";
+        } else {
+          window.requestAnimationFrame(settle);
+        }
+      }
+
+      root.style.scrollSnapType = "none";
+      window.scrollTo({ top: top, behavior: "smooth" });
+      window.requestAnimationFrame(settle);
     }
 
     window.addEventListener(
@@ -460,7 +479,13 @@
         // A screen taller than the window scrolls on its own
         if (at < 0 || screens[at].offsetHeight > window.innerHeight + 2) return;
 
-        touch = { x: event.touches[0].clientX, y: event.touches[0].clientY, time: Date.now(), at: at };
+        touch = {
+          x: event.touches[0].clientX,
+          y: event.touches[0].clientY,
+          stamp: event.timeStamp,
+          time: Date.now(),
+          at: at
+        };
       },
       { passive: true }
     );
@@ -479,11 +504,12 @@
         // Sideways belongs to the strips
         if (Math.abs(dy) < Math.abs(dx) * 1.2) return;
 
-        var speed = Math.abs(dy) / Math.max(Date.now() - start.time, 1);
+        var elapsed = event.timeStamp > 0 && start.stamp > 0 ? event.timeStamp - start.stamp : Date.now() - start.time;
+        var speed = Math.abs(dy) / Math.max(elapsed, 1);
         var deliberate = Math.abs(dy) > window.innerHeight * 0.25 || (speed > 0.35 && Math.abs(dy) > 24);
         var target = screens[start.at + (dy < 0 ? 1 : -1)];
 
-        if (deliberate && target) window.scrollTo({ top: topOf(target), behavior: "smooth" });
+        if (deliberate && target) turnTo(topOf(target));
       },
       { passive: true }
     );
