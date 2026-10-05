@@ -427,10 +427,12 @@
     });
   }
 
-  // Phones: a deliberate flick turns exactly one screen. Snapping alone only
+  // Phones: a deliberate swipe turns exactly one screen. Snapping alone only
   // advances once a flick would carry past half a screen, which on Android
-  // takes a hard throw; here the swipe's direction decides, and the snap
-  // stays as the resistance that settles small, hesitant drags back.
+  // takes a hard throw. Here a quick swipe, or a drag past a quarter of the
+  // screen, turns the page; a slow peek settles back, and that snap is the
+  // resistance. Speed is taken over the whole gesture: once a page scrolls,
+  // Chrome sends touchmove only every 200ms or so.
   function initPhonePaging() {
     var paging = window.matchMedia("(max-width: 600px) and (min-height: 621px)");
     var screens = Array.prototype.slice.call(document.querySelectorAll("main > section[id]"));
@@ -478,7 +480,7 @@
         if (Math.abs(dy) < Math.abs(dx) * 1.2) return;
 
         var speed = Math.abs(dy) / Math.max(Date.now() - start.time, 1);
-        var deliberate = Math.abs(dy) > window.innerHeight * 0.18 || (speed > 0.45 && Math.abs(dy) > 24);
+        var deliberate = Math.abs(dy) > window.innerHeight * 0.25 || (speed > 0.35 && Math.abs(dy) > 24);
         var target = screens[start.at + (dy < 0 ? 1 : -1)];
 
         if (deliberate && target) window.scrollTo({ top: topOf(target), behavior: "smooth" });
