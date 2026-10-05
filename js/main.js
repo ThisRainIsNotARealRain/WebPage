@@ -262,14 +262,17 @@
     });
   }
 
-  // On desktop every section is one screen and the page snaps between them, so
-  // a screen composes itself as it arrives: its items come in reading order,
-  // timed from the snap rather than from each item crossing the fold. Phones
-  // scroll freely, so there items still appear one by one as they enter.
+  // On desktops and phones every section is one screen and the page snaps
+  // between them, so a screen composes itself as it arrives: its items come
+  // in reading order, timed from the snap rather than from each item crossing
+  // the fold. Tablets and short windows scroll freely, so there items still
+  // appear one by one as they enter.
   function initChoreography() {
     var sections = Array.prototype.slice.call(document.querySelectorAll("main > section[id]"));
     var revealItems = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
-    var oneScreen = window.matchMedia("(min-width: 861px) and (min-height: 621px)");
+    var oneScreen = window.matchMedia(
+      "(min-width: 861px) and (min-height: 621px), (max-width: 600px) and (min-height: 621px)"
+    );
 
     function show(item) {
       item.classList.add("is-visible");
@@ -367,6 +370,121 @@
     sections.forEach(function (section) {
       observer.observe(section);
     });
+  }
+
+  // Phones: the four capabilities, the four steps, the five partnerships and
+  // the three founders sit on horizontal strips. Dots under each follow the
+  // swipe and jump on tap; they repeat what a swipe does, so they stay out of
+  // the tab order.
+  function initStrips() {
+    document.querySelectorAll(".features, .chain, .partners__grid, .people__core").forEach(function (strip) {
+      var items = Array.prototype.slice.call(strip.children);
+      if (items.length < 2) return;
+
+      var dots = document.createElement("div");
+      var queued = false;
+      dots.className = "strip-dots";
+      dots.setAttribute("aria-hidden", "true");
+
+      var buttons = items.map(function (item, index) {
+        var button = document.createElement("button");
+        button.type = "button";
+        button.tabIndex = -1;
+        button.setAttribute("aria-pressed", String(index === 0));
+        button.addEventListener("click", function () {
+          var left = item.offsetLeft - items[0].offsetLeft;
+          if (typeof strip.scrollTo === "function") {
+            strip.scrollTo({ left: left, behavior: reducedMotion ? "auto" : "smooth" });
+          } else {
+            strip.scrollLeft = left;
+          }
+        });
+        dots.appendChild(button);
+        return button;
+      });
+
+      strip.parentNode.insertBefore(dots, strip.nextSibling);
+
+      function sync() {
+        var step = items[1].offsetLeft - items[0].offsetLeft || strip.clientWidth;
+        var atEnd = strip.scrollLeft >= strip.scrollWidth - strip.clientWidth - 2;
+        var current = atEnd ? items.length - 1 : Math.round(strip.scrollLeft / step);
+        buttons.forEach(function (button, index) {
+          button.setAttribute("aria-pressed", String(index === current));
+        });
+        queued = false;
+      }
+
+      strip.addEventListener(
+        "scroll",
+        function () {
+          if (queued) return;
+          queued = true;
+          window.requestAnimationFrame(sync);
+        },
+        { passive: true }
+      );
+    });
+  }
+
+  // Phones: a deliberate flick turns exactly one screen. Snapping alone only
+  // advances once a flick would carry past half a screen, which on Android
+  // takes a hard throw; here the swipe's direction decides, and the snap
+  // stays as the resistance that settles small, hesitant drags back.
+  function initPhonePaging() {
+    var paging = window.matchMedia("(max-width: 600px) and (min-height: 621px)");
+    var screens = Array.prototype.slice.call(document.querySelectorAll("main > section[id]"));
+    var touch = null;
+
+    if (reducedMotion || screens.length < 2) return;
+
+    function topOf(element) {
+      return element.getBoundingClientRect().top + window.pageYOffset;
+    }
+
+    window.addEventListener(
+      "touchstart",
+      function (event) {
+        touch = null;
+        if (!paging.matches || event.touches.length !== 1 || body.classList.contains("nav-open")) return;
+
+        var at = -1;
+        for (var i = 0; i < screens.length; i++) {
+          if (Math.abs(topOf(screens[i]) - window.pageYOffset) < 4) {
+            at = i;
+            break;
+          }
+        }
+        // A screen taller than the window scrolls on its own
+        if (at < 0 || screens[at].offsetHeight > window.innerHeight + 2) return;
+
+        touch = { x: event.touches[0].clientX, y: event.touches[0].clientY, time: Date.now(), at: at };
+      },
+      { passive: true }
+    );
+
+    window.addEventListener(
+      "touchend",
+      function (event) {
+        if (!touch) return;
+
+        var start = touch;
+        var end = event.changedTouches[0];
+        var dx = end.clientX - start.x;
+        var dy = end.clientY - start.y;
+        touch = null;
+
+        // Sideways belongs to the strips
+        if (Math.abs(dy) < Math.abs(dx) * 1.2) return;
+
+        var speed = Math.abs(dy) / Math.max(Date.now() - start.time, 1);
+        var deliberate = Math.abs(dy) > window.innerHeight * 0.18 || (speed > 0.45 && Math.abs(dy) > 24);
+        var target = screens[start.at + (dy < 0 ? 1 : -1)];
+
+        if (deliberate && target) window.scrollTo({ top: topOf(target), behavior: "smooth" });
+      },
+      { passive: true }
+    );
   }
 
   function initParallax() {
@@ -549,6 +667,8 @@
   initHeroMotion();
   initChoreography();
   initSectionIndex();
+  initStrips();
+  initPhonePaging();
   initParallax();
   initRain();
   initPointerDetails();

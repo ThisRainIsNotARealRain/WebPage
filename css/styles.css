@@ -931,11 +931,14 @@ html[lang="en"] .partners__grid h3 {
   background: var(--porcelain);
 }
 
+/* The advisors are the list's last item, a full-width row under the three;
+   the row gap is the space that sat above them when they were a block of
+   their own. On phones the same item becomes the strip's last card. */
 .people__core {
   display: grid;
   margin-top: clamp(1.8rem, 3vw, 2.6rem);
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1.8rem, 3.4vw, 3.4rem);
+  gap: clamp(1.8rem, 3.2vw, 2.8rem) clamp(1.8rem, 3.4vw, 3.4rem);
   list-style: none;
 }
 
@@ -981,10 +984,10 @@ html[lang="en"] .people h3 {
   line-height: 1.7;
 }
 
-.people__advisors {
+.people__core > .people__advisors {
   display: grid;
-  margin-top: clamp(1.8rem, 3.2vw, 2.8rem);
   padding-top: clamp(1.1rem, 1.8vw, 1.5rem);
+  grid-column: 1 / -1;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem clamp(1.8rem, 3.4vw, 3.4rem);
   border-top: 1px solid var(--line);
@@ -1213,6 +1216,14 @@ html[lang="en"] .contact__grid > div {
 .motion-ready .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* The card rules above outrank the line before, so they settle explicitly.
+   Left at 10px, the partner cards showed a band of the grid's line colour
+   under their top rule. */
+.motion-ready .partners__grid li.reveal.is-visible,
+.motion-ready .people__core li.reveal.is-visible {
+  transform: none;
 }
 
 .motion-ready [data-hero-item] {
@@ -1640,6 +1651,7 @@ html[lang="en"] .contact__grid > div {
 
   .people__core {
     margin-top: 1.3rem;
+    row-gap: 1.3rem;
   }
 
   .people h3 {
@@ -1652,8 +1664,7 @@ html[lang="en"] .contact__grid > div {
     line-height: 1.62;
   }
 
-  .people__advisors {
-    margin-top: 1.3rem;
+  .people__core > .people__advisors {
     padding-top: 0.9rem;
   }
 
@@ -2072,6 +2083,11 @@ html[lang="en"] .contact__grid > div {
     gap: 2.6rem;
   }
 
+  /* Keeps the 1.8rem the advisors had above them before they joined the list */
+  .people__core > .people__advisors {
+    margin-top: -0.8rem;
+  }
+
   .partners__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2081,7 +2097,7 @@ html[lang="en"] .contact__grid > div {
     gap: 0.6rem;
   }
 
-  .people__advisors {
+  .people__core > .people__advisors {
     grid-template-columns: 1fr;
     gap: 1.2rem;
   }
@@ -2517,5 +2533,444 @@ html[lang="en"] .contact__grid > div {
     min-height: 0;
     padding-inline: 0;
     font-size: 0.95rem;
+  }
+}
+
+/* ==========================================================================
+   Phones, one screen at a time (2026-10-05, third pass). Up to 600px wide
+   each section is one phone screen, and the page turns a screen per swipe
+   as the desktop does with the wheel. The copy comes first and the
+   illustration takes the height that is left. The four steps, the five
+   partnerships and the three founders sit on horizontal strips with dots
+   instead of running down the page. Tablets (601 to 860px) keep the
+   stacked, free-scrolling layout.
+   ========================================================================== */
+
+.strip-dots {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  :root {
+    --phone-gap: clamp(0.75rem, 2vh, 1.4rem);
+    /* Past the first screen the header is always in its compact state */
+    --phone-top: calc(58px + var(--phone-gap));
+  }
+
+  .hero,
+  .platform,
+  .model,
+  .partners,
+  .people,
+  .close {
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
+  }
+
+  .model,
+  .partners,
+  .people {
+    padding-block: var(--phone-top) var(--phone-gap);
+  }
+
+  .model > .section-shell,
+  .partners > .section-shell,
+  .people > .section-shell {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--phone-gap);
+  }
+
+  /* Scenes: the illustration fills whatever the copy leaves */
+  .scene__art {
+    flex: 1 1 0;
+    min-height: 7rem;
+  }
+
+  .scene__art img,
+  .hero .scene__art img,
+  .close .scene__art img {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .hero {
+    --art-y: 62%;
+  }
+
+  .hero__content {
+    padding-top: calc(var(--header-h) + var(--phone-gap));
+    padding-bottom: var(--phone-gap);
+  }
+
+  .hero h1 {
+    margin-top: 0.8rem;
+  }
+
+  .hero__summary {
+    margin-top: var(--phone-gap);
+    gap: var(--phone-gap);
+  }
+
+  .hero__summary > p {
+    font-size: 0.92rem;
+    line-height: 1.75;
+  }
+
+  .platform {
+    padding-bottom: var(--phone-gap);
+  }
+
+  .platform .scene__art {
+    min-height: calc(var(--header-h) + 4.5rem);
+  }
+
+  .platform .section-shell {
+    margin-top: 0.2rem;
+  }
+
+  .platform__content {
+    gap: var(--phone-gap);
+  }
+
+  .platform h2 {
+    margin-top: 0.5rem;
+  }
+
+  .close__content {
+    padding-block: var(--phone-top) var(--phone-gap);
+  }
+
+  .close h2 {
+    margin-top: 0.7rem;
+  }
+
+  .close__lead {
+    margin-top: 0.8rem;
+    font-size: 1.05rem;
+  }
+
+  .contact {
+    margin-top: var(--phone-gap);
+    padding-top: 0.9rem;
+  }
+
+  .contact__grid {
+    gap: 0.7rem;
+  }
+
+  /* Headings and the line under them */
+  html[lang="en"] .display {
+    font-size: clamp(2.1rem, 9.2vw, 3.3rem);
+  }
+
+  /* Each heading is followed by a strip with its own top rule, so the rule
+     under the heading would only double it */
+  .section-head,
+  .motion-ready .section-head {
+    gap: 0.7rem;
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .section-head::after,
+  .motion-ready .section-head::after {
+    display: none;
+  }
+
+  .section-head h2 {
+    margin-top: 0.6rem;
+  }
+
+  .lede {
+    font-size: 0.92rem;
+    line-height: 1.75;
+  }
+
+  /* English runs about a third longer than Chinese; its body sets a step smaller */
+  html[lang="en"] .lede,
+  html[lang="en"] .hero__summary > p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  html[lang="en"] .chain__desc,
+  html[lang="en"] .features span,
+  html[lang="en"] .partners__grid li > p:last-child,
+  html[lang="en"] .people__bio,
+  html[lang="en"] .people__duty,
+  html[lang="en"] .model__rule p {
+    font-size: 0.82rem;
+    line-height: 1.62;
+  }
+
+  .section-head__aside {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .section-head__aside .button {
+    flex: none;
+  }
+
+  /* Strips: a card and a glimpse of the next, one card per swipe. A strip
+     is a scroll box, so it must not give up height to its neighbours. */
+  .features,
+  .chain,
+  .partners__grid,
+  .people__core {
+    display: grid;
+    flex-shrink: 0;
+    margin: 0 -5vw;
+    padding-inline: 5vw;
+    grid-template-columns: none;
+    grid-auto-columns: 86%;
+    grid-auto-flow: column;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: 5vw;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .features::-webkit-scrollbar,
+  .chain::-webkit-scrollbar,
+  .partners__grid::-webkit-scrollbar,
+  .people__core::-webkit-scrollbar {
+    display: none;
+  }
+
+  .features > li,
+  .chain > li,
+  .partners__grid > li,
+  .people__core > li {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  /* Cards on a strip fade in place; a rising card would be cut by the strip */
+  .motion-ready .partners__grid li.reveal,
+  .motion-ready .people__core li.reveal {
+    transform: none;
+  }
+
+  /* The four capabilities: each keeps the hairline the list had on top */
+  .features {
+    width: auto;
+    justify-self: stretch;
+    padding-top: 0;
+    gap: 1.1rem;
+    border-top: 0;
+  }
+
+  .features li {
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(66, 99, 89, 0.24);
+  }
+
+  .features b {
+    font-size: 1.1rem;
+  }
+
+  .features span {
+    font-size: 0.84rem;
+    line-height: 1.65;
+  }
+
+  .platform__content > .strip-dots {
+    justify-self: stretch;
+  }
+
+  /* The line keeps running sideways as on the desktop, arrows in the gaps;
+     the top padding keeps the nodes inside the strip */
+  .chain {
+    --chain-gap: 1.6rem;
+    padding-block: 0.6rem 0.1rem;
+    gap: var(--chain-gap);
+  }
+
+  .chain li:not(:last-child)::after {
+    display: block;
+  }
+
+  .chain li {
+    padding-top: 0.9rem;
+    gap: 0.35rem;
+  }
+
+  .chain__sys {
+    padding-top: 0.2rem;
+  }
+
+  .chain__desc {
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+
+  .model__rule {
+    margin-top: 0;
+    padding-top: 0.75rem;
+    gap: 0.3rem;
+  }
+
+  .model__rule b {
+    font-size: 1.2rem;
+  }
+
+  .model__rule p {
+    font-size: 0.84rem;
+    line-height: 1.65;
+  }
+
+  .partners__grid,
+  .motion-ready .is-in .partners__grid {
+    gap: 1.1rem;
+    border: 0;
+    background: none;
+  }
+
+  .partners__grid li {
+    padding: 0.9rem 0 0;
+    gap: 0.6rem;
+    border-top: 3px solid var(--celadon-500);
+    background: none;
+  }
+
+  .partners__grid h3 {
+    font-size: 1.3rem;
+  }
+
+  .partners__grid li > p:last-child {
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+
+  .people__core {
+    gap: 1.25rem;
+  }
+
+  .people__core li {
+    padding-top: 0.9rem;
+    gap: 0.35rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .people h3 {
+    font-size: 1.45rem;
+  }
+
+  .people__bio,
+  .people__duty {
+    font-size: 0.84rem;
+    line-height: 1.68;
+  }
+
+  /* The advisors are the strip's last card: name and role on one line each,
+     the credentials under it */
+  .people__core > .people__advisors {
+    margin-top: 0;
+    padding-top: 0.9rem;
+    grid-column: auto;
+    align-content: start;
+    gap: 0.75rem;
+  }
+
+  .people__advisors > div {
+    gap: 0.15rem;
+  }
+
+  .people__advisors .people__name {
+    gap: 0 0.7rem;
+  }
+
+  .people__name b {
+    font-size: 0.98rem;
+  }
+
+  .people .people__advisors .people__bio {
+    font-size: 0.78rem;
+    line-height: 1.6;
+  }
+
+  /* Dots under each strip: the current card is the longer mark */
+  .strip-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-block: calc(var(--phone-gap) * -0.5) calc(var(--phone-gap) * -0.3);
+  }
+
+  .strip-dots button {
+    width: 1.1rem;
+    height: 1.25rem;
+    padding: 0;
+    background: linear-gradient(var(--line), var(--line)) center / 100% 2px no-repeat;
+    cursor: pointer;
+    transition: width 500ms var(--ease-out);
+  }
+
+  .strip-dots button[aria-pressed="true"] {
+    width: 1.9rem;
+    background-image: linear-gradient(var(--celadon-600), var(--celadon-600));
+  }
+
+  .motion-ready .strip-dots {
+    opacity: 0;
+    transition: opacity 600ms ease 500ms;
+  }
+
+  .motion-ready .is-in .strip-dots {
+    opacity: 1;
+  }
+}
+
+/* Snapping, and each screen composing itself as it arrives, wherever a
+   phone window holds a screen: Safari with its toolbars showing is about
+   660px tall on a recent iPhone. Shorter windows scroll freely. */
+@media (max-width: 600px) and (min-height: 621px) and (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-padding-top: 0;
+    scroll-snap-type: y mandatory;
+  }
+
+  .hero,
+  .platform,
+  .model,
+  .partners,
+  .people,
+  .close {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .site-footer {
+    scroll-snap-align: end;
+  }
+
+  .motion-ready .reveal {
+    transition-delay: calc(var(--i, 0) * 80ms + 60ms);
+  }
+
+  .motion-ready .chain li {
+    --chain-delay: 380ms;
+  }
+
+  .motion-ready .chain li:nth-child(2) {
+    --chain-delay: 560ms;
+  }
+
+  .motion-ready .chain li:nth-child(3) {
+    --chain-delay: 740ms;
+  }
+
+  .motion-ready .chain li:nth-child(4) {
+    --chain-delay: 920ms;
   }
 }
