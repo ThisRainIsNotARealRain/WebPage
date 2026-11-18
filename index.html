@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>非雨 RealRain｜IP 商业化发行平台 · 交汇地 Crossroads</title>
+  <title>非雨 RealRain｜IP 实体商业化发行平台</title>
   <meta name="description" content="非雨是面向开放创作的 IP 商业化发行平台，以消费品为出版媒介，连接 IP 方、创作者、生产方与消费者。线上平台交汇地：realrain.art。" />
-  <meta name="theme-color" content="#0F1110" />
+  <meta name="theme-color" content="#090B0A" />
   <link rel="canonical" href="https://realrain.co/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://realrain.co/" />
   <link rel="alternate" hreflang="en" href="https://realrain.co/en/" />
@@ -21,7 +21,7 @@
       } catch (e) {}
       var match = document.cookie.match(/(?:^|;\s*)rr_lang=(en|zh)(?:;|$)/);
       var pref = match ? match[1] : null;
-      if (!pref) {
+      if (!pref && targetLang === "zh") {
         var langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
         for (var i = 0; i < langs.length; i++) {
           var code = String(langs[i] || "").toLowerCase();
@@ -40,22 +40,22 @@
   <meta property="og:site_name" content="非雨 RealRain" />
   <meta property="og:locale" content="zh_CN" />
   <meta property="og:title" content="非雨 RealRain｜让想象世界，进入现实生活" />
-  <meta property="og:description" content="面向开放创作的 IP 商业化发行平台，以消费品为出版媒介，连接 IP 方、创作者、生产方与消费者。" />
+  <meta property="og:description" content="面向开放创作的 IP 实体商业化发行平台，线上平台交汇地：realrain.art。" />
   <meta property="og:url" content="https://realrain.co/" />
-  <meta property="og:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-2" />
+  <meta property="og:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-3" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="非雨 RealRain｜IP 商业化发行平台 · 交汇地 Crossroads" />
-  <meta name="twitter:description" content="以消费品为出版媒介，连接 IP 方、创作者、生产方与消费者。线上平台交汇地：realrain.art。" />
-  <meta name="twitter:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-2" />
+  <meta name="twitter:title" content="非雨 RealRain｜让想象世界，进入现实生活" />
+  <meta name="twitter:description" content="面向开放创作的 IP 实体商业化发行平台。" />
+  <meta name="twitter:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-3" />
 
-  <link rel="icon" type="image/png" href="assets/logo/realrain-favicon-celadon.png?v=20261118-2" />
-  <link rel="preload" href="assets/fonts/noto-serif-sc-600.woff2?v=20261118-2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="assets/fonts/noto-sans-sc-400.woff2?v=20261118-2" as="font" type="font/woff2" crossorigin />
+  <link rel="icon" type="image/png" href="assets/logo/realrain-favicon-celadon.png?v=20261118-3" />
+  <link rel="preload" href="assets/fonts/noto-serif-sc-600.woff2?v=20261118-3" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/noto-sans-sc-400.woff2?v=20261118-3" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&display=swap" media="print" onload="this.media='all'" />
-  <link rel="stylesheet" href="css/styles.css?v=20261118-2" />
+  <link rel="stylesheet" href="css/styles.css?v=20261118-3" />
 
   <script type="application/ld+json">
     {
@@ -87,11 +87,11 @@
       </a>
 
       <nav class="header-nav" aria-label="主导航">
-        <a href="#publishing">实体出版</a>
-        <a href="#product">交汇地</a>
-        <a href="#partners">合作方式</a>
-        <a href="#team">团队</a>
-        <a href="#contact">联系</a>
+        <a href="#publishing" data-chapter-link="01">出版</a>
+        <a href="#product" data-chapter-link="02">交汇地</a>
+        <a href="#partners" data-chapter-link="03">合作</a>
+        <a href="#team" data-chapter-link="04">团队</a>
+        <a href="#contact" data-chapter-link="05">联系</a>
       </nav>
 
       <div class="header-actions">
@@ -105,6 +105,20 @@
     </div>
   </header>
 
+  <nav class="chapter-rail is-dark" id="chapterRail" aria-label="章节导航">
+    <span class="rail-readout" id="railReadout">01</span>
+    <div class="rail-track" id="railTrack">
+      <div class="rail-thumb" id="railThumb" aria-hidden="true"></div>
+      <button class="rail-stop is-active" type="button" data-rail-index="0" data-rail-label="01 · 非雨" aria-label="第 1 屏：非雨"></button>
+      <button class="rail-stop" type="button" data-rail-index="1" data-rail-label="02 · 出版" aria-label="第 2 屏：实体出版"></button>
+      <button class="rail-stop" type="button" data-rail-index="2" data-rail-label="03 · 交汇地" aria-label="第 3 屏：交汇地"></button>
+      <button class="rail-stop" type="button" data-rail-index="3" data-rail-label="04 · 合作" aria-label="第 4 屏：合作"></button>
+      <button class="rail-stop" type="button" data-rail-index="4" data-rail-label="05 · 团队" aria-label="第 5 屏：团队"></button>
+      <button class="rail-stop" type="button" data-rail-index="5" data-rail-label="06 · 联系" aria-label="第 6 屏：联系"></button>
+    </div>
+    <span class="rail-tooltip" id="railTooltip" aria-hidden="true">01 · 非雨</span>
+  </nav>
+
   <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true" hidden>
     <div class="mobile-drawer-inner">
       <div class="mobile-drawer-head">
@@ -112,14 +126,15 @@
         <button class="mobile-drawer-close" id="drawerClose" type="button" aria-label="关闭菜单">关闭</button>
       </div>
       <nav class="mobile-drawer-nav" aria-label="移动导航">
-        <a href="#publishing"><span class="drawer-num">01</span><span>实体出版</span></a>
-        <a href="#product"><span class="drawer-num">02</span><span>交汇地 Crossroads</span></a>
-        <a href="#partners"><span class="drawer-num">03</span><span>合作方式</span></a>
-        <a href="#team"><span class="drawer-num">04</span><span>团队与顾问</span></a>
-        <a href="#contact"><span class="drawer-num">05</span><span>联系我们</span></a>
+        <a href="#top"><span class="drawer-num">01</span><span>非雨 RealRain</span></a>
+        <a href="#publishing"><span class="drawer-num">02</span><span>实体出版</span></a>
+        <a href="#product"><span class="drawer-num">03</span><span>交汇地 Crossroads</span></a>
+        <a href="#partners"><span class="drawer-num">04</span><span>合作路径</span></a>
+        <a href="#team"><span class="drawer-num">05</span><span>团队与顾问</span></a>
+        <a href="#contact"><span class="drawer-num">06</span><span>联系</span></a>
       </nav>
       <div class="mobile-drawer-foot">
-        <a class="btn btn-ivory drawer-cta" href="https://realrain.art/">进入交汇地 Crossroads ↗</a>
+        <a class="btn btn-ivory drawer-cta" href="https://realrain.art/">进入交汇地 ↗</a>
         <div class="drawer-meta">
           <a href="mailto:contact@realrain.co">contact@realrain.co</a>
           <a href="en/" hreflang="en" lang="en">English</a>
@@ -129,313 +144,286 @@
   </div>
 
   <main id="main">
-    <!-- ACT I: Hero & Tangible Editions Exhibition (Obsidian #0F1110) -->
-    <section class="act act-dark hero-act" id="top" data-theme="dark">
+    <!-- ACT 01: THE COVER (Pure Brand + Interactive Rain Horizon) -->
+    <section class="act act-dark cover-act is-active" id="top" data-theme="dark" data-chapter="0" data-label="01 · 非雨">
+      <canvas class="rain-canvas" id="rainCanvas" aria-hidden="true"></canvas>
+      <div class="cover-scrim" aria-hidden="true"></div>
+
+      <div class="container cover-shell">
+        <div class="cover-spacer" aria-hidden="true"></div>
+
+        <div class="cover-center">
+          <p class="cover-seal">非雨 · REALRAIN</p>
+          <h1 class="cover-title">让想象世界，<br>进入现实生活。</h1>
+          <p class="cover-sub">面向开放创作的 IP 实体出版平台。</p>
+          <div class="cover-actions">
+            <a class="btn btn-ivory magnetic" href="https://realrain.art/">进入交汇地 ↗</a>
+            <a class="btn btn-quiet-dark" href="#publishing">探索非雨 ↓</a>
+          </div>
+        </div>
+
+        <div class="cover-foot">
+          <span class="chapter-counter">01 / 06</span>
+          <span class="cue-hint">移动或拖拽水面 · 向下吸附翻页</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT 02: THE MEDIUM (Horizontal Spring-Drag Architecture) -->
+    <section class="act act-alabaster medium-act" id="publishing" data-theme="light" data-chapter="1" data-label="02 · 出版">
       <div class="container">
-        <div class="hero-grid">
-          <div class="hero-copy">
-            <h1 class="hero-title">让想象世界，<br>进入现实生活。</h1>
-            <p class="hero-lead">非雨是面向开放创作的 IP 商业化发行平台。我们以实体消费品为出版媒介，连接 IP 方、创作者、生产方与消费者，支持角色与作品的持续开发、精工生产与商业化发行。</p>
-            <div class="hero-actions">
-              <a class="btn btn-ivory" href="https://realrain.art/">进入交汇地 ↗</a>
-              <a class="btn btn-quiet-dark" href="#partners">合作方式 →</a>
+        <div class="chapter-head">
+          <div class="chapter-head-left">
+            <p class="eyebrow">02 / 实体出版</p>
+            <h2 class="chapter-title">曾经把作品印成书，<br>今天把世界做成器物。</h2>
+          </div>
+          <p class="chapter-thesis">开放创作，治理商业化。让每一次衍生有源可溯，让虚构角色拥有真实的重量。</p>
+        </div>
+
+        <div class="drag-stage">
+          <div class="drag-viewport" id="publishViewport">
+            <div class="drag-track" id="publishTrack" data-drag-mode="free" aria-label="实体出版四重链路，可横向拖拽">
+              <article class="medium-card">
+                <div class="card-top">
+                  <span class="card-index">01</span>
+                  <span class="card-tag">IP 空间</span>
+                </div>
+                <h3>设定与权利</h3>
+                <p>角色、世界观与许可规则在案。</p>
+              </article>
+
+              <article class="medium-card">
+                <div class="card-top">
+                  <span class="card-index">02</span>
+                  <span class="card-tag">授权共创</span>
+                </div>
+                <h3>授权开发</h3>
+                <p>在许可内衍生创作，完整保留来源与署名。</p>
+              </article>
+
+              <article class="medium-card">
+                <div class="card-top">
+                  <span class="card-index">03</span>
+                  <span class="card-tag">OEM · POD</span>
+                </div>
+                <h3>精工制造</h3>
+                <p>连接按需定制与规模工艺，忠于原作质感。</p>
+              </article>
+
+              <article class="medium-card">
+                <div class="card-top">
+                  <span class="card-index">04</span>
+                  <span class="card-tag">交汇地市集</span>
+                </div>
+                <h3>市集发行</h3>
+                <p>直面受众发售，以真实回响驱动再版。</p>
+              </article>
             </div>
           </div>
 
-          <div class="hero-exhibition">
-            <div class="edition-stage" aria-live="polite">
-              <div class="stage-spotlight" aria-hidden="true"></div>
-
-              <figure class="edition-plate is-active" data-edition-panel="badges">
-                <div class="plate-media">
-                  <img src="assets/media/editions/edition-badges.webp?v=20261118-2" alt="作品《霏霏》75mm 双闪马口铁徽章实物陈列" width="1252" height="612" fetchpriority="high" decoding="async" />
-                </div>
-                <figcaption class="plate-caption">
-                  <span class="plate-work">作品《霏霏》</span>
-                  <span class="plate-spec">75mm 双闪徽章 · 马口铁覆膜工艺</span>
-                </figcaption>
-              </figure>
-
-              <figure class="edition-plate" data-edition-panel="cards" hidden>
-                <div class="plate-media">
-                  <img src="assets/media/editions/edition-cards.webp?v=20261118-2" alt="作品《霏霏》89×65mm 正反典藏透卡陈列" width="1112" height="702" decoding="async" />
-                </div>
-                <figcaption class="plate-caption">
-                  <span class="plate-work">作品《霏霏》</span>
-                  <span class="plate-spec">89 × 65mm 正反典藏透卡</span>
-                </figcaption>
-              </figure>
-
-              <figure class="edition-plate" data-edition-panel="standee" hidden>
-                <div class="plate-media plate-media-tall">
-                  <img src="assets/media/editions/edition-standee.webp?v=20261118-2" alt="作品《霏霏》异形亚克力双面立牌实物模型" width="697" height="912" decoding="async" />
-                </div>
-                <figcaption class="plate-caption">
-                  <span class="plate-work">作品《霏霏》</span>
-                  <span class="plate-spec">异形双面亚克力立牌 · 独立底座插接</span>
-                </figcaption>
-              </figure>
+          <div class="drag-meta">
+            <div class="drag-meter" aria-hidden="true">
+              <div class="drag-meter-fill" id="publishProgress"></div>
             </div>
-
-            <div class="edition-tabs" role="tablist" aria-label="实体周边陈列">
-              <button class="edition-tab is-active" type="button" role="tab" aria-selected="true" data-edition-tab="badges">
-                <span class="tab-index">01</span>
-                <span class="tab-label">双闪徽章</span>
-              </button>
-              <button class="edition-tab" type="button" role="tab" aria-selected="false" data-edition-tab="cards">
-                <span class="tab-index">02</span>
-                <span class="tab-label">典藏透卡</span>
-              </button>
-              <button class="edition-tab" type="button" role="tab" aria-selected="false" data-edition-tab="standee">
-                <span class="tab-index">03</span>
-                <span class="tab-label">亚克力立牌</span>
-              </button>
-            </div>
+            <span class="drag-hint">横向拖拽探索 · DRAG TRACK</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ACT II: How IP Gets Published (Pure Alabaster #FFFFFF) -->
-    <section class="act act-white" id="publishing" data-theme="light">
+    <!-- ACT 03: CROSSROADS (Draggable Specimen Deck + Live Platform) -->
+    <section class="act act-dark platform-act" id="product" data-theme="dark" data-chapter="2" data-label="03 · 交汇地">
       <div class="container">
-        <div class="act-head-split">
-          <div class="act-head-main">
-            <p class="eyebrow">01 / 实体出版</p>
-            <h2 class="act-title">消费品，是新的出版媒介</h2>
-          </div>
-          <p class="act-summary">传统出版把作品印成书；非雨出版 IP，用的是消费品。角色与作品在授权范围内开发成周边与品牌商品，经生产与发行到达消费者手中。</p>
-        </div>
+        <div class="platform-grid">
+          <div class="platform-copy">
+            <p class="eyebrow eyebrow-light">03 / 交汇地 CROSSROADS</p>
+            <h2 class="chapter-title chapter-title-light">一座持续运转的<br>IP 发行现场。</h2>
+            <p class="platform-lead">非雨运营的线上平台。集中管理设定，开启授权共创，在线制版并直通市集发行。</p>
 
-        <div class="ledger-grid reveal">
-          <article class="ledger-col">
-            <span class="ledger-index">01 · IP 方</span>
-            <h3>设定与权利</h3>
-            <p>角色、世界观、作品与素材，连同可授权范围和收益规则一起记录在案。</p>
-          </article>
-          <article class="ledger-col">
-            <span class="ledger-index">02 · 创作者 · 品牌方</span>
-            <h3>授权开发</h3>
-            <p>在授权范围内围绕设定与素材开发内容和商品，每一件衍生作品都有清晰记录。</p>
-          </article>
-          <article class="ledger-col">
-            <span class="ledger-index">03 · 生产方</span>
-            <h3>生产履约</h3>
-            <p>生产方按品类、工艺与交付能力接入，通过 OEM 批量生产或 POD 按需生产完成交付。</p>
-          </article>
-          <article class="ledger-col">
-            <span class="ledger-index">04 · 消费者</span>
-            <h3>市集发行</h3>
-            <p>商品在交汇地市集展示与发行，消费者的购买与反馈用来调整下一批商品方向。</p>
-          </article>
-        </div>
+            <div class="cap-strip" aria-label="平台核心能力">
+              <span>IP 空间</span>
+              <span>授权共创</span>
+              <span>工房</span>
+              <span>市集</span>
+            </div>
 
-        <div class="principle-strip reveal">
-          <p class="principle-label">开放创作，治理商业化</p>
-          <p class="principle-body">创作者可以用不同的工具、在不同的社区里创作；作品进入商业化时，使用范围、审核责任与收益规则都要先明确。</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ACT III: Crossroads Platform Spread (Warm Celadon Stone #F4F5F3) -->
-    <section class="act act-stone" id="product" data-theme="light">
-      <div class="container">
-        <div class="spread-grid">
-          <div class="spread-copy">
-            <p class="eyebrow">02 / 交汇地 CROSSROADS · 1.0</p>
-            <h2 class="act-title">交汇地，IP 的开发与发行平台</h2>
-            <p class="spread-lead">交汇地是非雨运营的线上平台。IP 方在这里建立和经营 IP，创作者在授权范围内开发内容与周边，商品在平台市集展示与发行。</p>
-            <div class="spread-actions">
-              <a class="btn btn-celadon" href="https://realrain.art/">进入交汇地 realrain.art ↗</a>
-              <a class="btn btn-outline-dark" href="#contact">合作咨询</a>
+            <div class="platform-actions">
+              <a class="btn btn-ivory magnetic" href="https://realrain.art/">进入交汇地 realrain.art ↗</a>
             </div>
           </div>
 
-          <div class="spread-diptych reveal">
-            <figure class="diptych-plate diptych-art">
-              <div class="diptych-frame">
-                <img src="assets/media/editions/edition-artwork.webp?v=20261118-2" alt="作品《霏霏》角色与设定画稿" width="1280" height="1226" decoding="async" />
+          <div class="specimen-column">
+            <div class="specimen-viewport" id="specimenViewport">
+              <div class="specimen-track" id="specimenDeck" data-drag-mode="snap" aria-label="交汇地现场与实体样本，可横向拖拽切换">
+                <figure class="specimen-slide">
+                  <div class="specimen-frame">
+                    <img src="assets/media/editions/crossroads-workshop.webp?v=20261118-3" alt="交汇地 Crossroads 工房在线制版界面" width="1440" height="840" decoding="async" />
+                  </div>
+                  <figcaption>01 · 工房在线制版</figcaption>
+                </figure>
+
+                <figure class="specimen-slide">
+                  <div class="specimen-frame specimen-frame-stage">
+                    <img src="assets/media/editions/edition-cards.webp?v=20261118-3" alt="交汇地印制样本：89×65mm 典藏透卡" width="1112" height="702" decoding="async" />
+                  </div>
+                  <figcaption>02 · 典藏透卡成品</figcaption>
+                </figure>
+
+                <figure class="specimen-slide">
+                  <div class="specimen-frame specimen-frame-stage">
+                    <img src="assets/media/editions/edition-badges.webp?v=20261118-3" alt="交汇地印制样本：75mm 双闪徽章" width="1252" height="612" decoding="async" />
+                  </div>
+                  <figcaption>03 · 双闪金属徽章</figcaption>
+                </figure>
+
+                <figure class="specimen-slide">
+                  <div class="specimen-frame">
+                    <img src="assets/media/editions/edition-artwork.webp?v=20261118-3" alt="原创角色设定母版画稿《霏霏》" width="1280" height="1226" decoding="async" />
+                  </div>
+                  <figcaption>04 · 角色设定母版</figcaption>
+                </figure>
               </div>
-              <figcaption class="diptych-caption">01 · 角色与设定画稿《霏霏》</figcaption>
-            </figure>
+            </div>
 
-            <figure class="diptych-plate diptych-workshop">
-              <div class="diptych-frame">
-                <img src="assets/media/editions/crossroads-workshop.webp?v=20261118-2" alt="交汇地 Crossroads 工房工作台：吧唧设计与实体规格预览" width="1440" height="840" decoding="async" />
+            <div class="specimen-bar">
+              <div class="specimen-pills" role="tablist" aria-label="切换样本">
+                <button class="specimen-pill is-active" type="button" role="tab" aria-selected="true" data-slide="0">01 工房</button>
+                <button class="specimen-pill" type="button" role="tab" aria-selected="false" data-slide="1">02 透卡</button>
+                <button class="specimen-pill" type="button" role="tab" aria-selected="false" data-slide="2">03 徽章</button>
+                <button class="specimen-pill" type="button" role="tab" aria-selected="false" data-slide="3">04 原画</button>
               </div>
-              <figcaption class="diptych-caption">02 · 交汇地工房 · 实体周边设计</figcaption>
-            </figure>
-          </div>
-        </div>
-
-        <div class="spec-strip reveal">
-          <div class="spec-item">
-            <p class="spec-title">01 · IP 空间</p>
-            <p class="spec-desc">为每个 IP 集中管理角色、世界观、素材与作品，版本与发布状态都可查。</p>
-          </div>
-          <div class="spec-item">
-            <p class="spec-title">02 · 授权共创</p>
-            <p class="spec-desc">设定与素材连同创作许可按版本发布，创作者获授开发，作品保留来源与署名。</p>
-          </div>
-          <div class="spec-item">
-            <p class="spec-title">03 · 工房</p>
-            <p class="spec-desc">围绕 IP 素材加工衍生内容，在线排版设计徽章、透卡与立牌等实体周边。</p>
-          </div>
-          <div class="spec-item">
-            <p class="spec-title">04 · 市集</p>
-            <p class="spec-desc">周边商品在平台市集集中展示与发行，消费者从角色与作品直接找到商品。</p>
+              <span class="drag-hint drag-hint-dark">左右拖拽切换 · DRAG</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ACT IV: Partnership Ledger (Pure White #FFFFFF, Full-Width Horizontal Index) -->
-    <section class="act act-white" id="partners" data-theme="light">
+    <!-- ACT 04: COLLABORATION (5 Sparse Lines) -->
+    <section class="act act-white partners-act" id="partners" data-theme="light" data-chapter="3" data-label="04 · 合作">
       <div class="container">
-        <div class="act-head-split">
-          <div class="act-head-main">
-            <p class="eyebrow">03 / 合作方式</p>
-            <h2 class="act-title">与非雨合作，开展 IP 商业化</h2>
+        <div class="chapter-head chapter-head-compact">
+          <div class="chapter-head-left">
+            <p class="eyebrow">04 / 合作</p>
+            <h2 class="chapter-title">五种路径，同一套标准。</h2>
           </div>
-          <p class="act-summary">具体授权与履约范围，根据项目约定。</p>
+          <p class="chapter-thesis">权责与收益规则按项目约定。</p>
         </div>
 
-        <div class="partners-ledger reveal">
-          <div class="partner-row partner-head" aria-hidden="true">
-            <span></span>
-            <span>业务方向</span>
-            <span>面向伙伴</span>
-            <span>合作内容</span>
+        <div class="paths-list">
+          <div class="path-item">
+            <span class="path-num">01</span>
+            <h3 class="path-name">原创 IP 发行</h3>
+            <span class="path-role">原创作者</span>
+            <p class="path-desc">将原创角色与作品交由非雨开发、生产与发行。</p>
           </div>
-
-          <div class="partner-row">
-            <span class="row-num">01</span>
-            <h3 class="row-title">原创 IP 发行</h3>
-            <p class="row-col row-partner"><span class="row-label">面向伙伴</span>原创作者</p>
-            <p class="row-col"><span class="row-label">合作内容</span>原创作者可将角色与作品交由非雨发行。非雨组织商品开发、生产与发行，权利与收益按约定划分。</p>
+          <div class="path-item">
+            <span class="path-num">02</span>
+            <h3 class="path-name">标准品周边托管</h3>
+            <span class="path-role">IP 方</span>
+            <p class="path-desc">在交汇地市集托管官方周边，依真实反馈迭代。</p>
           </div>
-
-          <div class="partner-row">
-            <span class="row-num">02</span>
-            <h3 class="row-title">标准品周边托管</h3>
-            <p class="row-col row-partner"><span class="row-label">面向伙伴</span>IP 方</p>
-            <p class="row-col"><span class="row-label">合作内容</span>通过交汇地市集托管标准品周边，由平台组织商品展示、发行与生产协作，并结合购买与反馈调整后续商品方向。</p>
+          <div class="path-item">
+            <span class="path-num">03</span>
+            <h3 class="path-name">授权共创</h3>
+            <span class="path-role">创作者</span>
+            <p class="path-desc">围绕开放设定开发内容与商品，衍生链条清晰在案。</p>
           </div>
-
-          <div class="partner-row">
-            <span class="row-num">03</span>
-            <h3 class="row-title">授权共创</h3>
-            <p class="row-col row-partner"><span class="row-label">面向伙伴</span>创作者</p>
-            <p class="row-col"><span class="row-label">合作内容</span>在授权范围内围绕 IP 的设定与素材开发内容及商品。平台记录作品与衍生关系，明确商业使用与收益规则。</p>
+          <div class="path-item">
+            <span class="path-num">04</span>
+            <h3 class="path-name">品牌授权</h3>
+            <span class="path-role">品牌方</span>
+            <p class="path-desc">引入契合受众的 IP 角色，协同打造联名消费品。</p>
           </div>
-
-          <div class="partner-row">
-            <span class="row-num">04</span>
-            <h3 class="row-title">品牌授权</h3>
-            <p class="row-col row-partner"><span class="row-label">面向伙伴</span>品牌方</p>
-            <p class="row-col"><span class="row-label">合作内容</span>围绕自身受众、品类与渠道与 IP 方开展品牌授权合作，把角色与作品引入品牌商品并协同后续发行。</p>
-          </div>
-
-          <div class="partner-row">
-            <span class="row-num">05</span>
-            <h3 class="row-title">生产合作</h3>
-            <p class="row-col row-partner"><span class="row-label">面向伙伴</span>生产方</p>
-            <p class="row-col"><span class="row-label">合作内容</span>按品类、工艺与交付能力接入非雨，通过 OEM 批量生产或 POD 按需生产，为平台商品发行提供生产与履约支持。</p>
+          <div class="path-item">
+            <span class="path-num">05</span>
+            <h3 class="path-name">生产合作</h3>
+            <span class="path-role">制造方</span>
+            <p class="path-desc">接入 OEM 或 POD 柔性制造网络，共定工艺标准。</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ACT V: Founding Team & Advisory Monograph (Warm Alabaster #F8F8F7) -->
-    <section class="act act-alabaster" id="team" data-theme="light">
+    <!-- ACT 05: PEOPLE (Distilled Studio Credentials) -->
+    <section class="act act-stone team-act" id="team" data-theme="light" data-chapter="4" data-label="05 · 团队">
       <div class="container">
-        <div class="act-head-split act-head-single">
-          <div class="act-head-main">
-            <p class="eyebrow">04 / 团队与顾问</p>
-            <h2 class="act-title">技术、创作者运营与权利协作</h2>
+        <div class="chapter-head chapter-head-compact">
+          <div class="chapter-head-left">
+            <p class="eyebrow">05 / 团队</p>
+            <h2 class="chapter-title">理性工程与创作直觉的交汇。</h2>
           </div>
         </div>
 
-        <div class="team-monograph reveal">
-          <article class="team-person">
-            <div class="person-rule" aria-hidden="true"></div>
+        <div class="people-grid">
+          <article class="person-col">
+            <span class="person-index">01</span>
             <h3>徐北辰</h3>
             <p class="person-role">创始人 / CEO</p>
-            <p class="person-bio">帝国理工学院机器学习与大数据科学硕士；参与剑桥大学卡文迪许实验室与 KICC 的宇宙学及机器学习研究，曾任 AI4S 科学家与视觉语言大模型算法工程师。负责公司战略、核心产品与技术体系。</p>
+            <p class="person-bio">帝国理工学院硕士，曾参与剑桥大学卡文迪许实验室与 KICC 研究；主理公司战略、产品与技术体系。</p>
           </article>
 
-          <article class="team-person">
-            <div class="person-rule" aria-hidden="true"></div>
+          <article class="person-col">
+            <span class="person-index">02</span>
             <h3>周弈杉</h3>
             <p class="person-role">联合创始人 / COO</p>
-            <p class="person-bio">萨里大学创业与创新管理硕士；长期从事绘画、3D 建模与二次元内容实践，参与出版，个人作品曾授权第三方发行；具备创作者市集及社区运营经验。负责创作者产品、内容与项目运营、合作转化。</p>
+            <p class="person-bio">萨里大学硕士，长期从事插画、3D 与二次元出版及市集实践；主理创作者产品与商业化运营。</p>
           </article>
 
-          <article class="team-person">
-            <div class="person-rule" aria-hidden="true"></div>
+          <article class="person-col">
+            <span class="person-index">03</span>
             <h3>栗志果</h3>
             <p class="person-role">版权与产业合作</p>
-            <p class="person-bio">南京大学计算机专业研究生；曾任蚂蚁集团高级产品专家、司法链平台负责人，参与大型机构产品、跨组织协同与版权基础设施建设。负责权利合作、交易治理与机构协同。</p>
+            <p class="person-bio">南京大学计算机研究生，前蚂蚁集团高级产品专家、司法链平台负责人；主理权利合作与交易治理。</p>
           </article>
         </div>
 
-        <div class="advisors-ledger reveal">
-          <p class="advisors-heading">专业顾问</p>
-          <div class="advisors-cols">
-            <div class="advisor-entry">
-              <h4>张翼遥 <span class="advisor-role">政策与传播顾问</span></h4>
-              <p>北京大学新媒体研究中心顾问。</p>
-            </div>
-            <div class="advisor-entry">
-              <h4>邓雨蝶 <span class="advisor-role">制片与导演顾问</span></h4>
-              <p>北京电影学院本科、清华大学与南加州大学硕士；具有光线传媒、智谱华章相关 AIGC 内容项目经验。</p>
-            </div>
+        <div class="advisors-strip">
+          <div class="advisor-item">
+            <span class="advisor-name">张翼遥</span>
+            <span class="advisor-title">政策与传播顾问</span>
+            <span class="advisor-cred">北京大学新媒体研究中心顾问</span>
+          </div>
+          <div class="advisor-item">
+            <span class="advisor-name">邓雨蝶</span>
+            <span class="advisor-title">制片与导演顾问</span>
+            <span class="advisor-cred">北电本科，清华与南加大硕士；光线传媒、智谱华章 AIGC 项目经验</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ACT VI: Closing Contact & Obsidian Footer (Obsidian #0F1110) -->
-    <section class="act act-dark contact-act" id="contact" data-theme="dark">
-      <div class="container">
-        <div class="contact-monolith">
-          <p class="eyebrow eyebrow-light">05 / 联系我们</p>
+    <!-- ACT 06: CLOSING MONOLITH & COLOPHON (Obsidian #090B0A) -->
+    <section class="act act-dark contact-act" id="contact" data-theme="dark" data-chapter="5" data-label="06 · 联系">
+      <div class="container contact-shell">
+        <div class="contact-spacer" aria-hidden="true"></div>
+
+        <div class="contact-center">
+          <p class="eyebrow eyebrow-light">06 / 联系</p>
           <p class="slogan-serif" lang="en">Hack to the Wonderland</p>
-          <p class="contact-lead">欢迎带着你的作品、需求或合作想法，与非雨联系。</p>
-          <div class="contact-direct">
-            <a class="contact-mail" href="mailto:contact@realrain.co">contact@realrain.co</a>
-          </div>
-          <div class="contact-secondary">
-            <a class="btn btn-outline-light" href="https://realrain.art/">进入交汇地 realrain.art ↗</a>
+          <p class="contact-lead">带着作品或想法，来聊。</p>
+          <div class="contact-actions">
+            <a class="contact-mail magnetic" href="mailto:contact@realrain.co">contact@realrain.co</a>
+            <a class="btn btn-outline-light" href="https://realrain.art/">进入交汇地 ↗</a>
           </div>
         </div>
+
+        <footer class="colophon">
+          <div class="colophon-left">
+            <img class="colophon-wordmark" src="assets/logo/realrain-wordmark-light.svg" alt="RealRain" width="84" height="17" />
+            <span class="colophon-sep">非雨</span>
+            <span class="colophon-addr">北京市海淀区成府路 28 号 优盛大厦</span>
+          </div>
+          <div class="colophon-right">
+            <span>© 2026 RealRain / 非雨</span>
+            <a href="https://realrain.art/">realrain.art ↗</a>
+            <a href="en/" hreflang="en" lang="en">English</a>
+          </div>
+        </footer>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer" data-theme="dark">
-    <div class="container">
-      <div class="footer-row">
-        <div class="footer-brand">
-          <div class="footer-brand-top">
-            <img class="footer-wordmark" src="assets/logo/realrain-wordmark-light.svg" alt="RealRain" width="88" height="18" />
-            <span class="footer-cn">非雨</span>
-          </div>
-          <p class="footer-address">北京市海淀区成府路 28 号 优盛大厦</p>
-        </div>
-        <div class="footer-links">
-          <a href="https://realrain.art/">交汇地 realrain.art ↗</a>
-          <a href="mailto:contact@realrain.co">contact@realrain.co</a>
-          <a href="en/" hreflang="en" lang="en">English</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>© 2026 RealRain / 非雨</span>
-        <span>面向开放创作的 IP 商业化发行平台</span>
-      </div>
-    </div>
-  </footer>
-
-  <script src="js/main.js?v=20261118-2" defer></script>
+  <script src="js/main.js?v=20261118-3" defer></script>
 </body>
 </html>

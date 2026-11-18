@@ -1,4 +1,4 @@
-// Render the Monograph Editorial Open Graph image (1200x630) with headless Chrome.
+// Render the Atmospheric Rain Cover Open Graph image (1200x630) with headless Chrome.
 //
 //   node tools/render-og.cjs
 const fs = require("fs");
@@ -25,7 +25,38 @@ const WORDMARK_SVG = fs
 
 const SERIF_FONT = readDataUri("assets/fonts/noto-serif-sc-600.woff2", "font/woff2");
 const SANS_FONT = readDataUri("assets/fonts/noto-sans-sc-400.woff2", "font/woff2");
-const BADGES_URI = readDataUri("assets/media/editions/edition-badges.webp", "image/webp");
+
+// Generate subtle SVG diagonal rain threads & elliptical water horizon ripples
+const RAIN_SVG = `
+<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="h-glow" cx="72%" cy="68%" r="52%">
+      <stop offset="0%" stop-color="#708F88" stop-opacity="0.22" />
+      <stop offset="60%" stop-color="#708F88" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#090B0A" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#h-glow)" />
+  <g stroke="#B6CEC8" stroke-width="1" stroke-linecap="round">
+    <line x1="780" y1="60" x2="770" y2="128" stroke-opacity="0.16" />
+    <line x1="840" y1="110" x2="828" y2="195" stroke-opacity="0.24" />
+    <line x1="910" y1="40" x2="900" y2="112" stroke-opacity="0.14" />
+    <line x1="965" y1="160" x2="950" y2="260" stroke-opacity="0.28" />
+    <line x1="1030" y1="88" x2="1018" y2="178" stroke-opacity="0.18" />
+    <line x1="1095" y1="145" x2="1082" y2="235" stroke-opacity="0.22" />
+    <line x1="1140" y1="70" x2="1130" y2="142" stroke-opacity="0.14" />
+    <line x1="720" y1="220" x2="708" y2="310" stroke-opacity="0.18" />
+    <line x1="875" y1="255" x2="862" y2="352" stroke-opacity="0.26" />
+    <line x1="1008" y1="290" x2="996" y2="375" stroke-opacity="0.2" />
+    <line x1="1120" y1="280" x2="1108" y2="365" stroke-opacity="0.16" />
+    <line x1="650" y1="140" x2="641" y2="205" stroke-opacity="0.12" />
+  </g>
+  <g fill="none" stroke="#A2BEB7">
+    <ellipse cx="900" cy="458" rx="92" ry="22" stroke-opacity="0.28" stroke-width="1" />
+    <ellipse cx="900" cy="458" rx="164" ry="39" stroke-opacity="0.14" stroke-width="1" />
+    <ellipse cx="1040" cy="492" rx="64" ry="15" stroke-opacity="0.2" stroke-width="1" />
+  </g>
+</svg>`;
 
 const HTML = `<!doctype html>
 <html lang="zh-Hans">
@@ -47,7 +78,7 @@ const HTML = `<!doctype html>
     width: 1200px;
     height: 630px;
     overflow: hidden;
-    background: #0F1110;
+    background: #090B0A;
     color: #F5F6F4;
     font-family: "RealRain Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -56,20 +87,32 @@ const HTML = `<!doctype html>
     position: relative;
     width: 1200px;
     height: 630px;
-    padding: 52px 68px;
+    padding: 52px 72px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background:
-      radial-gradient(620px 440px at 82% 52%, rgba(112, 143, 136, 0.22), rgba(15, 17, 16, 0) 74%),
-      #0F1110;
+    background: #090B0A;
+  }
+  .rain-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .rain-layer svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .top, .center, .bottom {
+    position: relative;
+    z-index: 2;
   }
   .top {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-bottom: 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.11);
   }
   .brand {
     display: flex;
@@ -89,47 +132,39 @@ const HTML = `<!doctype html>
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: 14px;
     letter-spacing: 0.14em;
-    color: #A1A8A4;
+    color: #9BA39E;
   }
-  .body {
-    display: grid;
-    grid-template-columns: 1.25fr 0.9fr;
-    align-items: center;
-    gap: 40px;
+  .center {
+    max-width: 780px;
+  }
+  .seal {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: #A2BEB7;
+    margin-bottom: 18px;
   }
   h1 {
     font-family: "RealRain Serif SC", Georgia, serif;
-    font-size: 56px;
+    font-size: 64px;
     font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.015em;
+    line-height: 1.16;
+    letter-spacing: -0.02em;
     color: #F5F6F4;
   }
   .sub {
     margin-top: 22px;
     font-size: 20px;
-    line-height: 1.62;
-    color: #A1A8A4;
-  }
-  .art {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .art img {
-    width: 100%;
-    height: auto;
-    max-height: 295px;
-    object-fit: contain;
+    color: #9BA39E;
   }
   .bottom {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-top: 22px;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 1px solid rgba(255, 255, 255, 0.11);
     font-size: 15px;
-    color: #A1A8A4;
+    color: #9BA39E;
   }
   .bottom b {
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -141,6 +176,7 @@ const HTML = `<!doctype html>
 </head>
 <body>
   <div class="frame">
+    <div class="rain-layer">${RAIN_SVG}</div>
     <div class="top">
       <div class="brand">
         <span class="emblem">${EMBLEM_SVG}</span>
@@ -149,14 +185,10 @@ const HTML = `<!doctype html>
       </div>
       <div class="domain">REALRAIN.CO</div>
     </div>
-    <div class="body">
-      <div>
-        <h1>让想象世界，<br>进入现实生活。</h1>
-        <p class="sub">面向开放创作的 IP 商业化发行平台 · 交汇地 realrain.art</p>
-      </div>
-      <div class="art">
-        <img src="${BADGES_URI}" alt="" />
-      </div>
+    <div class="center">
+      <div class="seal">非雨 · REALRAIN</div>
+      <h1>让想象世界，<br>进入现实生活。</h1>
+      <p class="sub">面向开放创作的 IP 实体出版平台 · realrain.art</p>
     </div>
     <div class="bottom">
       <span>Hack to the Wonderland</span>
