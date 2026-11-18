@@ -1,4 +1,4 @@
-// Render the Atmospheric Rain Cover Open Graph image (1200x630) with headless Chrome.
+// Render the Dark-Crystal Generative Commerce Open Graph image (1200x630).
 //
 //   node tools/render-og.cjs
 const fs = require("fs");
@@ -26,37 +26,67 @@ const WORDMARK_SVG = fs
 const SERIF_FONT = readDataUri("assets/fonts/noto-serif-sc-600.woff2", "font/woff2");
 const SANS_FONT = readDataUri("assets/fonts/noto-sans-sc-400.woff2", "font/woff2");
 
-// Generate subtle SVG diagonal rain threads & elliptical water horizon ripples
-const RAIN_SVG = `
-<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <defs>
-    <radialGradient id="h-glow" cx="72%" cy="68%" r="52%">
-      <stop offset="0%" stop-color="#708F88" stop-opacity="0.22" />
-      <stop offset="60%" stop-color="#708F88" stop-opacity="0.06" />
-      <stop offset="100%" stop-color="#090B0A" stop-opacity="0" />
-    </radialGradient>
-  </defs>
-  <rect width="1200" height="630" fill="url(#h-glow)" />
-  <g stroke="#B6CEC8" stroke-width="1" stroke-linecap="round">
-    <line x1="780" y1="60" x2="770" y2="128" stroke-opacity="0.16" />
-    <line x1="840" y1="110" x2="828" y2="195" stroke-opacity="0.24" />
-    <line x1="910" y1="40" x2="900" y2="112" stroke-opacity="0.14" />
-    <line x1="965" y1="160" x2="950" y2="260" stroke-opacity="0.28" />
-    <line x1="1030" y1="88" x2="1018" y2="178" stroke-opacity="0.18" />
-    <line x1="1095" y1="145" x2="1082" y2="235" stroke-opacity="0.22" />
-    <line x1="1140" y1="70" x2="1130" y2="142" stroke-opacity="0.14" />
-    <line x1="720" y1="220" x2="708" y2="310" stroke-opacity="0.18" />
-    <line x1="875" y1="255" x2="862" y2="352" stroke-opacity="0.26" />
-    <line x1="1008" y1="290" x2="996" y2="375" stroke-opacity="0.2" />
-    <line x1="1120" y1="280" x2="1108" y2="365" stroke-opacity="0.16" />
-    <line x1="650" y1="140" x2="641" y2="205" stroke-opacity="0.12" />
-  </g>
-  <g fill="none" stroke="#A2BEB7">
-    <ellipse cx="900" cy="458" rx="92" ry="22" stroke-opacity="0.28" stroke-width="1" />
-    <ellipse cx="900" cy="458" rx="164" ry="39" stroke-opacity="0.14" stroke-width="1" />
-    <ellipse cx="1040" cy="492" rx="64" ry="15" stroke-opacity="0.2" stroke-width="1" />
-  </g>
-</svg>`;
+// Parametric 3D dot-wave SVG sculpture matching #orbCanvas
+function buildDotWaveSvg() {
+  const dots = [];
+  const cx = 960;
+  const cy = 320;
+  const radius = 195;
+  const rotY = -0.32;
+  const rotX = 0.24;
+  const cosY = Math.cos(rotY);
+  const sinY = Math.sin(rotY);
+  const cosX = Math.cos(rotX);
+  const sinX = Math.sin(rotX);
+
+  for (let r = 0; r < 19; r++) {
+    for (let c = 0; c < 19; c++) {
+      const nx = (c - 9) / 9;
+      const ny = (r - 9) / 9;
+      const dist = Math.hypot(nx, ny);
+      if (dist <= 1.02) {
+        const baseR = Math.max(0.18, 1.0 - dist * 0.72);
+        const wave = Math.sin(dist * 6.4) * 0.12;
+        const nz = Math.sqrt(Math.max(0, 1 - dist * dist * 0.65)) * 0.42 + wave;
+
+        const x1 = nx * cosY + nz * sinY;
+        const z1 = -nx * sinY + nz * cosY;
+        const y2 = ny * cosX - z1 * sinX;
+        const z2 = ny * sinX + z1 * cosX;
+
+        const persp = 2.6 / (2.6 - z2);
+        const sx = (cx + x1 * radius * persp).toFixed(1);
+        const sy = (cy + y2 * radius * persp).toFixed(1);
+        const rad = Math.max(0.8, baseR * radius * 0.032 * persp).toFixed(2);
+        const alpha = Math.min(0.95, Math.max(0.18, (0.45 + z2 * 0.55) * baseR)).toFixed(3);
+        const mix = Math.max(0, Math.min(1, z2 + 0.4));
+        const cr = Math.round(112 + mix * 110);
+        const cg = Math.round(143 + mix * 98);
+        const cb = Math.round(136 + mix * 96);
+        dots.push(`<circle cx="${sx}" cy="${sy}" r="${rad}" fill="rgb(${cr},${cg},${cb})" fill-opacity="${alpha}" />`);
+      }
+    }
+  }
+  return `
+    <svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <radialGradient id="orb-halo" cx="80%" cy="51%" r="40%">
+          <stop offset="0%" stop-color="#A4C8BF" stop-opacity="0.22" />
+          <stop offset="55%" stop-color="#708F88" stop-opacity="0.06" />
+          <stop offset="100%" stop-color="#040606" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient id="aurora" cx="24%" cy="80%" r="55%">
+          <stop offset="0%" stop-color="#1E3934" stop-opacity="0.45" />
+          <stop offset="100%" stop-color="#040606" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <rect width="1200" height="630" fill="url(#aurora)" />
+      <rect width="1200" height="630" fill="url(#orb-halo)" />
+      ${dots.join("\n")}
+    </svg>`;
+}
+
+const ORB_SVG = buildDotWaveSvg();
 
 const HTML = `<!doctype html>
 <html lang="zh-Hans">
@@ -78,8 +108,8 @@ const HTML = `<!doctype html>
     width: 1200px;
     height: 630px;
     overflow: hidden;
-    background: #090B0A;
-    color: #F5F6F4;
+    background: #040606;
+    color: #F6F8F6;
     font-family: "RealRain Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     -webkit-font-smoothing: antialiased;
   }
@@ -91,14 +121,14 @@ const HTML = `<!doctype html>
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: #090B0A;
+    background: #040606;
   }
-  .rain-layer {
+  .bg-layer {
     position: absolute;
     inset: 0;
     pointer-events: none;
   }
-  .rain-layer svg {
+  .bg-layer svg {
     width: 100%;
     height: 100%;
     display: block;
@@ -112,7 +142,7 @@ const HTML = `<!doctype html>
     align-items: center;
     justify-content: space-between;
     padding-bottom: 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
   .brand {
     display: flex;
@@ -125,58 +155,58 @@ const HTML = `<!doctype html>
     padding-left: 16px;
     border-left: 1px solid rgba(255, 255, 255, 0.22);
     font-size: 16px;
-    color: #A2BEB7;
+    color: #A4C8BF;
     letter-spacing: 0.08em;
   }
   .domain {
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: 14px;
     letter-spacing: 0.14em;
-    color: #9BA39E;
+    color: #98A39D;
   }
   .center {
-    max-width: 780px;
+    max-width: 720px;
   }
   .seal {
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: 13px;
-    letter-spacing: 0.2em;
-    color: #A2BEB7;
+    letter-spacing: 0.18em;
+    color: #A4C8BF;
     margin-bottom: 18px;
   }
   h1 {
     font-family: "RealRain Serif SC", Georgia, serif;
-    font-size: 64px;
+    font-size: 62px;
     font-weight: 600;
     line-height: 1.16;
     letter-spacing: -0.02em;
-    color: #F5F6F4;
+    color: #F6F8F6;
   }
   .sub {
-    margin-top: 22px;
+    margin-top: 20px;
     font-size: 20px;
-    color: #9BA39E;
+    color: #98A39D;
   }
   .bottom {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-top: 22px;
-    border-top: 1px solid rgba(255, 255, 255, 0.11);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     font-size: 15px;
-    color: #9BA39E;
+    color: #98A39D;
   }
   .bottom b {
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-weight: 500;
     letter-spacing: 0.12em;
-    color: #A2BEB7;
+    color: #A4C8BF;
   }
 </style>
 </head>
 <body>
   <div class="frame">
-    <div class="rain-layer">${RAIN_SVG}</div>
+    <div class="bg-layer">${ORB_SVG}</div>
     <div class="top">
       <div class="brand">
         <span class="emblem">${EMBLEM_SVG}</span>
@@ -186,13 +216,13 @@ const HTML = `<!doctype html>
       <div class="domain">REALRAIN.CO</div>
     </div>
     <div class="center">
-      <div class="seal">非雨 · REALRAIN</div>
+      <div class="seal">非雨 · 生成式消费平台</div>
       <h1>让想象世界，<br>进入现实生活。</h1>
-      <p class="sub">面向开放创作的 IP 实体出版平台 · realrain.art</p>
+      <p class="sub">交汇之地 Crossroads × 造物工坊 Workshop · realrain.art</p>
     </div>
     <div class="bottom">
       <span>Hack to the Wonderland</span>
-      <b>CROSSROADS · REALRAIN.ART ↗</b>
+      <b>REALRAIN.ART ↗</b>
     </div>
   </div>
 </body>

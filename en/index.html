@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>RealRain | Physical IP Publishing Platform</title>
-  <meta name="description" content="The physical publishing platform for open IP. Consumer goods as the medium, connecting rights holders, creators, manufacturers and consumers via Crossroads." />
-  <meta name="theme-color" content="#090B0A" />
+  <title>RealRain | Generative Commerce Platform</title>
+  <meta name="description" content="RealRain is a generative commerce platform turning personal taste into tangible physical objects through Crossroads and Workshop." />
+  <meta name="theme-color" content="#040606" />
   <link rel="canonical" href="https://realrain.co/en/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://realrain.co/" />
   <link rel="alternate" hreflang="en" href="https://realrain.co/en/" />
@@ -39,47 +39,47 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="RealRain" />
   <meta property="og:locale" content="en_US" />
-  <meta property="og:title" content="RealRain | Imagined worlds, made physical" />
-  <meta property="og:description" content="The physical publishing platform for open IP. Platform: realrain.art." />
+  <meta property="og:title" content="RealRain | Where imagined worlds become real" />
+  <meta property="og:description" content="Generative commerce platform: Crossroads × Workshop. realrain.art." />
   <meta property="og:url" content="https://realrain.co/en/" />
-  <meta property="og:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-3" />
+  <meta property="og:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-4" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="RealRain | Imagined worlds, made physical" />
-  <meta name="twitter:description" content="The physical publishing platform for open IP." />
-  <meta name="twitter:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-3" />
+  <meta name="twitter:title" content="RealRain | Generative Commerce Platform" />
+  <meta name="twitter:description" content="Where imagined worlds become real." />
+  <meta name="twitter:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-4" />
 
-  <link rel="icon" type="image/png" href="../assets/logo/realrain-favicon-celadon.png?v=20261118-3" />
-  <link rel="preload" href="../assets/fonts/noto-serif-sc-600.woff2?v=20261118-3" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="../assets/fonts/noto-sans-sc-400.woff2?v=20261118-3" as="font" type="font/woff2" crossorigin />
+  <link rel="icon" type="image/png" href="../assets/logo/realrain-favicon-celadon.png?v=20261118-4" />
+  <link rel="preload" href="../assets/fonts/noto-serif-sc-600.woff2?v=20261118-4" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/noto-sans-sc-400.woff2?v=20261118-4" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&display=swap" media="print" onload="this.media='all'" />
-  <link rel="stylesheet" href="../css/styles.css?v=20261118-3" />
+  <link rel="stylesheet" href="../css/styles.css?v=20261118-4" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header is-dark" id="siteHeader">
+  <canvas class="gl-bg" id="glCanvas" aria-hidden="true"></canvas>
+  <div class="ambient-vignette" aria-hidden="true"></div>
+
+  <header class="site-header" id="siteHeader">
     <div class="header-inner">
       <a class="header-brand" href="#top" aria-label="RealRain home">
-        <img class="brand-emblem brand-emblem-light" src="../assets/logo/realrain-logo-rain-celadon-reverse.svg" alt="" width="20" height="20" aria-hidden="true" />
-        <img class="brand-emblem brand-emblem-dark" src="../assets/logo/realrain-logo-rain-celadon-layered.svg" alt="" width="20" height="20" aria-hidden="true" />
-        <img class="brand-wordmark brand-wordmark-light" src="../assets/logo/realrain-wordmark-light.svg" alt="RealRain" width="108" height="22" />
-        <img class="brand-wordmark brand-wordmark-dark" src="../assets/logo/realrain-wordmark-dark.svg" alt="" width="108" height="22" aria-hidden="true" />
+        <img class="brand-emblem" src="../assets/logo/realrain-logo-rain-celadon-reverse.svg" alt="" width="20" height="20" aria-hidden="true" />
+        <img class="brand-wordmark" src="../assets/logo/realrain-wordmark-light.svg" alt="RealRain" width="108" height="22" />
       </a>
 
       <nav class="header-nav" aria-label="Primary navigation">
-        <a href="#publishing" data-chapter-link="01">Medium</a>
-        <a href="#product" data-chapter-link="02">Crossroads</a>
-        <a href="#partners" data-chapter-link="03">Partnerships</a>
-        <a href="#team" data-chapter-link="04">People</a>
-        <a href="#contact" data-chapter-link="05">Contact</a>
+        <a href="#paradigm" data-chapter-link="1">Paradigm</a>
+        <a href="#platform" data-chapter-link="2">Platform</a>
+        <a href="#team" data-chapter-link="3">Team</a>
+        <a href="#contact" data-chapter-link="4">Vision</a>
       </nav>
 
       <div class="header-actions">
         <a class="header-lang" href="../" hreflang="zh-Hans" lang="zh-Hans">中文</a>
-        <a class="btn btn-header-cta" href="https://realrain.art/">Open Crossroads ↗</a>
+        <a class="btn btn-luminous btn-header-cta" href="https://realrain.art/">Crossroads ↗</a>
         <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="mobileDrawer" aria-label="Open menu">
           <span class="nav-toggle-line"></span>
           <span class="nav-toggle-line"></span>
@@ -88,18 +88,15 @@
     </div>
   </header>
 
-  <nav class="chapter-rail is-dark" id="chapterRail" aria-label="Chapter navigation">
-    <span class="rail-readout" id="railReadout">01</span>
-    <div class="rail-track" id="railTrack">
-      <div class="rail-thumb" id="railThumb" aria-hidden="true"></div>
-      <button class="rail-stop is-active" type="button" data-rail-index="0" data-rail-label="01 · Cover" aria-label="Chapter 1: Cover"></button>
-      <button class="rail-stop" type="button" data-rail-index="1" data-rail-label="02 · The Medium" aria-label="Chapter 2: The Medium"></button>
-      <button class="rail-stop" type="button" data-rail-index="2" data-rail-label="03 · Crossroads" aria-label="Chapter 3: Crossroads"></button>
-      <button class="rail-stop" type="button" data-rail-index="3" data-rail-label="04 · Partnerships" aria-label="Chapter 4: Partnerships"></button>
-      <button class="rail-stop" type="button" data-rail-index="4" data-rail-label="05 · People" aria-label="Chapter 5: People"></button>
-      <button class="rail-stop" type="button" data-rail-index="5" data-rail-label="06 · Contact" aria-label="Chapter 6: Contact"></button>
+  <nav class="chapter-dots" id="chapterDots" aria-label="Chapter navigation">
+    <div class="dots-track" id="dotsTrack">
+      <div class="dots-indicator" id="dotsIndicator" aria-hidden="true"></div>
+      <button class="dot-stop is-active" type="button" data-dot-index="0" aria-label="Chapter 1"></button>
+      <button class="dot-stop" type="button" data-dot-index="1" aria-label="Chapter 2"></button>
+      <button class="dot-stop" type="button" data-dot-index="2" aria-label="Chapter 3"></button>
+      <button class="dot-stop" type="button" data-dot-index="3" aria-label="Chapter 4"></button>
+      <button class="dot-stop" type="button" data-dot-index="4" aria-label="Chapter 5"></button>
     </div>
-    <span class="rail-tooltip" id="railTooltip" aria-hidden="true">01 · Cover</span>
   </nav>
 
   <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true" hidden>
@@ -110,14 +107,13 @@
       </div>
       <nav class="mobile-drawer-nav" aria-label="Mobile navigation">
         <a href="#top"><span class="drawer-num">01</span><span>RealRain</span></a>
-        <a href="#publishing"><span class="drawer-num">02</span><span>The Medium</span></a>
-        <a href="#product"><span class="drawer-num">03</span><span>Crossroads</span></a>
-        <a href="#partners"><span class="drawer-num">04</span><span>Partnerships</span></a>
-        <a href="#team"><span class="drawer-num">05</span><span>People</span></a>
-        <a href="#contact"><span class="drawer-num">06</span><span>Contact</span></a>
+        <a href="#paradigm"><span class="drawer-num">02</span><span>Generative Commerce</span></a>
+        <a href="#platform"><span class="drawer-num">03</span><span>Ecosystem</span></a>
+        <a href="#team"><span class="drawer-num">04</span><span>Team &amp; Advisors</span></a>
+        <a href="#contact"><span class="drawer-num">05</span><span>Vision &amp; Contact</span></a>
       </nav>
       <div class="mobile-drawer-foot">
-        <a class="btn btn-ivory drawer-cta" href="https://realrain.art/">Open Crossroads ↗</a>
+        <a class="btn btn-luminous drawer-cta" href="https://realrain.art/">Enter Crossroads ↗</a>
         <div class="drawer-meta">
           <a href="mailto:contact@realrain.co">contact@realrain.co</a>
           <a href="../" hreflang="zh-Hans" lang="zh-Hans">简体中文</a>
@@ -127,267 +123,197 @@
   </div>
 
   <main id="main">
-    <!-- ACT 01: THE COVER -->
-    <section class="act act-dark cover-act is-active" id="top" data-theme="dark" data-chapter="0" data-label="01 · Cover">
-      <canvas class="rain-canvas" id="rainCanvas" aria-hidden="true"></canvas>
-      <div class="cover-scrim" aria-hidden="true"></div>
+    <!-- CHAPTER 01: COVER -->
+    <section class="act cover-act is-active" id="top" data-chapter="0">
+      <div class="container cover-container">
+        <div class="cover-grid">
+          <div class="cover-copy">
+            <p class="eyebrow">RealRain · Generative Commerce</p>
+            <h1 class="cover-title reveal-line">
+              <span>Where imagined worlds</span>
+              <span class="shimmer-text">become real.</span>
+            </h1>
+            <p class="cover-sub reveal-fade">Turning personal taste into tangible objects, on demand.</p>
+            <div class="cover-actions reveal-fade">
+              <a class="btn btn-luminous magnetic" href="https://realrain.art/">Enter Crossroads ↗</a>
+              <a class="btn btn-glass magnetic" href="#paradigm">Explore ↓</a>
+            </div>
+          </div>
 
-      <div class="container cover-shell">
-        <div class="cover-spacer" aria-hidden="true"></div>
-
-        <div class="cover-center">
-          <p class="cover-seal">REALRAIN</p>
-          <h1 class="cover-title">Imagined worlds,<br>made physical.</h1>
-          <p class="cover-sub">The physical publishing platform for open IP.</p>
-          <div class="cover-actions">
-            <a class="btn btn-ivory magnetic" href="https://realrain.art/">Open Crossroads ↗</a>
-            <a class="btn btn-quiet-dark" href="#publishing">Explore ↓</a>
+          <div class="cover-sculpture" aria-hidden="true">
+            <canvas class="orb-canvas" id="orbCanvas"></canvas>
           </div>
         </div>
 
-        <div class="cover-foot">
-          <span class="chapter-counter">01 / 06</span>
-          <span class="cue-hint">DRAG SURFACE · SCROLL ↓</span>
+        <a class="scroll-drop" href="#paradigm" aria-label="Scroll to next section">
+          <span class="scroll-drop-line"></span>
+        </a>
+      </div>
+    </section>
+
+    <!-- CHAPTER 02: PARADIGM -->
+    <section class="act paradigm-act" id="paradigm" data-chapter="1">
+      <div class="container">
+        <header class="act-header">
+          <p class="eyebrow">01 / Generative Commerce</p>
+          <h2 class="act-title reveal-line">
+            <span>Beyond static shelves.</span>
+            <span>Designed around you.</span>
+          </h2>
+        </header>
+
+        <div class="glass-trio" id="paradigmTrack">
+          <article class="glass-card spotlight tilt-card">
+            <div class="card-num">01</div>
+            <h3>Zero-Prompt</h3>
+            <p class="card-en">Remix First</p>
+            <p class="card-brief">Start from inspiration, customize without prompts.</p>
+          </article>
+
+          <article class="glass-card spotlight tilt-card">
+            <div class="card-num">02</div>
+            <h3>Taste Graph</h3>
+            <p class="card-en">Proactive Discovery</p>
+            <p class="card-brief">A living preference model that anticipates what you love.</p>
+          </article>
+
+          <article class="glass-card spotlight tilt-card">
+            <div class="card-num">03</div>
+            <h3>Direct Craft</h3>
+            <p class="card-en">Programmable Medium</p>
+            <p class="card-brief">Embedded licensing and factory specs, made to order.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- ACT 02: THE MEDIUM -->
-    <section class="act act-alabaster medium-act" id="publishing" data-theme="light" data-chapter="1" data-label="02 · The Medium">
-      <div class="container">
-        <div class="chapter-head">
-          <div class="chapter-head-left">
-            <p class="eyebrow">02 / THE MEDIUM</p>
-            <h2 class="chapter-title">Once printed as books.<br>Now published as objects.</h2>
-          </div>
-          <p class="chapter-thesis">Open creation, governed release. Giving fictional worlds tangible weight and traceable lineage.</p>
-        </div>
+    <!-- CHAPTER 03: ECOSYSTEM 3D STAGE -->
+    <section class="act stage-act" id="platform" data-chapter="2">
+      <div class="container stage-container">
+        <header class="act-header act-header-centered">
+          <p class="eyebrow">02 / Ecosystem</p>
+          <h2 class="act-title reveal-line">
+            <span>Crossroads &amp; Workshop.</span>
+          </h2>
+        </header>
 
-        <div class="drag-stage">
-          <div class="drag-viewport" id="publishViewport">
-            <div class="drag-track" id="publishTrack" data-drag-mode="free" aria-label="Publishing sequence, drag horizontally">
-              <article class="medium-card">
-                <div class="card-top">
-                  <span class="card-index">01</span>
-                  <span class="card-tag">IP Space</span>
-                </div>
-                <h3>Canon &amp; Rights</h3>
-                <p>Worlds, assets and licence terms on record.</p>
-              </article>
-
-              <article class="medium-card">
-                <div class="card-top">
-                  <span class="card-index">02</span>
-                  <span class="card-tag">Co-creation</span>
-                </div>
-                <h3>Licensed Craft</h3>
-                <p>Create inside the licence with source and credit intact.</p>
-              </article>
-
-              <article class="medium-card">
-                <div class="card-top">
-                  <span class="card-index">03</span>
-                  <span class="card-tag">OEM · POD</span>
-                </div>
-                <h3>Precision Run</h3>
-                <p>On-demand and batch craft calibrated to the artwork.</p>
-              </article>
-
-              <article class="medium-card">
-                <div class="card-top">
-                  <span class="card-index">04</span>
-                  <span class="card-tag">Market</span>
-                </div>
-                <h3>Market Release</h3>
-                <p>Direct release where audience response shapes the next run.</p>
-              </article>
-            </div>
-          </div>
-
-          <div class="drag-meta">
-            <div class="drag-meter" aria-hidden="true">
-              <div class="drag-meter-fill" id="publishProgress"></div>
-            </div>
-            <span class="drag-hint">DRAG TO EXPLORE</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ACT 03: CROSSROADS -->
-    <section class="act act-dark platform-act" id="product" data-theme="dark" data-chapter="2" data-label="03 · Crossroads">
-      <div class="container">
-        <div class="platform-grid">
-          <div class="platform-copy">
-            <p class="eyebrow eyebrow-light">03 / CROSSROADS</p>
-            <h2 class="chapter-title chapter-title-light">Where IP is built,<br>crafted, and released.</h2>
-            <p class="platform-lead">RealRain's live platform for canon management, licensed co-creation, and physical editions.</p>
-
-            <div class="cap-strip" aria-label="Platform pillars">
-              <span>IP Spaces</span>
-              <span>Co-creation</span>
-              <span>Workshop</span>
-              <span>Market</span>
-            </div>
-
-            <div class="platform-actions">
-              <a class="btn btn-ivory magnetic" href="https://realrain.art/">Open realrain.art ↗</a>
-            </div>
-          </div>
-
-          <div class="specimen-column">
-            <div class="specimen-viewport" id="specimenViewport">
-              <div class="specimen-track" id="specimenDeck" data-drag-mode="snap" aria-label="Crossroads workshop and edition specimens, drag horizontally">
-                <figure class="specimen-slide">
-                  <div class="specimen-frame">
-                    <img src="../assets/media/editions/crossroads-workshop.webp?v=20261118-3" alt="Crossroads interactive workshop previewing badge styling" width="1440" height="840" decoding="async" />
-                  </div>
-                  <figcaption>01 · Crossroads Workshop</figcaption>
-                </figure>
-
-                <figure class="specimen-slide">
-                  <div class="specimen-frame specimen-frame-stage">
-                    <img src="../assets/media/editions/edition-cards.webp?v=20261118-3" alt="Collector Print Edition: Feifei 89 by 65mm cards" width="1112" height="702" decoding="async" />
-                  </div>
-                  <figcaption>02 · Collector Print Edition</figcaption>
-                </figure>
-
-                <figure class="specimen-slide">
-                  <div class="specimen-frame specimen-frame-stage">
-                    <img src="../assets/media/editions/edition-badges.webp?v=20261118-3" alt="Dual-Glitter Metal Edition: Feifei 75mm badges" width="1252" height="612" decoding="async" />
-                  </div>
-                  <figcaption>03 · Dual-Glitter Metal Edition</figcaption>
-                </figure>
-
-                <figure class="specimen-slide">
-                  <div class="specimen-frame">
-                    <img src="../assets/media/editions/edition-artwork.webp?v=20261118-3" alt="Original Character Master: Feifei" width="1280" height="1226" decoding="async" />
-                  </div>
-                  <figcaption>04 · Original Character Master</figcaption>
-                </figure>
+        <div class="stage-viewport" id="stageViewport">
+          <div class="stage-deck" id="stageDeck" aria-label="Ecosystem 3D Showcase">
+            <figure class="stage-card glass-card is-center" data-stage-idx="0" data-pos="center">
+              <div class="stage-media">
+                <img src="../assets/media/editions/crossroads-workshop.webp?v=20261118-4" alt="Crossroads interactive design interface" width="1440" height="840" decoding="async" />
               </div>
-            </div>
+              <figcaption class="stage-caption">
+                <div>
+                  <h3>Crossroads</h3>
+                  <p>Browse · Remix · Discover</p>
+                </div>
+                <span class="stage-badge">01</span>
+              </figcaption>
+            </figure>
 
-            <div class="specimen-bar">
-              <div class="specimen-pills" role="tablist" aria-label="Select specimen">
-                <button class="specimen-pill is-active" type="button" role="tab" aria-selected="true" data-slide="0">01 Workshop</button>
-                <button class="specimen-pill" type="button" role="tab" aria-selected="false" data-slide="1">02 Print</button>
-                <button class="specimen-pill" type="button" role="tab" aria-selected="false" data-slide="2">03 Metal</button>
-                <button class="specimen-pill" type="button" role="tab" aria-selected="false" data-slide="3">04 Master</button>
+            <figure class="stage-card glass-card is-right" data-stage-idx="1" data-pos="right">
+              <div class="stage-media stage-media-dark">
+                <img src="../assets/media/editions/edition-cards.webp?v=20261118-4" alt="Physical collector cards from single master" width="1112" height="702" decoding="async" />
               </div>
-              <span class="drag-hint drag-hint-dark">DRAG SPECIMENS</span>
+              <figcaption class="stage-caption">
+                <div>
+                  <h3>Physical Editions</h3>
+                  <p>Badges · Collector Prints · Standees</p>
+                </div>
+                <span class="stage-badge">02</span>
+              </figcaption>
+            </figure>
+
+            <figure class="stage-card glass-card is-left" data-stage-idx="2" data-pos="left">
+              <div class="stage-media">
+                <img src="../assets/media/editions/edition-artwork.webp?v=20261118-4" alt="Original character master edition" width="1280" height="1226" decoding="async" />
+              </div>
+              <figcaption class="stage-caption">
+                <div>
+                  <h3>Workshop Engine</h3>
+                  <p>Open Masters · Direct Factory · Auto Splits</p>
+                </div>
+                <span class="stage-badge">03</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="stage-foot">
+          <div class="stage-tabs" role="tablist" aria-label="Switch perspective">
+            <button class="stage-tab is-active" type="button" role="tab" aria-selected="true" data-stage-tab="0">Crossroads</button>
+            <button class="stage-tab" type="button" role="tab" aria-selected="false" data-stage-tab="1">Editions</button>
+            <button class="stage-tab" type="button" role="tab" aria-selected="false" data-stage-tab="2">Workshop</button>
+          </div>
+          <a class="stage-link magnetic" href="https://realrain.art/">realrain.art ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 04: TEAM -->
+    <section class="act team-act" id="team" data-chapter="3">
+      <div class="container">
+        <header class="act-header">
+          <p class="eyebrow">03 / Team</p>
+          <h2 class="act-title reveal-line">
+            <span>AI systems, creator markets, and rights.</span>
+          </h2>
+        </header>
+
+        <div class="glass-trio team-trio">
+          <article class="glass-card spotlight tilt-card person-card">
+            <div class="person-head">
+              <h3>Beichen Xu</h3>
+              <span class="person-role">Founder &amp; CEO</span>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ACT 04: PARTNERSHIPS -->
-    <section class="act act-white partners-act" id="partners" data-theme="light" data-chapter="3" data-label="04 · Partnerships">
-      <div class="container">
-        <div class="chapter-head chapter-head-compact">
-          <div class="chapter-head-left">
-            <p class="eyebrow">04 / PARTNERSHIPS</p>
-            <h2 class="chapter-title">Five ways into the network.</h2>
-          </div>
-          <p class="chapter-thesis">Scope and terms agreed per project.</p>
-        </div>
-
-        <div class="paths-list">
-          <div class="path-item">
-            <span class="path-num">01</span>
-            <h3 class="path-name">Original IP</h3>
-            <span class="path-role">Creators</span>
-            <p class="path-desc">Publish original characters and works as physical editions.</p>
-          </div>
-          <div class="path-item">
-            <span class="path-num">02</span>
-            <h3 class="path-name">Merchandise Hosting</h3>
-            <span class="path-role">Rights Holders</span>
-            <p class="path-desc">Host official editions on Crossroads with demand-led runs.</p>
-          </div>
-          <div class="path-item">
-            <span class="path-num">03</span>
-            <h3 class="path-name">Licensed Co-creation</h3>
-            <span class="path-role">Creators</span>
-            <p class="path-desc">Build derivative works and goods with tracked lineage.</p>
-          </div>
-          <div class="path-item">
-            <span class="path-num">04</span>
-            <h3 class="path-name">Brand Licensing</h3>
-            <span class="path-role">Brands</span>
-            <p class="path-desc">Bring established IP into branded consumer categories.</p>
-          </div>
-          <div class="path-item">
-            <span class="path-num">05</span>
-            <h3 class="path-name">Manufacturing</h3>
-            <span class="path-role">Suppliers</span>
-            <p class="path-desc">Join our OEM and print-on-demand craft network.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ACT 05: PEOPLE -->
-    <section class="act act-stone team-act" id="team" data-theme="light" data-chapter="4" data-label="05 · People">
-      <div class="container">
-        <div class="chapter-head chapter-head-compact">
-          <div class="chapter-head-left">
-            <p class="eyebrow">05 / PEOPLE</p>
-            <h2 class="chapter-title">Where engineering meets creative practice.</h2>
-          </div>
-        </div>
-
-        <div class="people-grid">
-          <article class="person-col">
-            <span class="person-index">01</span>
-            <h3>Beichen Xu</h3>
-            <p class="person-role">Founder / CEO</p>
-            <p class="person-bio">MSc, Imperial College London; prior research with Cavendish Lab &amp; KICC, Cambridge. Strategy, product and technology.</p>
+            <p class="person-creds">Imperial College · Cambridge Cavendish &amp; KICC · MiraclePlus S26</p>
           </article>
 
-          <article class="person-col">
-            <span class="person-index">02</span>
-            <h3>Yishan Zhou</h3>
-            <p class="person-role">Co-founder / COO</p>
-            <p class="person-bio">MSc, University of Surrey; illustrator, published creator and market organiser. Creator products and operations.</p>
+          <article class="glass-card spotlight tilt-card person-card">
+            <div class="person-head">
+              <h3>Yishan Zhou</h3>
+              <span class="person-role">Co-founder &amp; COO</span>
+            </div>
+            <p class="person-creds">University of Surrey · Creator Markets &amp; Publishing</p>
           </article>
 
-          <article class="person-col">
-            <span class="person-index">03</span>
-            <h3>Zhiguo Li</h3>
-            <p class="person-role">Copyright &amp; Partnerships</p>
-            <p class="person-bio">CS graduate studies, Nanjing University; former head of Ant Group's judicial blockchain. Rights governance and partnerships.</p>
+          <article class="glass-card spotlight tilt-card person-card">
+            <div class="person-head">
+              <h3>Zhiguo Li</h3>
+              <span class="person-role">Co-founder &amp; CPO</span>
+            </div>
+            <p class="person-creds">Nanjing University · Ex-Head of Ant Judicial Chain · 100+ Patents</p>
           </article>
         </div>
 
-        <div class="advisors-strip">
-          <div class="advisor-item">
+        <div class="advisors-bar glass-panel spotlight">
+          <div class="advisor-pill">
             <span class="advisor-name">Yiyao Zhang</span>
-            <span class="advisor-title">Policy &amp; Communications</span>
-            <span class="advisor-cred">Advisor, PKU New Media Research Center</span>
+            <span class="advisor-role">Policy &amp; Communications</span>
+            <span class="advisor-org">PKU New Media Research Center</span>
           </div>
-          <div class="advisor-item">
-            <span class="advisor-name">Yudie Deng</span>
-            <span class="advisor-title">Production &amp; Directing</span>
-            <span class="advisor-cred">BFA, Tsinghua &amp; USC; Enlight Media and Zhipu AI projects</span>
+          <div class="advisor-divider" aria-hidden="true"></div>
+          <div class="advisor-pill">
+            <span class="advisor-name">Xin Wang</span>
+            <span class="advisor-role">IP &amp; BD Advisor</span>
+            <span class="advisor-org">Founder, Share Times &amp; Starry Universe</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ACT 06: CONTACT -->
-    <section class="act act-dark contact-act" id="contact" data-theme="dark" data-chapter="5" data-label="06 · Contact">
-      <div class="container contact-shell">
+    <!-- CHAPTER 05: VISION & COLOPHON -->
+    <section class="act contact-act" id="contact" data-chapter="4">
+      <div class="container contact-container">
         <div class="contact-spacer" aria-hidden="true"></div>
 
         <div class="contact-center">
-          <p class="eyebrow eyebrow-light">06 / CONTACT</p>
-          <p class="slogan-serif">Hack to the Wonderland</p>
-          <p class="contact-lead">Bring a world, or an idea.</p>
+          <p class="eyebrow">04 / Generative Lifestyle</p>
+          <p class="slogan-monolith shimmer-text">Hack to the Wonderland</p>
           <div class="contact-actions">
             <a class="contact-mail magnetic" href="mailto:contact@realrain.co">contact@realrain.co</a>
-            <a class="btn btn-outline-light" href="https://realrain.art/">Open Crossroads ↗</a>
+            <a class="btn btn-glass magnetic" href="https://realrain.art/">Enter realrain.art ↗</a>
           </div>
         </div>
 
@@ -406,6 +332,6 @@
     </section>
   </main>
 
-  <script src="../js/main.js?v=20261118-3" defer></script>
+  <script src="../js/main.js?v=20261118-4" defer></script>
 </body>
 </html>
