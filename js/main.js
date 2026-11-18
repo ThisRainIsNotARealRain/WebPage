@@ -100,9 +100,11 @@
         "void main() {",
         "  vec2 uv = gl_FragCoord.xy / uRes;",
         "  float aspect = uRes.x / max(1.0, uRes.y);",
-        "  vec2 p = (uv - 0.5) * vec2(aspect, 1.0);",
+        "  float portrait = clamp(1.0 - aspect, 0.0, 0.55);",
+        "  vec2 scale = vec2(max(aspect, 0.72), max(1.0, 1.0 + portrait * 0.18));",
+        "  vec2 p = (uv - 0.5) * scale;",
         "",
-        "  vec2 m = (uMouse - 0.5) * vec2(aspect, 1.0);",
+        "  vec2 m = (uMouse - 0.5) * scale;",
         "  float md = length(p - m);",
         "  p += normalize(p - m + 0.001) * exp(-md * 2.4) * 0.05;",
         "",
@@ -113,7 +115,7 @@
         "  float ribbon = smoothstep(0.38, 0.74, f);",
         "  float filament = pow(smoothstep(0.52, 0.84, f), 2.1);",
         "",
-        "  vec2 rp = (uv - uRipple) * vec2(aspect, 1.0);",
+        "  vec2 rp = (uv - uRipple) * scale;",
         "  float rd = length(rp);",
         "  float wave = 0.0;",
         "  if (uRippleAge >= 0.0 && uRippleAge < 2.2) {",
@@ -128,7 +130,7 @@
         "  vec3 col = mix(baseObsidian, mineralStone, ribbon * 0.92);",
         "  col += silverMist * (filament * 0.25 + wave);",
         "  col += vec3(0.18, 0.20, 0.19) * exp(-md * 2.8) * 0.22;",
-        "  col *= 1.0 - smoothstep(0.32, 1.05, length(p * vec2(0.78, 0.95))) * 0.62;",
+        "  col *= 1.0 - smoothstep(0.34, 1.08 + portrait * 0.22, length(p * vec2(mix(0.78, 0.68, portrait), 0.95))) * mix(0.62, 0.44, portrait);",
         "  col += (hash(gl_FragCoord.xy) - 0.5) * 0.012;",
         "",
         "  gl_FragColor = vec4(col, 1.0);",
@@ -199,6 +201,12 @@
             return;
           }
           lastDraw = tMs;
+
+          if (!reducedMotion && (tMs - lastInteraction) > 1200) {
+            var driftT = nowSec * 0.24;
+            state.mxTarget = 0.5 + Math.sin(driftT) * 0.18;
+            state.myTarget = 0.52 + Math.cos(driftT * 0.78) * 0.14;
+          }
 
           state.scroll += (state.scrollTarget - state.scroll) * 0.14;
           state.mx += (state.mxTarget - state.mx) * 0.14;
@@ -425,14 +433,26 @@
         return;
       }
       lastOrbDraw = tMs;
-      var dt60 = lastRenderTime ? Math.min(2.5, Math.max(0.25, (tMs - lastRenderTime) / 16.667)) : 1;
+      var hasPrevFrame = !!lastRenderTime;
+      var dt60 = hasPrevFrame ? Math.min(2.5, Math.max(0.25, (tMs - lastRenderTime) / 16.667)) : 1;
       lastRenderTime = tMs;
 
       ctx.clearRect(0, 0, w, h);
 
+      var isIdleBreathing = !reducedMotion &&
+        !hasDesktopGaze &&
+        !dragging &&
+        Math.abs(velX) < 0.0018 &&
+        Math.abs(velY) < 0.0018 &&
+        (tMs - lastDragMoveTime) > 600;
+
       if (!dragging) {
         targetY += velY * dt60;
         targetX = Math.max(-1.22, Math.min(1.22, targetX + velX * dt60));
+        if (isIdleBreathing && hasPrevFrame) {
+          targetY += Math.sin(tMs * 0.00085) * 0.0018 * dt60;
+          targetX = Math.max(-1.22, Math.min(1.22, targetX + Math.cos(tMs * 0.00065) * 0.0011 * dt60));
+        }
         var decay = Math.pow(0.94, dt60);
         velY *= decay;
         velX *= decay;
@@ -450,8 +470,8 @@
       var radius = Math.min(w, h) * (w <= 260 ? 0.43 : 0.38);
       var cx = w * 0.5;
       var cy = h * 0.5;
-      var litX = hasDesktopGaze ? gazeX : -0.34;
-      var litY = hasDesktopGaze ? gazeY : -0.38;
+      var litX = hasDesktopGaze ? gazeX : (reducedMotion ? -0.34 : Math.sin(t * 0.42) * 0.48);
+      var litY = hasDesktopGaze ? gazeY : (reducedMotion ? -0.38 : -0.26 + Math.cos(t * 0.34) * 0.24);
 
       var cosY = Math.cos(rotY);
       var sinY = Math.sin(rotY);
@@ -610,16 +630,21 @@
 
     var cachedStageW = window.innerWidth;
     var cachedIsMobile = window.innerWidth <= 960;
+    var cachedIsPhone = window.innerWidth <= 640;
 
     function measureStage() {
       cachedStageW = stage.clientWidth || window.innerWidth;
       cachedIsMobile = window.innerWidth <= 960;
+      cachedIsPhone = window.innerWidth <= 640;
     }
 
     function layoutRing() {
       var stageW = cachedStageW;
       var isMobile = cachedIsMobile;
-      var rx = isMobile ? Math.round(stageW * 0.44) : Math.min(430, Math.round(stageW * 0.39));
+      var isPhone = cachedIsPhone;
+      var rx = isPhone
+        ? Math.round(stageW * 0.10)
+        : (isMobile ? Math.round(stageW * 0.34) : Math.min(430, Math.round(stageW * 0.39)));
       var stepAngle = (Math.PI * 2) / total;
 
       for (var i = 0; i < total; i++) {
@@ -632,15 +657,17 @@
         var isFlankHover = hoveredIdx === i && Math.abs(delta) > 0.25;
         var x = sinT * rx;
         // Center sits crisp at z = 0, scale = 1 (1:1 native UI rendering); flanking cards recede in depth
-        var z = (normFront - 1) * (isMobile ? 120 : 175);
-        var y = (1 - normFront) * (isMobile ? -8 : -12);
-        var rotY = -sinT * (isMobile ? 11 : 14);
-        var scale = (0.71 + 0.29 * normFront) + (isFlankHover ? 0.032 : 0);
+        var z = (normFront - 1) * (isPhone ? 135 : (isMobile ? 120 : 175));
+        var y = (1 - normFront) * (isPhone ? -15 : (isMobile ? -8 : -12));
+        var rotY = -sinT * (isPhone ? 8 : (isMobile ? 11 : 14));
+        var scale = (isPhone ? (0.80 + 0.20 * normFront) : (0.71 + 0.29 * normFront)) + (isFlankHover ? 0.032 : 0);
 
         var dist = Math.abs(delta);
         var baseOpacity = dist < 0.05
           ? 1.0
-          : Math.max(isMobile ? 0.16 : 0.46, (isMobile ? 0.52 : 0.78) - dist * (isMobile ? 0.30 : 0.26));
+          : (isPhone
+            ? Math.max(0.12, 0.44 - dist * 0.22)
+            : Math.max(isMobile ? 0.16 : 0.46, (isMobile ? 0.52 : 0.78) - dist * (isMobile ? 0.30 : 0.26)));
         var opacity = isFlankHover ? Math.min(0.95, baseOpacity + 0.22) : baseOpacity;
         var zIdx = Math.round((cosT + 2) * 20);
 
@@ -850,41 +877,27 @@
   }
 
   /* =========================================================
-     3C. Chapter 04: Mobile Founding Team Deck (#teamTrack)
+     3C. Chapter 04: Mobile Founding Team Hairline Accordion (#teamTrack)
      ========================================================= */
   function initTeamDeck() {
     var track = document.getElementById("teamTrack");
-    var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-team-tab]"));
     var cards = track ? Array.prototype.slice.call(track.querySelectorAll("[data-team-card]")) : [];
-    if (!track || !tabs.length || !cards.length) return;
+    if (!track || !cards.length) return;
 
-    function syncTab(idx) {
-      for (var t = 0; t < tabs.length; t++) {
-        var match = t === idx;
-        tabs[t].classList.toggle("is-active", match);
-        tabs[t].setAttribute("aria-selected", match ? "true" : "false");
+    function setActive(idx) {
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].classList.toggle("is-expanded", i === idx);
       }
     }
 
-    for (var t = 0; t < tabs.length; t++) {
-      tabs[t].addEventListener("click", function () {
-        var idx = parseInt(this.getAttribute("data-team-tab"), 10);
-        if (!cards[idx]) return;
-        track.scrollTo({ left: cards[idx].offsetLeft, behavior: "smooth" });
-        syncTab(idx);
-      });
+    for (var i = 0; i < cards.length; i++) {
+      (function (idx, el) {
+        el.addEventListener("click", function () {
+          if (window.innerWidth > 960) return;
+          setActive(idx);
+        });
+      })(i, cards[i]);
     }
-
-    var raf = 0;
-    track.addEventListener("scroll", function () {
-      if (window.innerWidth > 960 || raf) return;
-      raf = requestAnimationFrame(function () {
-        raf = 0;
-        var w = Math.max(1, track.clientWidth);
-        var idx = Math.max(0, Math.min(cards.length - 1, Math.round(track.scrollLeft / w)));
-        syncTab(idx);
-      });
-    }, { passive: true });
   }
 
   /* =========================================================
