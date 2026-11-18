@@ -383,88 +383,178 @@
   }
 
   /* =========================================================
-     3. 3D Coverflow Stage in Chapter 03 (#stageDeck)
+     3. Optical Showcase Stage in Chapter 03 (#stageViewport)
      ========================================================= */
-  function initStageDeck() {
+  function initShowcaseStage() {
+    var platform = document.getElementById("platform");
+    var layout = platform ? platform.querySelector(".showcase-layout") : null;
     var viewport = document.getElementById("stageViewport");
-    var deck = document.getElementById("stageDeck");
-    var cards = deck ? Array.prototype.slice.call(deck.querySelectorAll(".stage-card")) : [];
+    var sheen = document.getElementById("stageSheen");
+    var captionEl = document.getElementById("showcaseMobileCaption");
+    var scenes = viewport ? Array.prototype.slice.call(viewport.querySelectorAll(".stage-scene")) : [];
     var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-stage-tab]"));
-    if (!viewport || !cards.length) return;
+    if (!viewport || !scenes.length) return;
 
-    var total = cards.length;
+    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var finePointer = window.matchMedia("(pointer: fine)").matches;
+    var total = scenes.length;
     var active = 0;
+    var autoTimer = 0;
+    var paused = false;
 
-    function applyPositions(idx) {
-      active = ((idx % total) + total) % total;
-      var leftIdx = (active - 1 + total) % total;
-      var rightIdx = (active + 1) % total;
+    function triggerSheen() {
+      if (!sheen || reducedMotion) return;
+      sheen.classList.remove("is-sweeping");
+      void sheen.offsetWidth;
+      sheen.classList.add("is-sweeping");
+    }
 
-      for (var i = 0; i < cards.length; i++) {
-        var pos = i === active ? "center" : (i === rightIdx ? "right" : "left");
-        cards[i].setAttribute("data-pos", pos);
+    function selectScene(nextIdx, animateSheen) {
+      var target = ((nextIdx % total) + total) % total;
+      var dir = nextIdx > active ? 1 : -1;
+      if (target === 0 && active === total - 1 && nextIdx >= total) dir = 1;
+      if (target === total - 1 && active === 0 && nextIdx < 0) dir = -1;
+
+      active = target;
+      viewport.style.setProperty("--dir", String(dir));
+
+      for (var i = 0; i < scenes.length; i++) {
+        scenes[i].classList.toggle("is-active", i === active);
       }
 
       for (var t = 0; t < tabs.length; t++) {
-        var isMatch = parseInt(tabs[t].getAttribute("data-stage-tab"), 10) === active;
+        var idx = parseInt(tabs[t].getAttribute("data-stage-tab"), 10);
+        var isMatch = idx === active;
         tabs[t].classList.toggle("is-active", isMatch);
         tabs[t].setAttribute("aria-selected", isMatch ? "true" : "false");
+        if (isMatch && captionEl) {
+          captionEl.textContent = tabs[t].getAttribute("data-caption") || "";
+        }
       }
+
+      if (animateSheen !== false) triggerSheen();
     }
 
-    for (var i = 0; i < cards.length; i++) {
-      cards[i].addEventListener("click", function () {
-        var idx = parseInt(this.getAttribute("data-stage-idx"), 10);
-        if (idx !== active) applyPositions(idx);
-      });
+    function scheduleAuto() {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = 0;
+      }
+      if (reducedMotion || paused) return;
+      autoTimer = setInterval(function () {
+        if (platform && platform.classList.contains("is-active")) {
+          selectScene(active + 1, true);
+        }
+      }, 5600);
+    }
+
+    function setPaused(nextPaused) {
+      paused = nextPaused;
+      if (layout) layout.classList.toggle("is-paused", paused);
+      if (paused && autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = 0;
+      } else if (!paused) {
+        scheduleAuto();
+      }
     }
 
     for (var t = 0; t < tabs.length; t++) {
       tabs[t].addEventListener("click", function () {
-        applyPositions(parseInt(this.getAttribute("data-stage-tab"), 10));
+        var next = parseInt(this.getAttribute("data-stage-tab"), 10);
+        if (next !== active) selectScene(next, true);
+        scheduleAuto();
       });
     }
 
-    // Horizontal swipe/drag gesture to rotate 3D deck
+    if (layout) {
+      layout.addEventListener("pointerenter", function () { setPaused(true); });
+      layout.addEventListener("pointerleave", function () { setPaused(false); });
+      layout.addEventListener("focusin", function () { setPaused(true); });
+      layout.addEventListener("focusout", function () { setPaused(false); });
+    }
+
+    if (finePointer && !reducedMotion) {
+      viewport.addEventListener("pointermove", function (e) {
+        var r = viewport.getBoundingClientRect();
+        var nx = (e.clientX - r.left) / Math.max(1, r.width) - 0.5;
+        var ny = (e.clientY - r.top) / Math.max(1, r.height) - 0.5;
+        viewport.style.setProperty("--px", (nx * 18).toFixed(1) + "px");
+        viewport.style.setProperty("--py", (ny * 14).toFixed(1) + "px");
+      });
+      viewport.addEventListener("pointerleave", function () {
+        viewport.style.setProperty("--px", "0px");
+        viewport.style.setProperty("--py", "0px");
+      });
+    }
+
+    // Horizontal swipe/drag gesture on optical stage
     var pointerId = null;
     var startX = 0;
-    var dragged = false;
 
-    deck.addEventListener("pointerdown", function (e) {
+    viewport.addEventListener("pointerdown", function (e) {
       pointerId = e.pointerId;
       startX = e.clientX;
-      dragged = false;
-      deck.classList.add("is-dragging");
-      try { deck.setPointerCapture(e.pointerId); } catch (err) {}
-    });
-
-    deck.addEventListener("pointermove", function (e) {
-      if (pointerId !== e.pointerId) return;
-      if (Math.abs(e.clientX - startX) > 28) dragged = true;
+      viewport.classList.add("is-dragging");
+      try { viewport.setPointerCapture(e.pointerId); } catch (err) {}
     });
 
     function onEnd(e) {
       if (pointerId !== e.pointerId) return;
       var dx = e.clientX - startX;
       pointerId = null;
-      deck.classList.remove("is-dragging");
-      try { deck.releasePointerCapture(e.pointerId); } catch (err) {}
+      viewport.classList.remove("is-dragging");
+      try { viewport.releasePointerCapture(e.pointerId); } catch (err) {}
 
-      if (Math.abs(dx) > 36) {
-        applyPositions(dx < 0 ? active + 1 : active - 1);
+      if (Math.abs(dx) > 32) {
+        selectScene(dx < 0 ? active + 1 : active - 1, true);
+        scheduleAuto();
       }
     }
 
-    deck.addEventListener("pointerup", onEnd);
-    deck.addEventListener("pointercancel", onEnd);
-    deck.addEventListener("click", function (e) {
-      if (dragged) {
-        e.stopPropagation();
-        dragged = false;
-      }
-    }, true);
+    viewport.addEventListener("pointerup", onEnd);
+    viewport.addEventListener("pointercancel", onEnd);
 
-    applyPositions(0);
+    selectScene(0, false);
+    scheduleAuto();
+  }
+
+  function initTeamCarousel() {
+    var track = document.getElementById("teamTrack");
+    var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-team-tab]"));
+    var cards = track ? Array.prototype.slice.call(track.querySelectorAll("[data-team-card]")) : [];
+    if (!track || !tabs.length || !cards.length) return;
+
+    function syncTab(idx) {
+      for (var t = 0; t < tabs.length; t++) {
+        var match = t === idx;
+        tabs[t].classList.toggle("is-active", match);
+        tabs[t].setAttribute("aria-selected", match ? "true" : "false");
+      }
+    }
+
+    for (var t = 0; t < tabs.length; t++) {
+      tabs[t].addEventListener("click", function () {
+        var idx = parseInt(this.getAttribute("data-team-tab"), 10);
+        if (!cards[idx]) return;
+        track.scrollTo({
+          left: cards[idx].offsetLeft,
+          behavior: "smooth"
+        });
+        syncTab(idx);
+      });
+    }
+
+    var raf = 0;
+    track.addEventListener("scroll", function () {
+      if (raf) return;
+      raf = requestAnimationFrame(function () {
+        raf = 0;
+        var w = Math.max(1, track.clientWidth);
+        var idx = Math.round(track.scrollLeft / w);
+        syncTab(Math.max(0, Math.min(cards.length - 1, idx)));
+      });
+    }, { passive: true });
   }
 
   /* =========================================================
@@ -732,7 +822,8 @@
 
   initVolumetricBackdrop();
   initOrbSculpture();
-  initStageDeck();
+  initShowcaseStage();
+  initTeamCarousel();
   initChapterRail();
   initGlassEffects();
   initMobileDrawer();

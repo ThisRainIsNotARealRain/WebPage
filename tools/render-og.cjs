@@ -216,9 +216,9 @@ const HTML = `<!doctype html>
       <div class="domain">REALRAIN.CO</div>
     </div>
     <div class="center">
-      <div class="seal">非雨 · 生成式消费平台</div>
+      <div class="seal">REALRAIN · HACK TO THE WONDERLAND</div>
       <h1>让想象世界，<br>进入现实生活。</h1>
-      <p class="sub">交汇之地 Crossroads × 造物工坊 Workshop · realrain.art</p>
+      <p class="sub">正版 IP · AI 设计 · 实体周边发行 · 交汇之地 realrain.art</p>
     </div>
     <div class="bottom">
       <span>Hack to the Wonderland</span>
