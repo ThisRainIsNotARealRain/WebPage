@@ -588,6 +588,7 @@
 
     var cards = Array.prototype.slice.call(ring.querySelectorAll("[data-ring-card]"));
     var metas = cards.map(function (c) { return c.querySelector(".plate-meta"); });
+    var tabBar = document.getElementById("stageTabBar");
     var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-stage-tab]"));
     var total = cards.length;
     if (!total) return;
@@ -617,6 +618,7 @@
     function syncTabs(idx) {
       var mod = ((idx % total) + total) % total;
       activeIdx = mod;
+      if (tabBar) tabBar.style.setProperty("--stage-idx", String(mod));
       for (var t = 0; t < tabs.length; t++) {
         var tabIdx = parseInt(tabs[t].getAttribute("data-stage-tab"), 10);
         var match = tabIdx === mod;
@@ -643,7 +645,7 @@
       var isMobile = cachedIsMobile;
       var isPhone = cachedIsPhone;
       var rx = isPhone
-        ? Math.round(stageW * 0.10)
+        ? Math.round(stageW * 0.42)
         : (isMobile ? Math.round(stageW * 0.34) : Math.min(430, Math.round(stageW * 0.39)));
       var stepAngle = (Math.PI * 2) / total;
 
@@ -657,17 +659,17 @@
         var isFlankHover = hoveredIdx === i && Math.abs(delta) > 0.25;
         var x = sinT * rx;
         // Center sits crisp at z = 0, scale = 1 (1:1 native UI rendering); flanking cards recede in depth
-        var z = (normFront - 1) * (isPhone ? 135 : (isMobile ? 120 : 175));
-        var y = (1 - normFront) * (isPhone ? -15 : (isMobile ? -8 : -12));
-        var rotY = -sinT * (isPhone ? 8 : (isMobile ? 11 : 14));
-        var scale = (isPhone ? (0.80 + 0.20 * normFront) : (0.71 + 0.29 * normFront)) + (isFlankHover ? 0.032 : 0);
+        var z = (normFront - 1) * (isPhone ? 120 : (isMobile ? 120 : 175));
+        var y = (1 - normFront) * -8;
+        var rotY = -sinT * (isPhone ? 10 : (isMobile ? 11 : 14));
+        var scale = (isPhone ? (0.78 + 0.22 * normFront) : (0.71 + 0.29 * normFront)) + (isFlankHover ? 0.036 : 0);
 
         var dist = Math.abs(delta);
         var baseOpacity = dist < 0.05
           ? 1.0
           : (isPhone
-            ? Math.max(0.12, 0.44 - dist * 0.22)
-            : Math.max(isMobile ? 0.16 : 0.46, (isMobile ? 0.52 : 0.78) - dist * (isMobile ? 0.30 : 0.26)));
+            ? Math.max(0.32, 0.68 - dist * 0.12)
+            : Math.max(isMobile ? 0.30 : 0.50, (isMobile ? 0.64 : 0.82) - dist * 0.22));
         var opacity = isFlankHover ? Math.min(0.95, baseOpacity + 0.22) : baseOpacity;
         var zIdx = Math.round((cosT + 2) * 20);
 
@@ -791,7 +793,9 @@
       }
       if (!dragging) return;
 
-      var dragScale = Math.max(220, (stage.clientWidth || 360) * 0.44);
+      var dragScale = cachedIsPhone
+        ? Math.max(145, (stage.clientWidth || 360) * 0.38)
+        : Math.max(220, (stage.clientWidth || 360) * 0.44);
       var moveDt = Math.max(0.008, (now - lastMoveTime) * 0.001);
       dragVel = ((e.clientX - lastX) / dragScale) / moveDt;
       lastX = e.clientX;
@@ -825,7 +829,9 @@
         return;
       }
 
-      var dragScale = Math.max(220, (stage.clientWidth || 360) * 0.44);
+      var dragScale = cachedIsPhone
+        ? Math.max(145, (stage.clientWidth || 360) * 0.38)
+        : Math.max(220, (stage.clientWidth || 360) * 0.44);
       var projected = dragStartIdx - dx / dragScale - dragVel * 0.09;
       var snapped = Math.round(projected);
       if (Math.abs(dx) > 32 && snapped === Math.round(dragStartIdx)) {
@@ -874,6 +880,30 @@
     }, { passive: true });
     measureStage();
     layoutRing();
+
+    var hasArrivalGlided = false;
+    var lastWinY = window.scrollY;
+    var lastScrollStep = 0;
+    window.addEventListener("scroll", function () {
+      var sy = window.scrollY;
+      var step = Math.abs(sy - lastWinY);
+      if (step > 0) lastScrollStep = step;
+      lastWinY = sy;
+    }, { passive: true });
+    if (platform && typeof IntersectionObserver === "function" && !reducedMotion) {
+      new IntersectionObserver(function (entries) {
+        if (!entries[0] || !entries[0].isIntersecting || hasArrivalGlided) return;
+        hasArrivalGlided = true;
+        if (!document.documentElement.classList.contains("is-programmatic-scroll") &&
+            lastScrollStep > 0 && lastScrollStep < window.innerHeight * 0.65 &&
+            current === 0 && target === 0 && !dragging) {
+          current = 0.22;
+          velocity = -0.35;
+          lastTime = performance.now();
+          if (!rafId) rafId = requestAnimationFrame(stepPhysics);
+        }
+      }, { threshold: 0.45 }).observe(platform);
+    }
   }
 
   /* =========================================================
@@ -884,9 +914,24 @@
     var cards = track ? Array.prototype.slice.call(track.querySelectorAll("[data-team-card]")) : [];
     if (!track || !cards.length) return;
 
+    function syncFocusable() {
+      var mobile = window.innerWidth <= 960;
+      for (var i = 0; i < cards.length; i++) {
+        if (mobile) {
+          cards[i].setAttribute("tabindex", "0");
+          cards[i].setAttribute("aria-expanded", cards[i].classList.contains("is-expanded") ? "true" : "false");
+        } else {
+          cards[i].removeAttribute("tabindex");
+          cards[i].removeAttribute("aria-expanded");
+        }
+      }
+    }
+
     function setActive(idx) {
       for (var i = 0; i < cards.length; i++) {
-        cards[i].classList.toggle("is-expanded", i === idx);
+        var expanded = i === idx;
+        cards[i].classList.toggle("is-expanded", expanded);
+        cards[i].setAttribute("aria-expanded", expanded ? "true" : "false");
       }
     }
 
@@ -896,8 +941,18 @@
           if (window.innerWidth > 960) return;
           setActive(idx);
         });
+        el.addEventListener("keydown", function (e) {
+          if (window.innerWidth > 960) return;
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setActive(idx);
+          }
+        });
       })(i, cards[i]);
     }
+
+    window.addEventListener("resize", syncFocusable, { passive: true });
+    syncFocusable();
   }
 
   /* =========================================================
