@@ -701,8 +701,8 @@
       if (!dragging) {
         var dt = lastTime ? Math.min(0.05, Math.max(0.004, (now - lastTime) * 0.001)) : 0.016;
         lastTime = now;
-        // Analytical 2nd-order critically damped harmonic oscillator (zeta = 1, omega = 21)
-        var omega = 21.0;
+        // Analytical 2nd-order critically damped harmonic oscillator (zeta = 1)
+        var omega = cachedIsPhone ? 14.0 : 20.5;
         var d0 = current - target;
         var expTerm = Math.exp(-omega * dt);
         var nextD = (d0 + (velocity + omega * d0) * dt) * expTerm;
@@ -794,13 +794,18 @@
       if (!dragging) return;
 
       var dragScale = cachedIsPhone
-        ? Math.max(145, (stage.clientWidth || 360) * 0.38)
-        : Math.max(220, (stage.clientWidth || 360) * 0.44);
+        ? Math.max(235, (stage.clientWidth || 390) * 0.66)
+        : Math.max(240, (stage.clientWidth || 360) * 0.44);
       var moveDt = Math.max(0.008, (now - lastMoveTime) * 0.001);
-      dragVel = ((e.clientX - lastX) / dragScale) / moveDt;
+      var instVel = ((e.clientX - lastX) / dragScale) / moveDt;
+      dragVel = dragVel * 0.55 + instVel * 0.45;
       lastX = e.clientX;
       lastMoveTime = now;
-      current = dragStartIdx - dx / dragScale;
+      var dCards = -dx / dragScale;
+      if (cachedIsPhone) {
+        dCards = Math.max(-1.15, Math.min(1.15, dCards));
+      }
+      current = dragStartIdx + dCards;
       target = current;
       layoutRing();
     });
@@ -830,16 +835,22 @@
       }
 
       var dragScale = cachedIsPhone
-        ? Math.max(145, (stage.clientWidth || 360) * 0.38)
-        : Math.max(220, (stage.clientWidth || 360) * 0.44);
-      var projected = dragStartIdx - dx / dragScale - dragVel * 0.09;
+        ? Math.max(235, (stage.clientWidth || 390) * 0.66)
+        : Math.max(240, (stage.clientWidth || 360) * 0.44);
+      if ((performance.now() - lastMoveTime) > 75) dragVel = 0;
+      var baseIdx = Math.round(dragStartIdx);
+      var projected = dragStartIdx - dx / dragScale - dragVel * (cachedIsPhone ? 0.065 : 0.09);
       var snapped = Math.round(projected);
-      if (Math.abs(dx) > 32 && snapped === Math.round(dragStartIdx)) {
-        snapped = Math.round(dragStartIdx) + (dx < 0 ? 1 : -1);
+      if ((Math.abs(dx) > 42 || (Math.abs(dx) > 18 && Math.abs(dragVel) > 1.1)) && snapped === baseIdx) {
+        snapped = baseIdx + (dx < 0 ? 1 : -1);
+      }
+      if (cachedIsPhone) {
+        snapped = Math.max(baseIdx - 1, Math.min(baseIdx + 1, snapped));
       }
 
       target = snapped;
-      velocity = Math.max(-18, Math.min(18, -dragVel));
+      var maxRelVel = cachedIsPhone ? 4.2 : 14;
+      velocity = Math.max(-maxRelVel, Math.min(maxRelVel, -dragVel));
       syncTabs(snapped);
       lastTime = performance.now();
       if (!rafId) rafId = requestAnimationFrame(stepPhysics);
