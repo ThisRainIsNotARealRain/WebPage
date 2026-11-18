@@ -20,18 +20,17 @@ npx --yes serve -l 8080 .
 
 - `index.html`：中文首页
 - `en/index.html`：英文首页
-- `css/styles.css`：视觉系统、响应式布局与动效状态
-- `js/main.js`：移动导航、滚动状态、视口动效与视差
-- `js/vendor/`：自托管的第三方脚本（anime.js）
-- `assets/media/art/`：插画场景（由 SVG 源文件导出，来源与哈希见 `manifest.json`）
-- `assets/fonts/`：自托管的中文标题字体子集
+- `css/styles.css`：高反差明暗建筑风格视觉系统、响应式布局与动效状态
+- `js/main.js`：移动导航抽屉、自适应页头主题、出版工作台交互切换、视口入场与光效
+- `assets/fonts/`：自托管的中文界面与标题字体子集（`noto-sans-sc-400.woff2` 与 `noto-sans-sc-600.woff2`）
+- `assets/media/art/`：Open Graph 品牌分享图（`realrain-og.jpg`；历史插画文件保留于目录中以避免外部旧引用失效）
 - `assets/logo/`：品牌标志
-- `tools/`：插画导出（`art.json`、`render-art.cjs`、`export-art.py`）与字体子集（`build-fonts.py`）脚本，只在重新生成时用
+- `tools/`：字库子集生成（`build-fonts.py`）、OG 图渲染（`render-og.cjs`）及历史插画导出脚本
 - `BRAND.md`：品牌定位、平台逻辑、信息层级、站点结构与调研依据
 - `DESIGN.md`：内容、设计、国内网络与维护说明
 - `THIRD_PARTY_NOTICES.md`：开源依赖与字体授权
 
-**改了中文文案要重跑 `python tools/build-fonts.py`**，否则新出现的字会掉回系统字体。
+**改了中文文案或工作台预设属性要重跑 `python tools/build-fonts.py`**，否则新出现的字会掉回系统字体。
 
 ## 发布
 

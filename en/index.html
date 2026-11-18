@@ -49,28 +49,28 @@
       content="An IP publishing platform built for open creation, with consumer goods as the medium."
     />
     <meta property="og:url" content="https://realrain.co/en/" />
-    <meta property="og:image" content="https://realrain.co/assets/media/art/dusk-terrace-og.jpg" />
+    <meta property="og:image" content="https://realrain.co/assets/media/art/realrain-og.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#f7f8f5" />
+    <meta name="theme-color" content="#ffffff" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Latin fonts load without blocking the page: fonts.googleapis.com is unreliable from mainland China -->
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
-        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet"
       />
     </noscript>
-    <link rel="stylesheet" href="../css/styles.css?v=20261005-3" />
+    <link rel="stylesheet" href="../css/styles.css?v=20261118-1" />
     <link rel="icon" href="../assets/logo/realrain-favicon-celadon.png" type="image/png" />
   </head>
 
@@ -84,246 +84,593 @@
 
     <header class="site-header" data-header>
       <div class="nav-scrim" data-nav-scrim aria-hidden="true"></div>
-      <a class="site-brand" href="#top" aria-label="RealRain home">
-        <img class="site-brand__mark" src="../assets/logo/realrain-logo-rain-celadon-layered.svg" width="34" height="34" alt="" />
-        <span class="site-brand__wordmark">REALRAIN</span>
-        <span class="site-brand__cn">非雨</span>
-      </a>
-
-      <nav class="site-nav" id="site-nav" aria-label="Main navigation" data-nav>
-        <div class="site-nav__head" aria-hidden="true">
-          <span>Navigation</span><span>RealRain / 非雨</span>
-        </div>
-        <a href="#product"><span>01</span>Product</a>
-        <a href="#publishing"><span>02</span>Publishing</a>
-        <a href="#partners"><span>03</span>Partners</a>
-        <a href="#team"><span>04</span>Team</a>
-        <a href="#contact"><span>05</span>Contact</a>
-        <div class="site-nav__foot">
-          <a class="site-nav__mobile-lang" href="../" hreflang="zh-Hans" lang="zh-Hans">
-            中文网站 <b aria-hidden="true">↗</b>
-          </a>
-          <a href="mailto:contact@realrain.co">contact@realrain.co</a>
-          <span>IP publishing platform</span>
-        </div>
-      </nav>
-
-      <div class="site-header__actions">
-        <a class="header-lang" href="../" hreflang="zh-Hans" lang="zh-Hans">中文</a>
-        <a class="header-cta" href="https://realrain.art/">
-          <span>Open Crossroads</span><b aria-hidden="true">↗</b>
+      <div class="site-header__inner">
+        <a class="site-brand" href="#top" aria-label="RealRain home">
+          <img
+            class="site-brand__mark site-brand__mark--light"
+            src="../assets/logo/realrain-logo-rain-celadon-layered.svg"
+            width="28"
+            height="28"
+            alt=""
+          />
+          <img
+            class="site-brand__mark site-brand__mark--dark"
+            src="../assets/logo/realrain-logo-rain-celadon-reverse.svg"
+            width="28"
+            height="28"
+            alt=""
+          />
+          <span class="site-brand__wordmark">REALRAIN</span>
+          <span class="site-brand__cn">非雨</span>
         </a>
-        <button
-          class="nav-toggle"
-          type="button"
-          aria-expanded="false"
-          aria-controls="site-nav"
-          aria-label="Open navigation"
-          data-nav-toggle
-        >
-          <span class="nav-toggle__label">Menu</span>
-          <span class="nav-toggle__icon" aria-hidden="true"><i></i><i></i></span>
-        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Main navigation" data-nav>
+          <div class="site-nav__head" aria-hidden="true">
+            <span>Navigation</span><span>RealRain / 非雨</span>
+          </div>
+          <a href="#product"><span>01</span>Product</a>
+          <a href="#publishing"><span>02</span>Publishing</a>
+          <a href="#partners"><span>03</span>Partners</a>
+          <a href="#team"><span>04</span>Team</a>
+          <a href="#contact"><span>05</span>Contact</a>
+          <div class="site-nav__foot">
+            <a class="site-nav__mobile-lang" href="../" hreflang="zh-Hans" lang="zh-Hans">
+              中文网站 <b aria-hidden="true">↗</b>
+            </a>
+            <a href="mailto:contact@realrain.co">contact@realrain.co</a>
+            <span>IP publishing platform</span>
+          </div>
+        </nav>
+
+        <div class="site-header__actions">
+          <a class="header-lang" href="../" hreflang="zh-Hans" lang="zh-Hans">中文</a>
+          <a class="header-cta" href="https://realrain.art/">
+            <span>Open Crossroads</span><b aria-hidden="true">↗</b>
+          </a>
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="site-nav"
+            aria-label="Open navigation"
+            data-nav-toggle
+          >
+            <span class="nav-toggle__label">Menu</span>
+            <span class="nav-toggle__icon" aria-hidden="true"><i></i><i></i></span>
+          </button>
+        </div>
       </div>
     </header>
 
     <main id="main">
-      <section class="hero scene" id="top" aria-labelledby="hero-title">
-        <picture class="scene__art" data-parallax="0.04">
-          <source
-            media="(max-width: 860px)"
-            srcset="../assets/media/art/dusk-terrace-m-768.webp"
-            width="768"
-            height="576"
-          />
-          <source
-            srcset="
-              ../assets/media/art/dusk-terrace-1280.webp 1280w,
-              ../assets/media/art/dusk-terrace-2048.webp 2048w
-            "
-            sizes="100vw"
-          />
-          <img
-            src="../assets/media/art/dusk-terrace-2048.webp"
-            width="2048"
-            height="1152"
-            alt="A brass telescope on a terrace at dusk, turned towards floating islands lit above a sea of clouds."
-            fetchpriority="high"
-          />
-        </picture>
-        <div class="scene__veil" aria-hidden="true"></div>
-        <canvas class="scene__rain" data-rain aria-hidden="true"></canvas>
-
-        <div class="hero__content section-shell">
-          <a class="hero__news" href="#product" data-hero-item>
-            <b>News</b><span>Crossroads 1.0 launches on 30 September</span><i aria-hidden="true">→</i>
-          </a>
-          <h1 id="hero-title" class="reveal">
-            Imagined worlds,<br />
-            <em>brought into<br />daily life.</em>
-          </h1>
-          <div class="hero__summary" data-hero-item>
-            <p>
-              RealRain is an IP commercialisation platform built for open creation. We publish
-              through consumer goods, connecting rights holders, creators, manufacturers and
-              consumers, and support the development, publishing and commercialisation of IP.
-            </p>
-            <div class="hero__actions">
-              <a class="button button--primary" href="https://realrain.art/">
-                <span>Open Crossroads</span><b aria-hidden="true">↗</b>
+      <section class="hero arch-section" id="top" aria-labelledby="hero-title">
+        <div class="section-shell arch-frame">
+          <div class="hero__intro">
+            <div class="hero__primary">
+              <a class="release-pill" href="#product">
+                <span class="release-pill__dot" aria-hidden="true"></span>
+                <span class="release-pill__tag">Crossroads 1.0</span>
+                <span class="release-pill__sep" aria-hidden="true">/</span>
+                <span class="release-pill__text">Live at realrain.art</span>
+                <span class="release-pill__arrow" aria-hidden="true">→</span>
               </a>
-              <a class="button button--ghost" href="#partners">Work with us</a>
+
+              <h1 id="hero-title" class="hero__title">
+                Imagined worlds,<br />
+                <span class="accent">brought into daily life.</span>
+              </h1>
+            </div>
+
+            <div class="hero__secondary">
+              <p class="hero__lede">
+                RealRain is an IP commercialisation platform built for open creation. We publish through consumer goods, connecting rights holders, creators, manufacturers and consumers, and support the development, publishing and commercialisation of IP.
+              </p>
+
+              <div class="hero__actions">
+                <a class="btn btn--primary" href="https://realrain.art/">
+                  <span>Open Crossroads</span><b aria-hidden="true">↗</b>
+                </a>
+                <a class="btn btn--secondary" href="#partners">
+                  <span>Work with us</span><b aria-hidden="true">→</b>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="workbench" data-workbench>
+            <div class="workbench__bezel">
+              <div class="workbench__chrome">
+                <div class="workbench__title">
+                  <span class="workbench__lights" aria-hidden="true"><i></i><i></i><i></i></span>
+                  <span class="workbench__label">CROSSROADS · PUBLISHING WORKBENCH</span>
+                </div>
+                <div class="workbench__tabs" role="tablist" aria-label="Consumer product carriers">
+                  <button
+                    class="workbench__tab is-active"
+                    type="button"
+                    role="tab"
+                    id="tab-badge"
+                    aria-selected="true"
+                    aria-controls="panel-spec"
+                    data-carrier="badge"
+                    data-asset-id="CHR-01 · Character Canon"
+                    data-asset-ver="v2.4 · Published"
+                    data-license-scope="Standard Merch · Co-creation"
+                    data-attribution="Source & credit retained"
+                    data-spec-title="Tinplate Badge · Ø 75.0 mm"
+                    data-spec-note="75.0 mm trim · +3.0 mm bleed"
+                    data-material="0.23mm tinplate · Dual-glitter film"
+                    data-mode="POD / OEM production"
+                    data-rights="Recorded per agreement"
+                    data-channel="Crossroads · Market"
+                  >
+                    Tinplate Badge · 75mm
+                  </button>
+                  <button
+                    class="workbench__tab"
+                    type="button"
+                    role="tab"
+                    id="tab-standee"
+                    aria-selected="false"
+                    aria-controls="panel-spec"
+                    tabindex="-1"
+                    data-carrier="standee"
+                    data-asset-id="CHR-01 · Full-body Key Art"
+                    data-asset-ver="v2.4 · Published"
+                    data-license-scope="Standard Merch · Co-creation"
+                    data-attribution="Source & credit retained"
+                    data-spec-title="Acrylic Standee · 120 × 85 mm"
+                    data-spec-note="120.0 × 85.0 mm · 2.0 mm laser contour"
+                    data-material="3mm clear acrylic · Double-sided"
+                    data-mode="OEM run / POD"
+                    data-rights="Recorded per agreement"
+                    data-channel="Crossroads · Market"
+                  >
+                    Acrylic Standee · 120mm
+                  </button>
+                  <button
+                    class="workbench__tab"
+                    type="button"
+                    role="tab"
+                    id="tab-card"
+                    aria-selected="false"
+                    aria-controls="panel-spec"
+                    tabindex="-1"
+                    data-carrier="card"
+                    data-asset-id="KEY-03 · Editorial Art Plate"
+                    data-asset-ver="v1.8 · Published"
+                    data-license-scope="Co-creation · Brand licensing"
+                    data-attribution="Source & credit retained"
+                    data-spec-title="Cold-Foil Card · 88 × 63 mm"
+                    data-spec-note="88.0 × 63.0 mm · R3.0 corner"
+                    data-material="350gsm art stock · Spot cold foil"
+                    data-mode="OEM print · Standard run"
+                    data-rights="Recorded per agreement"
+                    data-channel="Crossroads · Market"
+                  >
+                    Cold-Foil Card · 88×63mm
+                  </button>
+                </div>
+              </div>
+
+              <div class="workbench__body" id="panel-spec" role="tabpanel" aria-labelledby="tab-badge">
+                <div class="workbench__panel workbench__panel--meta">
+                  <div class="wb-head">
+                    <span class="wb-index">01</span>
+                    <div>
+                      <h2>IP Space · Canon &amp; Scope</h2>
+                      <p>Versions and status on record</p>
+                    </div>
+                  </div>
+                  <dl class="wb-kv">
+                    <div>
+                      <dt>Licensed Master</dt>
+                      <dd data-wb-field="asset-id">CHR-01 · Character Canon</dd>
+                    </div>
+                    <div>
+                      <dt>Current Version</dt>
+                      <dd data-wb-field="asset-ver">v2.4 · Published</dd>
+                    </div>
+                    <div>
+                      <dt>Licence Scope</dt>
+                      <dd data-wb-field="license-scope">Standard Merch · Co-creation</dd>
+                    </div>
+                    <div>
+                      <dt>Derivation &amp; Credit</dt>
+                      <dd data-wb-field="attribution">Source &amp; credit retained</dd>
+                    </div>
+                  </dl>
+                  <div class="wb-chain">
+                    <span>Canon Record</span>
+                    <i aria-hidden="true">→</i>
+                    <span>Licensed Dev</span>
+                    <i aria-hidden="true">→</i>
+                    <span>Market Release</span>
+                  </div>
+                </div>
+
+                <div class="workbench__panel workbench__panel--cad" data-active-carrier="badge">
+                  <div class="wb-cad-top">
+                    <span class="wb-cad-title">Workshop · Carrier &amp; Die-line</span>
+                    <span class="wb-cad-dim" data-wb-field="spec-title">Tinplate Badge · Ø 75.0 mm</span>
+                  </div>
+                  <div class="wb-cad-stage">
+                    <svg class="wb-svg" viewBox="0 0 360 240" aria-hidden="true">
+                      <defs>
+                        <radialGradient id="wb-glow" cx="50%" cy="46%" r="48%">
+                          <stop offset="0%" stop-color="#708F88" stop-opacity="0.22" />
+                          <stop offset="100%" stop-color="#708F88" stop-opacity="0" />
+                        </radialGradient>
+                        <linearGradient id="wb-foil" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#A8BDB6" stop-opacity="0.28" />
+                          <stop offset="50%" stop-color="#708F88" stop-opacity="0.06" />
+                          <stop offset="100%" stop-color="#E1EAE7" stop-opacity="0.24" />
+                        </linearGradient>
+                      </defs>
+
+                      <circle cx="180" cy="116" r="106" fill="url(#wb-glow)" />
+
+                      <g stroke="#708F88" stroke-opacity="0.25" stroke-width="0.8">
+                        <line x1="28" y1="116" x2="332" y2="116" stroke-dasharray="3 5" />
+                        <line x1="180" y1="16" x2="180" y2="218" stroke-dasharray="3 5" />
+                      </g>
+
+                      <g class="wb-carrier" data-carrier-svg="badge">
+                        <circle cx="180" cy="116" r="82" fill="none" stroke="#708F88" stroke-opacity="0.55" stroke-width="1" stroke-dasharray="4 4" />
+                        <circle cx="180" cy="116" r="72" fill="#171A1E" stroke="#A8BDB6" stroke-width="1.4" />
+                        <circle cx="180" cy="116" r="62" fill="url(#wb-foil)" stroke="#A8BDB6" stroke-opacity="0.35" stroke-width="0.9" stroke-dasharray="2 3" />
+                        <g transform="translate(180, 116)" fill="none">
+                          <polygon points="0,-42 42,0 0,42 -42,0" stroke="#708F88" stroke-opacity="0.55" stroke-width="0.9" />
+                          <polygon points="0,-31 27,16 -27,16" stroke="#A8BDB6" stroke-opacity="0.72" stroke-width="1" />
+                          <circle cx="0" cy="0" r="24" stroke="#E1EAE7" stroke-opacity="0.5" stroke-width="0.8" stroke-dasharray="1.5 3.5" />
+                          <circle cx="0" cy="0" r="11" fill="#23282D" stroke="#A8BDB6" stroke-width="1.15" />
+                          <circle cx="0" cy="0" r="3" fill="#A8BDB6" />
+                          <g fill="#E1EAE7" fill-opacity="0.85">
+                            <circle cx="0" cy="-42" r="1.8" />
+                            <circle cx="42" cy="0" r="1.8" />
+                            <circle cx="0" cy="42" r="1.8" />
+                            <circle cx="-42" cy="0" r="1.8" />
+                          </g>
+                        </g>
+                        <g stroke="#A8BDB6" stroke-opacity="0.75" stroke-width="0.85">
+                          <line x1="108" y1="208" x2="252" y2="208" />
+                          <line x1="108" y1="204" x2="108" y2="212" />
+                          <line x1="252" y1="204" x2="252" y2="212" />
+                          <polyline points="238,58 264,34 282,34" fill="none" stroke-opacity="0.65" />
+                          <polyline points="224,72 264,52 282,52" fill="none" stroke="#708F88" stroke-opacity="0.65" />
+                        </g>
+                        <text x="286" y="37" class="wb-svg-note">BLEED +3.0</text>
+                        <text x="286" y="55" class="wb-svg-note wb-svg-note--accent">TRIM Ø75.0</text>
+                        <text x="22" y="37" class="wb-svg-note">SAFE Ø67.0</text>
+                        <line x1="78" y1="34" x2="128" y2="72" stroke="#708F88" stroke-opacity="0.55" stroke-width="0.85" />
+                      </g>
+
+                      <g class="wb-carrier" data-carrier-svg="standee">
+                        <path
+                          d="M126 164 L126 88 C126 52, 148 30, 180 30 C212 30, 234 52, 234 88 L234 164 L206 164 L206 175 L154 175 L154 164 Z"
+                          fill="#171A1E"
+                          stroke="#A8BDB6"
+                          stroke-width="1.4"
+                        />
+                        <path
+                          d="M134 157 L134 88 C134 58, 153 38, 180 38 C207 38, 226 58, 226 88 L226 157 Z"
+                          fill="url(#wb-foil)"
+                          stroke="#708F88"
+                          stroke-width="1"
+                          stroke-dasharray="3 3"
+                        />
+                        <g transform="translate(180, 100)" fill="none">
+                          <polygon points="0,-42 30,0 0,42 -30,0" stroke="#A8BDB6" stroke-opacity="0.82" stroke-width="1.15" />
+                          <polygon points="0,-28 20,0 0,28 -20,0" fill="#23282D" stroke="#708F88" stroke-width="1" />
+                          <circle cx="0" cy="0" r="9" fill="#171A1E" stroke="#E1EAE7" stroke-width="1.1" />
+                          <line x1="-38" y1="0" x2="38" y2="0" stroke="#708F88" stroke-opacity="0.45" stroke-width="0.85" />
+                        </g>
+                        <rect x="118" y="181" width="124" height="22" rx="11" fill="#1B1F24" stroke="#708F88" stroke-width="1.2" />
+                        <rect x="154" y="188" width="52" height="6" rx="2" fill="#0E1012" stroke="#A8BDB6" stroke-width="0.9" />
+                        <text x="16" y="42" class="wb-svg-note wb-svg-note--accent">CONTOUR 2.0mm</text>
+                        <line x1="94" y1="39" x2="144" y2="49" stroke="#A8BDB6" stroke-opacity="0.6" stroke-width="0.85" />
+                        <text x="250" y="98" class="wb-svg-note">120 × 85 mm</text>
+                        <text x="250" y="195" class="wb-svg-note">BASE SLOT 52mm</text>
+                      </g>
+
+                      <g class="wb-carrier" data-carrier-svg="card">
+                        <rect x="76" y="42" width="208" height="144" rx="9" fill="#171A1E" stroke="#A8BDB6" stroke-width="1.4" />
+                        <rect x="86" y="52" width="188" height="124" rx="5" fill="url(#wb-foil)" stroke="#708F88" stroke-width="1" stroke-dasharray="4 3" />
+                        <rect x="96" y="62" width="104" height="104" rx="4" fill="#1B1F23" stroke="#A8BDB6" stroke-opacity="0.55" stroke-width="1" />
+                        <g transform="translate(148, 114)" fill="none">
+                          <rect x="-34" y="-34" width="68" height="68" rx="34" stroke="#708F88" stroke-opacity="0.5" stroke-width="0.9" stroke-dasharray="2 3" />
+                          <polygon points="0,-28 24,0 0,28 -24,0" fill="#23282D" stroke="#A8BDB6" stroke-width="1.15" />
+                          <circle cx="0" cy="0" r="8" fill="#171A1E" stroke="#E1EAE7" stroke-width="1" />
+                        </g>
+                        <g stroke="#708F88" stroke-opacity="0.65" stroke-width="1.1">
+                          <line x1="214" y1="74" x2="260" y2="74" />
+                          <line x1="214" y1="88" x2="252" y2="88" />
+                          <line x1="214" y1="102" x2="244" y2="102" />
+                          <rect x="214" y="138" width="46" height="20" rx="3" fill="none" stroke="#A8BDB6" stroke-opacity="0.55" />
+                        </g>
+                        <g stroke="#A8BDB6" stroke-opacity="0.65" stroke-width="0.9">
+                          <path d="M68 42 H74 M76 34 V40" />
+                          <path d="M286 42 H292 M284 34 V40" />
+                          <path d="M68 186 H74 M76 188 V194" />
+                          <path d="M286 186 H292 M284 188 V194" />
+                        </g>
+                        <text x="16" y="34" class="wb-svg-note">88 × 63 mm</text>
+                        <text x="294" y="151" class="wb-svg-note wb-svg-note--accent">SPOT FOIL</text>
+                        <text x="294" y="186" class="wb-svg-note">R3.0</text>
+                      </g>
+                    </svg>
+                  </div>
+                  <div class="wb-cad-foot">
+                    <span>DIE-LINE SPEC</span>
+                    <span data-wb-field="spec-note">75.0 mm trim · +3.0 mm bleed</span>
+                  </div>
+                </div>
+
+                <div class="workbench__panel workbench__panel--specs">
+                  <div class="wb-head">
+                    <span class="wb-index">03</span>
+                    <div>
+                      <h2>Production &amp; Release</h2>
+                      <p>Standard merch &amp; on-demand fulfilment</p>
+                    </div>
+                  </div>
+                  <dl class="wb-kv">
+                    <div>
+                      <dt>Material &amp; Process</dt>
+                      <dd data-wb-field="material">0.23mm tinplate · Dual-glitter film</dd>
+                    </div>
+                    <div>
+                      <dt>Production Mode</dt>
+                      <dd data-wb-field="mode">POD / OEM production</dd>
+                    </div>
+                    <div>
+                      <dt>Rights &amp; Revenue</dt>
+                      <dd data-wb-field="rights">Recorded per agreement</dd>
+                    </div>
+                    <div>
+                      <dt>Release Channel</dt>
+                      <dd class="wb-live"><i aria-hidden="true"></i><span data-wb-field="channel">Crossroads · Market</span></dd>
+                    </div>
+                  </dl>
+                  <div class="wb-foot-link">
+                    <span>realrain.art</span>
+                    <a href="https://realrain.art/">Open platform ↗</a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="platform scene" id="product" aria-labelledby="product-title">
-        <picture class="scene__art">
-          <source
-            media="(max-width: 860px)"
-            srcset="../assets/media/art/arrival-bridge-m-768.webp"
-            width="768"
-            height="576"
-          />
-          <source
-            srcset="
-              ../assets/media/art/arrival-bridge-1280.webp 1280w,
-              ../assets/media/art/arrival-bridge-2048.webp 2048w
-            "
-            sizes="100vw"
-          />
-          <img
-            src="../assets/media/art/arrival-bridge-2048.webp"
-            width="2048"
-            height="1152"
-            loading="lazy"
-            alt="A long bridge over a sea of clouds leads to a lit city in the sky, the illustration that opens Crossroads."
-          />
-        </picture>
-        <div class="scene__veil" aria-hidden="true"></div>
-
-        <div class="section-shell">
-          <div class="platform__content">
+      <section class="platform arch-section" id="product" data-theme="dark" aria-labelledby="product-title">
+        <div class="section-shell arch-frame">
+          <div class="section-head reveal">
             <div>
-              <p class="release reveal"><b>Crossroads 1.0</b><span>30 September 2026</span></p>
-              <h2 id="product-title" class="display reveal">Crossroads, a platform for <em>developing and releasing IP.</em></h2>
-            </div>
-            <p class="lede reveal">
-              Crossroads is the online platform RealRain runs. Rights holders build and run their IP
-              there, creators develop content and merchandise under licence, and goods are released in
-              the platform's market.
-            </p>
-            <ul class="features reveal">
-              <li><b>IP spaces</b><span>Characters, worlds, assets and works for each IP in one place, with versions and publishing status on record.</span></li>
-              <li><b>Licensed co-creation</b><span>Canon and assets are published by version with a creative licence; work made under it keeps its source and credits.</span></li>
-              <li><b>Workshop</b><span>Derivative content, and physical merchandise such as badges, designed from an IP's assets.</span></li>
-              <li><b>Market</b><span>Merchandise is shown and released in the market, where consumers find goods through characters and works.</span></li>
-            </ul>
-            <div class="platform__cta reveal">
-              <a class="button button--primary" href="https://realrain.art/">
-                <span>Open Crossroads</span><b aria-hidden="true">↗</b>
-              </a>
-              <span>realrain.art</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="model" id="publishing" aria-labelledby="publishing-title">
-        <div class="section-shell">
-          <div class="section-head">
-            <div>
-              <p class="slate reveal">How IP gets published</p>
-              <h2 id="publishing-title" class="display reveal">
-                Consumer goods, the new <em>publishing medium.</em>
+              <div class="section-meta">
+                <p class="slate">01 / PLATFORM</p>
+                <p class="release-tag"><b>Crossroads 1.0</b><span>30 September 2026</span></p>
+              </div>
+              <h2 id="product-title" class="display">
+                Crossroads, a platform for <span class="accent">developing and releasing IP.</span>
               </h2>
             </div>
-            <p class="lede reveal">
-              A publisher prints a work as a book. RealRain publishes IP as products: within the
-              scope of a licence, characters and works are developed into merchandise and branded
-              goods, then manufactured and released to consumers.
+            <div class="section-head__body">
+              <p class="lede">
+                Crossroads is the online platform RealRain runs. Rights holders build and run their IP there, creators develop content and merchandise under licence, and goods are released in the platform's market.
+              </p>
+              <div class="platform__cta">
+                <a class="btn btn--celadon" href="https://realrain.art/">
+                  <span>Open Crossroads</span><b aria-hidden="true">↗</b>
+                </a>
+                <span class="domain-mono">realrain.art</span>
+              </div>
+            </div>
+          </div>
+
+          <ul class="bento">
+            <li class="bento__card reveal" data-glow>
+              <div class="bento__diagram bento__diagram--spaces" aria-hidden="true">
+                <div class="ui-ledger">
+                  <div class="ui-ledger__row is-dim">
+                    <span class="ui-mono">v1.0</span>
+                    <span>Character canon</span>
+                    <span class="ui-tag">Archived</span>
+                  </div>
+                  <div class="ui-ledger__row is-dim">
+                    <span class="ui-mono">v2.0</span>
+                    <span>World &amp; assets</span>
+                    <span class="ui-tag">Published</span>
+                  </div>
+                  <div class="ui-ledger__row is-active">
+                    <span class="ui-mono">v2.4</span>
+                    <span>Full canon &amp; works</span>
+                    <span class="ui-tag is-celadon">Current</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bento__copy">
+                <span class="bento__num">01</span>
+                <h3>IP spaces</h3>
+                <p>Characters, worlds, assets and works for each IP in one place, with versions and publishing status on record.</p>
+              </div>
+            </li>
+
+            <li class="bento__card reveal" data-glow>
+              <div class="bento__diagram bento__diagram--cocreate" aria-hidden="true">
+                <div class="ui-lineage">
+                  <div class="ui-node">
+                    <span class="ui-mono">SOURCE</span>
+                    <strong>Canon &amp; assets · v2.4</strong>
+                  </div>
+                  <div class="ui-link-line">
+                    <span>Creative licence</span>
+                  </div>
+                  <div class="ui-node is-accent">
+                    <span class="ui-mono">DERIVATIVE</span>
+                    <strong>Licensed work · Source &amp; credit kept</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="bento__copy">
+                <span class="bento__num">02</span>
+                <h3>Licensed co-creation</h3>
+                <p>Canon and assets are published by version with a creative licence; work made under it keeps its source and credits.</p>
+              </div>
+            </li>
+
+            <li class="bento__card reveal" data-glow>
+              <div class="bento__diagram bento__diagram--workshop" aria-hidden="true">
+                <div class="ui-layers">
+                  <div class="ui-layer">
+                    <span class="ui-mono">01</span>
+                    <span>IP canon assets</span>
+                  </div>
+                  <div class="ui-layer is-mid">
+                    <span class="ui-mono">02</span>
+                    <span>Process &amp; die-line spec</span>
+                  </div>
+                  <div class="ui-layer is-top">
+                    <span class="ui-mono">03</span>
+                    <span>Physical merch &amp; badges</span>
+                    <i aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="bento__copy">
+                <span class="bento__num">03</span>
+                <h3>Workshop</h3>
+                <p>Derivative content, and physical merchandise such as badges, designed from an IP's assets.</p>
+              </div>
+            </li>
+
+            <li class="bento__card reveal" data-glow>
+              <div class="bento__diagram bento__diagram--market" aria-hidden="true">
+                <div class="ui-market">
+                  <div class="ui-market__index">
+                    <span class="ui-mono">INDEX</span>
+                    <strong>Characters &amp; works</strong>
+                  </div>
+                  <div class="ui-market__arrow" aria-hidden="true">→</div>
+                  <div class="ui-market__goods">
+                    <div class="ui-good-chip"><span>Badges</span></div>
+                    <div class="ui-good-chip"><span>Standees</span></div>
+                    <div class="ui-good-chip is-celadon"><span>Market release</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="bento__copy">
+                <span class="bento__num">04</span>
+                <h3>Market</h3>
+                <p>Merchandise is shown and released in the market, where consumers find goods through characters and works.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="model arch-section" id="publishing" aria-labelledby="publishing-title">
+        <div class="section-shell arch-frame">
+          <div class="section-head reveal">
+            <div>
+              <p class="slate">02 / HOW IP GETS PUBLISHED</p>
+              <h2 id="publishing-title" class="display">
+                Consumer goods, the new <span class="accent">publishing medium.</span>
+              </h2>
+            </div>
+            <p class="lede">
+              A publisher prints a work as a book. RealRain publishes IP as products: within the scope of a licence, characters and works are developed into merchandise and branded goods, then manufactured and released to consumers.
             </p>
           </div>
 
-          <ol class="chain">
-            <li class="reveal">
-              <p class="chain__meta"><span>01</span><b>Rights holders</b></p>
+          <ol class="chain-grid">
+            <li class="chain-step reveal">
+              <div class="chain-step__rail" aria-hidden="true">
+                <span class="chain-step__node"></span>
+              </div>
+              <p class="chain-step__meta"><span>01</span><b>Rights holders</b></p>
               <h3>Canon and rights</h3>
-              <p class="chain__desc">Characters, worlds, works and assets are recorded together with what may be licensed and how revenue is shared.</p>
-              <p class="chain__sys">Crossroads · IP space</p>
+              <p class="chain-step__desc">Characters, worlds, works and assets are recorded together with what may be licensed and how revenue is shared.</p>
+              <p class="chain-step__sys">Crossroads · IP space</p>
             </li>
-            <li class="reveal">
-              <p class="chain__meta"><span>02</span><b>Creators · Brands</b></p>
+            <li class="chain-step reveal">
+              <div class="chain-step__rail" aria-hidden="true">
+                <span class="chain-step__node"></span>
+              </div>
+              <p class="chain-step__meta"><span>02</span><b>Creators · Brands</b></p>
               <h3>Licensed development</h3>
-              <p class="chain__desc">Content and products are developed from the canon and assets, inside the licence. Every derivative work is recorded.</p>
-              <p class="chain__sys">Crossroads · Workshop</p>
+              <p class="chain-step__desc">Content and products are developed from the canon and assets, inside the licence. Every derivative work is recorded.</p>
+              <p class="chain-step__sys">Crossroads · Workshop</p>
             </li>
-            <li class="reveal">
-              <p class="chain__meta"><span>03</span><b>Manufacturers</b></p>
+            <li class="chain-step reveal">
+              <div class="chain-step__rail" aria-hidden="true">
+                <span class="chain-step__node"></span>
+              </div>
+              <p class="chain-step__meta"><span>03</span><b>Manufacturers</b></p>
               <h3>Production</h3>
-              <p class="chain__desc">Manufacturers join by category, process and delivery capacity, and fulfil through OEM runs or print on demand.</p>
-              <p class="chain__sys">OEM · POD</p>
+              <p class="chain-step__desc">Manufacturers join by category, process and delivery capacity, and fulfil through OEM runs or print on demand.</p>
+              <p class="chain-step__sys">OEM · POD</p>
             </li>
-            <li class="reveal">
-              <p class="chain__meta"><span>04</span><b>Consumers</b></p>
+            <li class="chain-step reveal">
+              <div class="chain-step__rail" aria-hidden="true">
+                <span class="chain-step__node"></span>
+              </div>
+              <p class="chain-step__meta"><span>04</span><b>Consumers</b></p>
               <h3>Release</h3>
-              <p class="chain__desc">Products are shown and released in the Crossroads Market. What consumers buy and tell us adjusts the direction of the next run.</p>
-              <p class="chain__sys">Crossroads · Market</p>
+              <p class="chain-step__desc">Products are shown and released in the Crossroads Market. What consumers buy and tell us adjusts the direction of the next run.</p>
+              <p class="chain-step__sys">Crossroads · Market</p>
             </li>
           </ol>
 
-          <div class="model__rule reveal">
+          <div class="governance-bar reveal">
             <b>Open creation, governed commercialisation.</b>
             <p>
-              Creators work with whatever tools and communities they choose; once a work goes
-              commercial, scope of use, review responsibility and revenue rules are made explicit
-              first.
+              Creators work with whatever tools and communities they choose; once a work goes commercial, scope of use, review responsibility and revenue rules are made explicit first.
             </p>
           </div>
         </div>
       </section>
 
-      <section class="partners" id="partners" aria-labelledby="partners-title">
-        <div class="section-shell">
-          <div class="section-head">
+      <section class="partners arch-section" id="partners" aria-labelledby="partners-title">
+        <div class="section-shell arch-frame">
+          <div class="section-head reveal">
             <div>
-              <p class="slate reveal">Partnerships</p>
-              <h2 id="partners-title" class="display reveal">
-                Commercialise IP <em>with RealRain.</em>
+              <p class="slate">03 / PARTNERSHIPS</p>
+              <h2 id="partners-title" class="display">
+                Commercialise IP <span class="accent">with RealRain.</span>
               </h2>
             </div>
-            <div class="section-head__aside reveal">
+            <div class="section-head__aside">
               <p>Licensing and fulfilment scope are agreed project by project.</p>
-              <a class="button button--primary" href="#contact">
+              <a class="btn btn--primary" href="#contact">
                 <span>Get in touch</span><b aria-hidden="true">→</b>
               </a>
             </div>
           </div>
 
-          <ul class="partners__grid">
-            <li class="reveal">
-              <p class="partners__tag"><b>Original IP</b><span>Original creators</span></p>
+          <ul class="partners-matrix">
+            <li class="partner-card partner-card--wide reveal">
+              <p class="partner-card__tag"><b>Original IP</b><span>Original creators</span></p>
               <h3>Turn original characters and works into products</h3>
               <p>Original creators can have RealRain publish their characters and works. RealRain organises product development, production and release, with rights and revenue shared as agreed.</p>
             </li>
-            <li class="reveal">
-              <p class="partners__tag"><b>Merchandise hosting</b><span>Rights holders</span></p>
+            <li class="partner-card partner-card--wide reveal">
+              <p class="partner-card__tag"><b>Merchandise hosting</b><span>Rights holders</span></p>
               <h3>Turn characters and works into products people can buy</h3>
               <p>Rights holders can host standard merchandise in the Crossroads Market. The platform organises showcase, release and production, and adjusts product direction on what consumers buy and say.</p>
             </li>
-            <li class="reveal">
-              <p class="partners__tag"><b>Licensed co-creation</b><span>Creators</span></p>
+            <li class="partner-card reveal">
+              <p class="partner-card__tag"><b>Licensed co-creation</b><span>Creators</span></p>
               <h3>Help develop an IP and take the work commercial</h3>
               <p>Within the licence, creators develop content and products from an IP's canon and assets. The platform records each work and its derivation, and sets out commercial use and revenue rules.</p>
             </li>
-            <li class="reveal">
-              <p class="partners__tag"><b>Brand licensing</b><span>Brands</span></p>
+            <li class="partner-card reveal">
+              <p class="partner-card__tag"><b>Brand licensing</b><span>Brands</span></p>
               <h3>Bring an IP into branded goods and new categories</h3>
               <p>Brands license from rights holders around their own audience, categories and channels, put characters and works on products, and coordinate the release that follows.</p>
             </li>
-            <li class="reveal">
-              <p class="partners__tag"><b>Production</b><span>Manufacturers</span></p>
+            <li class="partner-card reveal">
+              <p class="partner-card__tag"><b>Production</b><span>Manufacturers</span></p>
               <h3>Become a standard supplier to RealRain</h3>
               <p>Manufacturers join by category, process and delivery capacity, and produce through OEM or print on demand for products released on the platform.</p>
             </li>
@@ -331,124 +678,112 @@
         </div>
       </section>
 
-      <section class="people" id="team" aria-labelledby="team-title">
-        <div class="section-shell">
-          <div class="section-head section-head--single">
+      <section class="people arch-section" id="team" aria-labelledby="team-title">
+        <div class="section-shell arch-frame">
+          <div class="section-head section-head--single reveal">
             <div>
-              <p class="slate reveal">Team</p>
-              <h2 id="team-title" class="display reveal">Technology, creator operations <em>and rights</em></h2>
+              <p class="slate">04 / TEAM</p>
+              <h2 id="team-title" class="display">Technology, creator operations <span class="accent">and rights</span></h2>
             </div>
           </div>
 
-          <ul class="people__core">
-            <li class="reveal">
-              <h3>Beichen Xu</h3>
-              <p class="people__role">Founder / CEO</p>
-              <p class="people__bio">MSc in machine learning and big data science, Imperial College London. Worked on cosmology and machine learning research with the Cavendish Laboratory and KICC, University of Cambridge; formerly an AI4S scientist and a vision-language model engineer.</p>
-              <p class="people__duty">Leads company strategy, core product and technology.</p>
-            </li>
-            <li class="reveal">
-              <h3>Yishan Zhou</h3>
-              <p class="people__role">Co-founder / COO</p>
-              <p class="people__bio">MSc in entrepreneurship and innovation management, University of Surrey. A long practice in illustration, 3D modelling and anime-style work; has been published, has licensed personal work to third parties, and has run creator markets and communities.</p>
-              <p class="people__duty">Leads creator products, content and project operations, and partnerships.</p>
-            </li>
-            <li class="reveal">
-              <h3>Zhiguo Li</h3>
-              <p class="people__role">Copyright and industry partnerships</p>
-              <p class="people__bio">Graduate studies in computer science, Nanjing University. Formerly a senior product expert at Ant Group and head of its judicial blockchain platform, working on large institutional products, cross-organisation collaboration and copyright infrastructure.</p>
-              <p class="people__duty">Leads rights partnerships, transaction governance and institutional coordination.</p>
-            </li>
-            <li class="people__advisors">
-              <p class="people__label reveal">Advisors</p>
-              <div class="reveal">
-                <p class="people__name"><b>Yiyao Zhang</b><span>Policy and communications</span></p>
-                <p class="people__bio">Advisor to the New Media Research Center, Peking University.</p>
+          <ul class="team-grid">
+            <li class="team-card reveal">
+              <div class="team-card__top">
+                <h3>Beichen Xu</h3>
+                <p class="team-card__role">Founder / CEO</p>
               </div>
-              <div class="reveal">
-                <p class="people__name"><b>Yudie Deng</b><span>Production and directing</span></p>
-                <p class="people__bio">BA, Beijing Film Academy; master's degrees from Tsinghua University and the University of Southern California. AIGC content projects with Enlight Media and Zhipu AI.</p>
+              <p class="team-card__bio">MSc in machine learning and big data science, Imperial College London. Worked on cosmology and machine learning research with the Cavendish Laboratory and KICC, University of Cambridge; formerly an AI4S scientist and a vision-language model engineer.</p>
+              <p class="team-card__duty">Leads company strategy, core product and technology.</p>
+            </li>
+            <li class="team-card reveal">
+              <div class="team-card__top">
+                <h3>Yishan Zhou</h3>
+                <p class="team-card__role">Co-founder / COO</p>
               </div>
+              <p class="team-card__bio">MSc in entrepreneurship and innovation management, University of Surrey. A long practice in illustration, 3D modelling and anime-style work; has been published, has licensed personal work to third parties, and has run creator markets and communities.</p>
+              <p class="team-card__duty">Leads creator products, content and project operations, and partnerships.</p>
+            </li>
+            <li class="team-card reveal">
+              <div class="team-card__top">
+                <h3>Zhiguo Li</h3>
+                <p class="team-card__role">Copyright and industry partnerships</p>
+              </div>
+              <p class="team-card__bio">Graduate studies in computer science, Nanjing University. Formerly a senior product expert at Ant Group and head of its judicial blockchain platform, working on large institutional products, cross-organisation collaboration and copyright infrastructure.</p>
+              <p class="team-card__duty">Leads rights partnerships, transaction governance and institutional coordination.</p>
             </li>
           </ul>
+
+          <div class="advisors-band reveal">
+            <p class="advisors-band__label">Advisors</p>
+            <div class="advisors-band__grid">
+              <div class="advisor-item">
+                <p class="advisor-item__name"><b>Yiyao Zhang</b><span>Policy and communications</span></p>
+                <p class="advisor-item__bio">Advisor to the New Media Research Center, Peking University.</p>
+              </div>
+              <div class="advisor-item">
+                <p class="advisor-item__name"><b>Yudie Deng</b><span>Production and directing</span></p>
+                <p class="advisor-item__bio">BA, Beijing Film Academy; master's degrees from Tsinghua University and the University of Southern California. AIGC content projects with Enlight Media and Zhipu AI.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class="close scene" id="contact" aria-labelledby="close-title">
-        <picture class="scene__art">
-          <source
-            media="(max-width: 860px)"
-            srcset="../assets/media/art/welcome-loggia-m-768.webp"
-            width="768"
-            height="768"
-          />
-          <source
-            srcset="
-              ../assets/media/art/welcome-loggia-1280.webp 1280w,
-              ../assets/media/art/welcome-loggia-2048.webp 2048w
-            "
-            sizes="100vw"
-          />
-          <img
-            src="../assets/media/art/welcome-loggia-2048.webp"
-            width="2048"
-            height="1152"
-            loading="lazy"
-            alt=""
-          />
-        </picture>
-        <div class="scene__veil" aria-hidden="true"></div>
+      <section class="close arch-section" id="contact" data-theme="dark" aria-labelledby="close-title">
+        <div class="close__watermark" aria-hidden="true">
+          <img src="../assets/logo/realrain-logo-rain-celadon-reverse.svg" width="420" height="420" alt="" />
+        </div>
 
-        <div class="close__content section-shell">
-          <div class="close__vision">
-            <p class="slate reveal">Contact</p>
-            <h2 id="close-title" class="reveal">
+        <div class="section-shell arch-frame">
+          <div class="close__head reveal">
+            <p class="slate">05 / CONTACT</p>
+            <h2 id="close-title" class="close__title">
               <small>Hack to the</small>
               Wonderland
             </h2>
-            <p class="close__lead reveal">Bring your work, your brief or an idea for working together.</p>
+            <p class="close__lead">Bring your work, your brief or an idea for working together.</p>
           </div>
 
-          <div class="contact">
-            <dl class="contact__grid">
-              <div class="reveal">
-                <dt>Email</dt>
-                <dd>
-                  <a href="mailto:contact@realrain.co">contact@realrain.co <b aria-hidden="true">↗</b></a>
-                </dd>
-              </div>
-              <div class="reveal">
-                <dt>Platform</dt>
-                <dd>
-                  <a href="https://realrain.art/">realrain.art <b aria-hidden="true">↗</b></a>
-                </dd>
-              </div>
-              <div class="reveal">
-                <dt>Office</dt>
-                <dd class="contact__address">U-Center, 28 Chengfu Road, Haidian District, Beijing</dd>
-              </div>
-            </dl>
-          </div>
+          <dl class="contact-grid">
+            <div class="contact__card reveal" data-glow>
+              <dt>Email</dt>
+              <dd>
+                <a href="mailto:contact@realrain.co">contact@realrain.co <b aria-hidden="true">↗</b></a>
+              </dd>
+            </div>
+            <div class="contact__card reveal" data-glow>
+              <dt>Platform</dt>
+              <dd>
+                <a href="https://realrain.art/">realrain.art <b aria-hidden="true">↗</b></a>
+              </dd>
+            </div>
+            <div class="contact__card reveal" data-glow>
+              <dt>Office</dt>
+              <dd class="contact__address">U-Center, 28 Chengfu Road, Haidian District, Beijing</dd>
+            </div>
+          </dl>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer">
-      <a class="site-footer__brand" href="#top">
-        <img src="../assets/logo/realrain-logo-rain-celadon-reverse.svg" width="44" height="44" alt="" />
-        <span>REALRAIN / 非雨</span>
-      </a>
-      <p>IP publishing platform. Consumer goods as the medium.</p>
-      <div class="site-footer__links">
-        <a href="#top">Back to top ↑</a>
-        <a href="https://realrain.art/">Open Crossroads ↗</a>
-        <a href="../" hreflang="zh-Hans" lang="zh-Hans">中文</a>
-        <a href="mailto:contact@realrain.co">Contact</a>
+    <footer class="site-footer" data-theme="dark">
+      <div class="section-shell site-footer__inner">
+        <a class="site-footer__brand" href="#top">
+          <img src="../assets/logo/realrain-logo-rain-celadon-reverse.svg" width="32" height="32" alt="" />
+          <span>REALRAIN / 非雨</span>
+        </a>
+        <p class="site-footer__tag">IP publishing platform. Consumer goods as the medium.</p>
+        <div class="site-footer__links">
+          <a href="#top">Back to top ↑</a>
+          <a href="https://realrain.art/">Open Crossroads ↗</a>
+          <a href="../" hreflang="zh-Hans" lang="zh-Hans">中文</a>
+          <a href="mailto:contact@realrain.co">Contact</a>
+        </div>
+        <small>© <span data-year></span> RealRain / 非雨</small>
       </div>
-      <small>© <span data-year></span> RealRain / 非雨</small>
     </footer>
 
-    <script src="../js/vendor/anime.umd.min.js?v=4.5.0" defer></script>
-    <script src="../js/main.js?v=20261005-3" defer></script>
+    <script src="../js/main.js?v=20261118-1" defer></script>
   </body>
 </html>

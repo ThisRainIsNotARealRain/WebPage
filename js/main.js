@@ -6,7 +6,6 @@
   var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var mobileNav = window.matchMedia("(max-width: 860px)");
-  var animeApi = window.anime || null;
 
   root.classList.add("motion-ready");
 
@@ -122,33 +121,48 @@
     updateMobileState(false);
   }
 
-  function initScrollState() {
+  function initHeaderState() {
     var header = document.querySelector("[data-header]");
     var progress = document.querySelector(".page-progress span");
+    var darkBands = Array.prototype.slice.call(document.querySelectorAll('[data-theme="dark"]'));
     var queued = false;
 
     function update() {
       var scrollTop = window.scrollY || document.documentElement.scrollTop;
       var scrollRange = document.documentElement.scrollHeight - window.innerHeight;
+      var headerBottom = header ? header.offsetHeight : 64;
+      var probeY = Math.min(headerBottom * 0.5, 32);
+      var overDark = false;
 
-      if (header) header.classList.toggle("is-scrolled", scrollTop > 28);
+      for (var i = 0; i < darkBands.length; i++) {
+        var rect = darkBands[i].getBoundingClientRect();
+        if (rect.top <= probeY && rect.bottom > probeY) {
+          overDark = true;
+          break;
+        }
+      }
+
+      if (header) {
+        header.classList.toggle("is-scrolled", scrollTop > 20);
+        header.classList.toggle("is-dark", overDark);
+      }
+
       if (progress) {
         var amount = scrollRange > 0 ? Math.min(scrollTop / scrollRange, 1) : 0;
         progress.style.transform = "scaleX(" + amount + ")";
       }
+
       queued = false;
     }
 
-    window.addEventListener(
-      "scroll",
-      function () {
-        if (queued) return;
-        queued = true;
-        window.requestAnimationFrame(update);
-      },
-      { passive: true }
-    );
+    function requestUpdate() {
+      if (queued) return;
+      queued = true;
+      window.requestAnimationFrame(update);
+    }
 
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
     update();
   }
 
@@ -178,7 +192,7 @@
           });
         });
       },
-      { rootMargin: "-35% 0px -58% 0px", threshold: 0 }
+      { rootMargin: "-32% 0px -60% 0px", threshold: 0 }
     );
 
     sections.forEach(function (section) {
@@ -186,492 +200,112 @@
     });
   }
 
-  // The headline itself rises line by line (see splitHeadingLines); anime.js
-  // brings in the news chip first and the summary once the headline has landed.
-  function initHeroMotion() {
-    var items = document.querySelectorAll("[data-hero-item]");
+  function initWorkbench() {
+    var workbench = document.querySelector("[data-workbench]");
+    if (!workbench) return;
 
-    if (!items.length) return;
-    if (reducedMotion) {
-      items.forEach(function (item) {
-        item.style.opacity = "1";
+    var tabs = Array.prototype.slice.call(workbench.querySelectorAll('[role="tab"]'));
+    var panel = workbench.querySelector('[role="tabpanel"]');
+    var cadStage = workbench.querySelector("[data-active-carrier]");
+    var fields = Array.prototype.slice.call(workbench.querySelectorAll("[data-wb-field]"));
+
+    if (!tabs.length) return;
+
+    function activate(tab, moveFocus) {
+      var carrier = tab.getAttribute("data-carrier");
+
+      tabs.forEach(function (item) {
+        var selected = item === tab;
+        item.classList.toggle("is-active", selected);
+        item.setAttribute("aria-selected", String(selected));
+        item.tabIndex = selected ? 0 : -1;
       });
-      return;
-    }
 
-    if (animeApi && typeof animeApi.animate === "function") {
-      animeApi.animate("[data-hero-item]", {
-        opacity: [0, 1],
-        y: [28, 0],
-        delay: function (target, index) {
-          return index === 0 ? 60 : 460 + (index - 1) * 105;
-        },
-        duration: 1000,
-        ease: "outExpo"
-      });
-      return;
-    }
+      if (panel && tab.id) {
+        panel.setAttribute("aria-labelledby", tab.id);
+      }
 
-    items.forEach(function (item, index) {
-      window.setTimeout(function () {
-        item.style.opacity = "1";
-        item.style.transform = "none";
-      }, index === 0 ? 60 : 460 + (index - 1) * 100);
-    });
-  }
+      if (cadStage && carrier) {
+        cadStage.setAttribute("data-active-carrier", carrier);
+      }
 
-  // Headings rise out of a mask one line at a time. The lines are the breaks
-  // already written in the markup (<br>, or a block child such as <small>),
-  // so the phrase-level line breaking is untouched.
-  function splitHeadingLines() {
-    if (reducedMotion) return;
-
-    document.querySelectorAll(".display.reveal, .hero h1.reveal, .close h2.reveal").forEach(function (heading) {
-      var groups = [[]];
-
-      Array.prototype.slice.call(heading.childNodes).forEach(function (node) {
-        if (node.nodeName === "BR") {
-          groups.push([]);
-        } else if (node.nodeType === 1 && window.getComputedStyle(node).display === "block") {
-          groups.push([node], []);
-        } else {
-          groups[groups.length - 1].push(node);
+      fields.forEach(function (node) {
+        var key = node.getAttribute("data-wb-field");
+        var value = tab.getAttribute("data-" + key);
+        if (value !== null) {
+          node.textContent = value;
         }
       });
 
-      groups = groups.filter(function (nodes) {
-        return nodes.some(function (node) {
-          return node.nodeType === 1 || node.textContent.trim();
-        });
+      if (moveFocus) {
+        tab.focus();
+      }
+    }
+
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener("click", function () {
+        activate(tab, false);
       });
 
-      heading.textContent = "";
-      groups.forEach(function (nodes, index) {
-        var line = document.createElement("span");
-        var inner = document.createElement("span");
-        line.className = "line";
-        inner.className = "line__inner";
-        inner.style.setProperty("--line", index);
-        nodes.forEach(function (node) {
-          inner.appendChild(node);
-        });
-        line.appendChild(inner);
-        heading.appendChild(line);
+      tab.addEventListener("keydown", function (event) {
+        var next = -1;
+        if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+        else if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = tabs.length - 1;
+
+        if (next >= 0) {
+          event.preventDefault();
+          activate(tabs[next], true);
+        }
       });
-      heading.classList.add("has-lines");
     });
   }
 
-  // On desktops and phones every section is one screen and the page snaps
-  // between them, so a screen composes itself as it arrives: its items come
-  // in reading order, timed from the snap rather than from each item crossing
-  // the fold. Tablets and short windows scroll freely, so there items still
-  // appear one by one as they enter.
-  function initChoreography() {
-    var sections = Array.prototype.slice.call(document.querySelectorAll("main > section[id]"));
-    var revealItems = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
-    var oneScreen = window.matchMedia(
-      "(min-width: 861px) and (min-height: 621px), (max-width: 600px) and (min-height: 621px)"
-    );
+  function initCardGlow() {
+    if (!finePointer || reducedMotion) return;
+
+    document.querySelectorAll("[data-glow]").forEach(function (card) {
+      card.addEventListener("mousemove", function (event) {
+        var rect = card.getBoundingClientRect();
+        card.style.setProperty("--mx", (event.clientX - rect.left).toFixed(1) + "px");
+        card.style.setProperty("--my", (event.clientY - rect.top).toFixed(1) + "px");
+      });
+    });
+  }
+
+  function initReveal() {
+    var items = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+    if (!items.length) return;
 
     function show(item) {
       item.classList.add("is-visible");
     }
 
     if (reducedMotion || !("IntersectionObserver" in window)) {
-      sections.forEach(function (section) {
-        section.classList.add("is-in");
-      });
-      revealItems.forEach(show);
+      items.forEach(show);
       return;
     }
 
-    sections.forEach(function (section) {
+    document.querySelectorAll("main > section").forEach(function (section) {
       section.querySelectorAll(".reveal").forEach(function (item, index) {
-        item.style.setProperty("--i", index);
+        item.style.setProperty("--i", Math.min(index, 5));
       });
     });
-
-    var sectionObserver = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-in");
-          if (oneScreen.matches) entry.target.querySelectorAll(".reveal").forEach(show);
-          sectionObserver.unobserve(entry.target);
-        });
-      },
-      { rootMargin: "0px 0px -14% 0px", threshold: 0 }
-    );
-
-    var itemObserver = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          show(entry.target);
-          itemObserver.unobserve(entry.target);
-        });
-      },
-      { rootMargin: "0px 0px -7% 0px", threshold: 0.1 }
-    );
-
-    sections.forEach(function (section) {
-      sectionObserver.observe(section);
-    });
-    revealItems.forEach(function (item) {
-      itemObserver.observe(item);
-    });
-  }
-
-  // A quiet index on the right edge: one mark per screen, the current one
-  // drawn longer. It mirrors the header navigation, so it stays out of the
-  // tab order and the accessibility tree.
-  function initSectionIndex() {
-    if (!("IntersectionObserver" in window)) return;
-
-    var sections = Array.prototype.slice.call(document.querySelectorAll("main > section[id]"));
-    if (sections.length < 2) return;
-
-    var index = document.createElement("nav");
-    index.className = "section-index";
-    index.setAttribute("aria-hidden", "true");
-
-    var marks = sections.map(function (section, i) {
-      var navLink = document.querySelector('.site-nav > a[href="#' + section.id + '"]');
-      var label = navLink ? navLink.lastChild.textContent.trim() : root.lang === "zh-Hans" ? "首页" : "Top";
-      var mark = document.createElement("a");
-      var text = document.createElement("span");
-
-      mark.href = "#" + section.id;
-      mark.tabIndex = -1;
-      text.className = "section-index__label";
-      text.textContent = ("0" + (i + 1)).slice(-2) + "\u2002" + label;
-      mark.appendChild(text);
-      mark.appendChild(document.createElement("i"));
-      index.appendChild(mark);
-      return mark;
-    });
-
-    document.body.appendChild(index);
 
     var observer = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
           if (!entry.isIntersecting) return;
-          var position = sections.indexOf(entry.target);
-          marks.forEach(function (mark, i) {
-            mark.classList.toggle("is-active", i === position);
-          });
+          show(entry.target);
+          observer.unobserve(entry.target);
         });
       },
-      { rootMargin: "-45% 0px -54% 0px", threshold: 0 }
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.06 }
     );
 
-    sections.forEach(function (section) {
-      observer.observe(section);
-    });
-  }
-
-  // Phones: the four capabilities, the four steps, the five partnerships and
-  // the three founders sit on horizontal strips. Dots under each follow the
-  // swipe and jump on tap; they repeat what a swipe does, so they stay out of
-  // the tab order.
-  function initStrips() {
-    document.querySelectorAll(".features, .chain, .partners__grid, .people__core").forEach(function (strip) {
-      var items = Array.prototype.slice.call(strip.children);
-      if (items.length < 2) return;
-
-      var dots = document.createElement("div");
-      var queued = false;
-      dots.className = "strip-dots";
-      dots.setAttribute("aria-hidden", "true");
-
-      var buttons = items.map(function (item, index) {
-        var button = document.createElement("button");
-        button.type = "button";
-        button.tabIndex = -1;
-        button.setAttribute("aria-pressed", String(index === 0));
-        button.addEventListener("click", function () {
-          var left = item.offsetLeft - items[0].offsetLeft;
-          if (typeof strip.scrollTo === "function") {
-            strip.scrollTo({ left: left, behavior: reducedMotion ? "auto" : "smooth" });
-          } else {
-            strip.scrollLeft = left;
-          }
-        });
-        dots.appendChild(button);
-        return button;
-      });
-
-      strip.parentNode.insertBefore(dots, strip.nextSibling);
-
-      function sync() {
-        var step = items[1].offsetLeft - items[0].offsetLeft || strip.clientWidth;
-        var atEnd = strip.scrollLeft >= strip.scrollWidth - strip.clientWidth - 2;
-        var current = atEnd ? items.length - 1 : Math.round(strip.scrollLeft / step);
-        buttons.forEach(function (button, index) {
-          button.setAttribute("aria-pressed", String(index === current));
-        });
-        queued = false;
-      }
-
-      strip.addEventListener(
-        "scroll",
-        function () {
-          if (queued) return;
-          queued = true;
-          window.requestAnimationFrame(sync);
-        },
-        { passive: true }
-      );
-    });
-  }
-
-  // Phones: a deliberate swipe turns exactly one screen. Snapping alone only
-  // advances once a flick would carry past half a screen, which on Android
-  // takes a hard throw. Here a quick swipe, or a drag past a quarter of the
-  // screen, turns the page; a slow peek settles back, and that snap is the
-  // resistance. Speed is taken over the whole gesture by the touch events'
-  // own clocks: once a page scrolls, Chrome sends touchmove only every 200ms
-  // or so, and a busy page runs handlers late.
-  function initPhonePaging() {
-    var paging = window.matchMedia("(max-width: 600px) and (min-height: 621px)");
-    var screens = Array.prototype.slice.call(document.querySelectorAll("main > section[id]"));
-    var touch = null;
-
-    if (reducedMotion || screens.length < 2) return;
-
-    function topOf(element) {
-      return element.getBoundingClientRect().top + window.pageYOffset;
-    }
-
-    // While a page turns, snapping steps aside: the browser's own snap,
-    // landing a moment after the finger lifts, would otherwise pull it back
-    function turnTo(top) {
-      var started = Date.now();
-
-      function settle() {
-        if (Math.abs(window.pageYOffset - top) < 2 || Date.now() - started > 1500) {
-          root.style.scrollSnapType = "";
-        } else {
-          window.requestAnimationFrame(settle);
-        }
-      }
-
-      root.style.scrollSnapType = "none";
-      window.scrollTo({ top: top, behavior: "smooth" });
-      window.requestAnimationFrame(settle);
-    }
-
-    window.addEventListener(
-      "touchstart",
-      function (event) {
-        touch = null;
-        if (!paging.matches || event.touches.length !== 1 || body.classList.contains("nav-open")) return;
-
-        var at = -1;
-        for (var i = 0; i < screens.length; i++) {
-          if (Math.abs(topOf(screens[i]) - window.pageYOffset) < 4) {
-            at = i;
-            break;
-          }
-        }
-        // A screen taller than the window scrolls on its own
-        if (at < 0 || screens[at].offsetHeight > window.innerHeight + 2) return;
-
-        touch = {
-          x: event.touches[0].clientX,
-          y: event.touches[0].clientY,
-          stamp: event.timeStamp,
-          time: Date.now(),
-          at: at
-        };
-      },
-      { passive: true }
-    );
-
-    window.addEventListener(
-      "touchend",
-      function (event) {
-        if (!touch) return;
-
-        var start = touch;
-        var end = event.changedTouches[0];
-        var dx = end.clientX - start.x;
-        var dy = end.clientY - start.y;
-        touch = null;
-
-        // Sideways belongs to the strips
-        if (Math.abs(dy) < Math.abs(dx) * 1.2) return;
-
-        var elapsed = event.timeStamp > 0 && start.stamp > 0 ? event.timeStamp - start.stamp : Date.now() - start.time;
-        var speed = Math.abs(dy) / Math.max(elapsed, 1);
-        var deliberate = Math.abs(dy) > window.innerHeight * 0.25 || (speed > 0.35 && Math.abs(dy) > 24);
-        var target = screens[start.at + (dy < 0 ? 1 : -1)];
-
-        if (deliberate && target) turnTo(topOf(target));
-      },
-      { passive: true }
-    );
-  }
-
-  function initParallax() {
-    if (reducedMotion || window.innerWidth < 700) return;
-
-    var scenes = Array.prototype.slice.call(document.querySelectorAll("[data-parallax]"));
-    if (!scenes.length) return;
-
-    var queued = false;
-
-    function update() {
-      scenes.forEach(function (scene) {
-        var image = scene.querySelector("img");
-        if (!image) return;
-
-        var rect = scene.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-
-        var strength = Number(scene.dataset.parallax || 0.04);
-        var offset = (rect.top + rect.height / 2 - window.innerHeight / 2) * strength;
-        image.style.transform = "translate3d(0," + offset.toFixed(2) + "px,0) scale(1.035)";
-      });
-      queued = false;
-    }
-
-    function requestUpdate() {
-      if (queued) return;
-      queued = true;
-      window.requestAnimationFrame(update);
-    }
-
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-    requestUpdate();
-  }
-
-  // Rain over the first screen: sparse, slow hairlines in Rain Celadon. It
-  // pauses when the hero is off screen or the tab is hidden, and stays off
-  // under reduced motion.
-  function initRain() {
-    var canvas = document.querySelector("[data-rain]");
-    if (!canvas || reducedMotion || !canvas.getContext) return;
-
-    var ctx = canvas.getContext("2d");
-    var slant = 0.16;
-    var width = 0;
-    var height = 0;
-    var color = "#426359";
-    var drops = [];
-    var frame = 0;
-    var last = 0;
-    var running = false;
-    var inView = true;
-
-    function spawn(anywhere) {
-      var length = 24 + Math.random() * 90;
-      return {
-        x: Math.random() * (width + height * slant),
-        y: anywhere ? Math.random() * height : -length - Math.random() * height * 0.4,
-        length: length,
-        speed: 0.05 + Math.random() * 0.12,
-        alpha: 0.05 + Math.random() * 0.17
-      };
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, width, height);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1;
-      drops.forEach(function (drop) {
-        ctx.globalAlpha = drop.alpha;
-        ctx.beginPath();
-        ctx.moveTo(drop.x, drop.y);
-        ctx.lineTo(drop.x - drop.length * slant, drop.y + drop.length);
-        ctx.stroke();
-      });
-      ctx.globalAlpha = 1;
-    }
-
-    function size() {
-      var ratio = Math.min(window.devicePixelRatio || 1, 2);
-      width = canvas.clientWidth;
-      height = canvas.clientHeight;
-      canvas.width = Math.round(width * ratio);
-      canvas.height = Math.round(height * ratio);
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      color = window.getComputedStyle(canvas).color;
-      drops = [];
-      for (var i = Math.round((width * height) / 14000); i > 0; i--) drops.push(spawn(true));
-      draw();
-    }
-
-    function tick(time) {
-      var step = last ? Math.min(time - last, 50) : 16;
-      last = time;
-      drops.forEach(function (drop) {
-        drop.y += drop.speed * step;
-        drop.x -= drop.speed * step * slant;
-        if (drop.y > height) {
-          var fresh = spawn(false);
-          drop.x = fresh.x;
-          drop.y = fresh.y;
-          drop.length = fresh.length;
-          drop.speed = fresh.speed;
-          drop.alpha = fresh.alpha;
-        }
-      });
-      draw();
-      frame = window.requestAnimationFrame(tick);
-    }
-
-    function start() {
-      if (running || !inView || document.hidden) return;
-      running = true;
-      last = 0;
-      frame = window.requestAnimationFrame(tick);
-    }
-
-    function stop() {
-      running = false;
-      window.cancelAnimationFrame(frame);
-    }
-
-    size();
-    start();
-
-    var resizeTimer = 0;
-    window.addEventListener("resize", function () {
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(size, 150);
-    });
-    document.addEventListener("visibilitychange", function () {
-      if (document.hidden) stop();
-      else start();
-    });
-    if ("IntersectionObserver" in window) {
-      new IntersectionObserver(function (entries) {
-        inView = entries[0].isIntersecting;
-        if (inView) start();
-        else stop();
-      }).observe(canvas);
-    }
-  }
-
-  function initPointerDetails() {
-    if (!finePointer || reducedMotion) return;
-
-    document.querySelectorAll("[data-tilt]").forEach(function (element) {
-      element.addEventListener("mousemove", function (event) {
-        var rect = element.getBoundingClientRect();
-        var rotateY = ((event.clientX - rect.left) / rect.width - 0.5) * 2.6;
-        var rotateX = (0.5 - (event.clientY - rect.top) / rect.height) * 2.6;
-        element.style.transform =
-          "perspective(1200px) rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg)";
-      });
-
-      element.addEventListener("mouseleave", function () {
-        element.style.transform = "";
-      });
+    items.forEach(function (item) {
+      observer.observe(item);
     });
   }
 
@@ -689,16 +323,10 @@
   }
 
   initNavigation();
-  initScrollState();
+  initHeaderState();
   initActiveNavigation();
-  splitHeadingLines();
-  initHeroMotion();
-  initChoreography();
-  initSectionIndex();
-  initStrips();
-  initPhonePaging();
-  initParallax();
-  initRain();
-  initPointerDetails();
+  initWorkbench();
+  initCardGlow();
+  initReveal();
   initLanguageChoice();
 })();
