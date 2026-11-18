@@ -23,27 +23,35 @@
       ry: 0.5,
       rippleT: -10
     };
+    var lastInteraction = performance.now();
+
+    function markInteraction() {
+      lastInteraction = performance.now();
+    }
 
     window.addEventListener("pointermove", function (e) {
       state.mxTarget = e.clientX / Math.max(1, window.innerWidth);
       state.myTarget = 1.0 - e.clientY / Math.max(1, window.innerHeight);
+      markInteraction();
     }, { passive: true });
 
     window.addEventListener("pointerdown", function (e) {
       state.rx = e.clientX / Math.max(1, window.innerWidth);
       state.ry = 1.0 - e.clientY / Math.max(1, window.innerHeight);
       state.rippleT = performance.now() * 0.001;
+      markInteraction();
     }, { passive: true });
 
     function updateScrollTarget() {
       var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       state.scrollTarget = Math.max(0, Math.min(1, window.scrollY / maxScroll));
+      markInteraction();
     }
     window.addEventListener("scroll", updateScrollTarget, { passive: true });
     updateScrollTarget();
 
-    var gl = canvas.getContext("webgl", { alpha: false, antialias: false, powerPreference: "low-power" }) ||
-             canvas.getContext("experimental-webgl", { alpha: false, antialias: false });
+    var gl = canvas.getContext("webgl", { alpha: false, antialias: false, depth: false, stencil: false }) ||
+             canvas.getContext("experimental-webgl", { alpha: false, antialias: false, depth: false, stencil: false });
 
     if (gl) {
       var vsSrc = [
@@ -79,12 +87,12 @@
         "",
         "float fbm(vec2 p) {",
         "  float v = 0.0;",
-        "  float a = 0.5;",
+        "  float a = 0.56;",
         "  mat2 rot = mat2(0.8, 0.6, -0.6, 0.8);",
-        "  for (int i = 0; i < 4; i++) {",
+        "  for (int i = 0; i < 2; i++) {",
         "    v += a * noise(p);",
-        "    p = rot * p * 2.02;",
-        "    a *= 0.5;",
+        "    p = rot * p * 2.04;",
+        "    a *= 0.44;",
         "  }",
         "  return v;",
         "}",
@@ -102,8 +110,8 @@
         "  vec2 q = vec2(fbm(p * 1.4 + t + uScroll * 1.1), fbm(p * 1.4 + vec2(4.2, 1.7) - t * 0.8));",
         "  float f = fbm(p * 1.9 + q * 1.65 + vec2(uScroll * 0.8, -uScroll * 0.5));",
         "",
-        "  float ribbon = smoothstep(0.42, 0.78, f);",
-        "  float filament = pow(smoothstep(0.56, 0.88, f), 2.2);",
+        "  float ribbon = smoothstep(0.38, 0.74, f);",
+        "  float filament = pow(smoothstep(0.52, 0.84, f), 2.1);",
         "",
         "  vec2 rp = (uv - uRipple) * vec2(aspect, 1.0);",
         "  float rd = length(rp);",
@@ -120,6 +128,8 @@
         "  vec3 col = mix(baseObsidian, mineralStone, ribbon * 0.92);",
         "  col += silverMist * (filament * 0.25 + wave);",
         "  col += vec3(0.18, 0.20, 0.19) * exp(-md * 2.8) * 0.22;",
+        "  col *= 1.0 - smoothstep(0.32, 1.05, length(p * vec2(0.78, 0.95))) * 0.62;",
+        "  col += (hash(gl_FragCoord.xy) - 0.5) * 0.012;",
         "",
         "  gl_FragColor = vec4(col, 1.0);",
         "}"
@@ -162,34 +172,59 @@
         var uRippleAge = gl.getUniformLocation(prog, "uRippleAge");
 
         var resizeGL = function () {
-          var scale = Math.min(window.devicePixelRatio || 1, 1.5) * 0.75;
+          var scale = Math.min(0.45, 640 / Math.max(1, window.innerWidth));
           canvas.width = Math.max(1, Math.round(window.innerWidth * scale));
           canvas.height = Math.max(1, Math.round(window.innerHeight * scale));
           gl.viewport(0, 0, canvas.width, canvas.height);
+          markInteraction();
         };
         window.addEventListener("resize", resizeGL, { passive: true });
         resizeGL();
 
         var startT = performance.now();
-        var drawGL = function () {
-          var nowSec = performance.now() * 0.001;
+        var lastDraw = 0;
+        var glRafId = 0;
+
+        var drawGL = function (now) {
+          glRafId = 0;
+          if (document.hidden) return;
+          var tMs = typeof now === "number" ? now : performance.now();
+          var nowSec = tMs * 0.001;
+          var rippleAge = state.rippleT > 0 ? nowSec - state.rippleT : -1.0;
+          var rippleActive = rippleAge >= 0.0 && rippleAge < 2.2;
+          var idle = (tMs - lastInteraction) > 650 && !rippleActive;
+
+          if (!reducedMotion && idle && (tMs - lastDraw) < 32) {
+            glRafId = requestAnimationFrame(drawGL);
+            return;
+          }
+          lastDraw = tMs;
+
           state.scroll += (state.scrollTarget - state.scroll) * 0.14;
           state.mx += (state.mxTarget - state.mx) * 0.14;
           state.my += (state.myTarget - state.my) * 0.14;
 
           gl.uniform2f(uRes, canvas.width, canvas.height);
-          gl.uniform1f(uTime, reducedMotion ? 1.5 : (performance.now() - startT) * 0.001);
+          gl.uniform1f(uTime, reducedMotion ? 1.5 : (tMs - startT) * 0.001);
           gl.uniform2f(uMouse, state.mx, state.my);
           gl.uniform1f(uScroll, state.scroll);
           gl.uniform2f(uRipple, state.rx, state.ry);
-          gl.uniform1f(uRippleAge, state.rippleT > 0 ? nowSec - state.rippleT : -1.0);
+          gl.uniform1f(uRippleAge, rippleAge);
           gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
           if (!reducedMotion) {
-            requestAnimationFrame(drawGL);
+            glRafId = requestAnimationFrame(drawGL);
           }
         };
-        drawGL();
+
+        document.addEventListener("visibilitychange", function () {
+          if (!document.hidden && !reducedMotion && !glRafId) {
+            lastDraw = 0;
+            glRafId = requestAnimationFrame(drawGL);
+          }
+        });
+
+        drawGL(startT);
         return;
       }
     }
@@ -230,6 +265,7 @@
     var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     var points = [];
+    var projected = [];
     for (var row = 0; row < 19; row++) {
       for (var col = 0; col < 19; col++) {
         var nx = (col - 9) / 9;
@@ -242,6 +278,7 @@
             dist: dist,
             baseR: Math.max(0.18, 1.0 - dist * 0.72)
           });
+          projected.push({ sx: 0, sy: 0, r: 1, z: 0, lit: 0, alpha: 0.5 });
         }
       }
     }
@@ -258,6 +295,16 @@
     var dragging = false;
     var lastPX = 0;
     var lastPY = 0;
+    var orbCX = 0;
+    var orbCY = 0;
+    var lastOrbInteraction = performance.now();
+    var lastOrbDraw = 0;
+
+    function updateOrbMetrics() {
+      var r = canvas.getBoundingClientRect();
+      orbCX = r.left + r.width * 0.5;
+      orbCY = r.top + r.height * 0.5;
+    }
 
     canvas.addEventListener("pointerdown", function (e) {
       dragging = true;
@@ -266,6 +313,7 @@
       velX = 0;
       velY = 0;
       pulse = 1.0;
+      lastOrbInteraction = performance.now();
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
     });
 
@@ -279,22 +327,18 @@
         velX = dy * 0.0035;
         lastPX = e.clientX;
         lastPY = e.clientY;
+        lastOrbInteraction = performance.now();
       } else if (visible && e.pointerType !== "touch") {
-        var r = canvas.getBoundingClientRect();
-        if (!r.width || !r.height) return;
-        var orbCX = r.left + r.width * 0.5;
-        var orbCY = r.top + r.height * 0.5;
+        if (!orbCX && !orbCY) updateOrbMetrics();
         var spanX = Math.max(260, window.innerWidth * 0.52);
         var spanY = Math.max(220, window.innerHeight * 0.48);
         gazeX = Math.max(-1, Math.min(1, (e.clientX - orbCX) / spanX));
         gazeY = Math.max(-1, Math.min(1, (e.clientY - orbCY) / spanY));
-        // Front hemisphere has nz > 0; x1 = nx*cosY + nz*sinY, y2 = ny*cosX - z1*sinX
-        // So targetY = +gazeX turns the front dome horizontally toward the cursor,
-        // and targetX = -gazeY tilts it vertically toward the cursor!
         targetY = gazeX * 0.68;
         targetX = -gazeY * 0.56;
         velX *= 0.2;
         velY *= 0.2;
+        lastOrbInteraction = performance.now();
       }
     }, { passive: true });
 
@@ -309,14 +353,17 @@
     var h = 0;
     var dpr = 1;
     function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       w = canvas.clientWidth || 320;
       h = canvas.clientHeight || 320;
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      updateOrbMetrics();
+      lastOrbInteraction = performance.now();
     }
     window.addEventListener("resize", resize, { passive: true });
+    window.addEventListener("scroll", updateOrbMetrics, { passive: true });
     resize();
 
     var visible = true;
@@ -325,12 +372,36 @@
     if (hero && typeof IntersectionObserver === "function") {
       new IntersectionObserver(function (entries) {
         visible = entries[0].isIntersecting;
-        if (visible && !reducedMotion && !rafId) render();
+        if (visible && !document.hidden && !reducedMotion && !rafId) {
+          lastOrbDraw = 0;
+          rafId = requestAnimationFrame(render);
+        }
       }, { threshold: 0.05 }).observe(hero);
     }
 
-    function render() {
+    document.addEventListener("visibilitychange", function () {
+      if (visible && !document.hidden && !reducedMotion && !rafId) {
+        lastOrbDraw = 0;
+        rafId = requestAnimationFrame(render);
+      }
+    });
+
+    function render(now) {
       rafId = 0;
+      if (!visible || document.hidden) return;
+      var tMs = typeof now === "number" ? now : performance.now();
+      var settled = !dragging &&
+        Math.abs(velX) < 0.0005 &&
+        Math.abs(velY) < 0.0005 &&
+        Math.abs(targetX - rotX) < 0.002 &&
+        Math.abs(targetY - rotY) < 0.002 &&
+        pulse < 0.01;
+      if (!reducedMotion && settled && (tMs - lastOrbInteraction) > 800 && (tMs - lastOrbDraw) < 32) {
+        rafId = requestAnimationFrame(render);
+        return;
+      }
+      lastOrbDraw = tMs;
+
       ctx.clearRect(0, 0, w, h);
 
       if (!dragging) {
@@ -344,10 +415,10 @@
       rotY += (targetY - rotY) * 0.18;
       pulse *= 0.92;
 
-      canvas.dataset.rotX = rotX.toFixed(3);
-      canvas.dataset.rotY = rotY.toFixed(3);
+      canvas.__rotX = rotX;
+      canvas.__rotY = rotY;
 
-      var t = reducedMotion ? 0 : performance.now() * 0.0018;
+      var t = reducedMotion ? 0 : tMs * 0.0018;
       var radius = Math.min(w, h) * 0.38;
       var cx = w * 0.5;
       var cy = h * 0.5;
@@ -373,7 +444,6 @@
       ctx.arc(cx, cy, radius * 1.25, 0, Math.PI * 2);
       ctx.fill();
 
-      var projected = [];
       for (var i = 0; i < points.length; i++) {
         var pt = points[i];
         var wave = Math.sin(pt.dist * 6.4 - t) * 0.12 + Math.sin(pt.dist * 10 - t * 1.8) * pulse * 0.18;
@@ -386,14 +456,13 @@
 
         var persp = 2.6 / (2.6 - z2);
         var cursorLit = Math.max(0, (x1 * gazeX + y2 * gazeY) * 0.28);
-        projected.push({
-          sx: cx + x1 * radius * persp,
-          sy: cy + y2 * radius * persp,
-          r: Math.max(0.7, pt.baseR * (radius * 0.032) * persp),
-          z: z2,
-          lit: cursorLit,
-          alpha: Math.min(0.96, Math.max(0.16, (0.45 + z2 * 0.55) * pt.baseR + pulse * 0.2 + cursorLit * 0.28))
-        });
+        var slot = projected[i];
+        slot.sx = cx + x1 * radius * persp;
+        slot.sy = cy + y2 * radius * persp;
+        slot.r = Math.max(0.7, pt.baseR * (radius * 0.032) * persp);
+        slot.z = z2;
+        slot.lit = cursorLit;
+        slot.alpha = Math.min(0.96, Math.max(0.16, (0.45 + z2 * 0.55) * pt.baseR + pulse * 0.2 + cursorLit * 0.28));
       }
 
       projected.sort(function (a, b) { return a.z - b.z; });
@@ -410,12 +479,12 @@
         ctx.fill();
       }
 
-      if (visible && !reducedMotion) {
+      if (visible && !document.hidden && !reducedMotion) {
         rafId = requestAnimationFrame(render);
       }
     }
 
-    render();
+    render(performance.now());
   }
 
   /* =========================================================
@@ -538,9 +607,17 @@
       }
     }
 
+    var cachedStageW = window.innerWidth;
+    var cachedIsMobile = window.innerWidth <= 960;
+
+    function measureStage() {
+      cachedStageW = stage.clientWidth || window.innerWidth;
+      cachedIsMobile = window.innerWidth <= 960;
+    }
+
     function layoutRing() {
-      var stageW = stage.clientWidth || window.innerWidth;
-      var isMobile = window.innerWidth <= 960;
+      var stageW = cachedStageW;
+      var isMobile = cachedIsMobile;
       var rx = isMobile ? Math.round(stageW * 0.45) : Math.min(410, Math.round(stageW * 0.37));
       var rz = isMobile ? 105 : 145;
       var maxTilt = isMobile ? 12 : 14;
@@ -764,7 +841,11 @@
       }
     }, { passive: false });
 
-    window.addEventListener("resize", layoutRing, { passive: true });
+    window.addEventListener("resize", function () {
+      measureStage();
+      layoutRing();
+    }, { passive: true });
+    measureStage();
     layoutRing();
   }
 
@@ -839,19 +920,38 @@
     var ch = 0;
     var dpr = 1;
     var lastFrame = 0;
+    var lastRailDraw = 0;
+    var railRafId = 0;
+    var cachedPadTop = 18;
+    var cachedRailSpan = 120;
+    var cachedFirstTop = 0;
+    var cachedActSpan = 1;
+    var cachedLineGrad = null;
+    var latestScrollY = window.scrollY;
 
-    function getTrackMetrics() {
-      if (!track || !stops.length) return { padTop: 18, span: 120 };
-      var firstY = stops[0].offsetTop + stops[0].offsetHeight * 0.5;
-      var lastY = stops[stops.length - 1].offsetTop + stops[stops.length - 1].offsetHeight * 0.5;
-      return { padTop: firstY, span: Math.max(20, lastY - firstY) };
+    function measureRail() {
+      if (track && stops.length) {
+        var firstY = stops[0].offsetTop + stops[0].offsetHeight * 0.5;
+        var lastY = stops[stops.length - 1].offsetTop + stops[stops.length - 1].offsetHeight * 0.5;
+        cachedPadTop = firstY;
+        cachedRailSpan = Math.max(20, lastY - firstY);
+      }
+      cachedFirstTop = acts[0].offsetTop;
+      var lastTop = acts[acts.length - 1].offsetTop;
+      cachedActSpan = Math.max(1, lastTop - cachedFirstTop);
+      if (ctx && ch > 8) {
+        var g = ctx.createLinearGradient(0, 4, 0, ch - 4);
+        g.addColorStop(0, "rgba(140, 162, 155, 0)");
+        g.addColorStop(0.16, "rgba(140, 162, 155, 0.22)");
+        g.addColorStop(0.5, "rgba(244, 243, 239, 0.24)");
+        g.addColorStop(0.84, "rgba(140, 162, 155, 0.22)");
+        g.addColorStop(1, "rgba(140, 162, 155, 0)");
+        cachedLineGrad = g;
+      }
     }
 
     function computeScrollRatio() {
-      var firstTop = acts[0].offsetTop;
-      var lastTop = acts[acts.length - 1].offsetTop;
-      var span = Math.max(1, lastTop - firstTop);
-      return Math.max(0, Math.min(1, (window.scrollY - firstTop) / span));
+      return Math.max(0, Math.min(1, (latestScrollY - cachedFirstTop) / cachedActSpan));
     }
 
     function spawnRipple(ratio) {
@@ -862,25 +962,36 @@
 
     function resizeRailCanvas() {
       if (!rainCanvas || !track) return;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       cw = track.clientWidth || 28;
       ch = track.clientHeight || 180;
       rainCanvas.width = Math.round(cw * dpr);
       rainCanvas.height = Math.round(ch * dpr);
       if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      measureRail();
     }
 
     function renderRail(now) {
+      railRafId = 0;
+      if (document.hidden) return;
       if (!ctx || !cw || !ch) {
-        requestAnimationFrame(renderRail);
+        railRafId = requestAnimationFrame(renderRail);
         return;
       }
-      var dt = lastFrame ? Math.min(0.05, Math.max(0.004, (now - lastFrame) * 0.001)) : 0.016;
-      lastFrame = now;
 
       if (!scrubbing) {
         targetRatio = computeScrollRatio();
       }
+
+      var settled = Math.abs(dropRatio - targetRatio) < 0.001 && ripples.length === 0 && !scrubbing;
+      if (!reducedMotion && settled && lastRailDraw && (now - lastRailDraw) < 32) {
+        railRafId = requestAnimationFrame(renderRail);
+        return;
+      }
+      lastRailDraw = now;
+
+      var dt = lastFrame ? Math.min(0.05, Math.max(0.004, (now - lastFrame) * 0.001)) : 0.016;
+      lastFrame = now;
 
       if (reducedMotion) {
         dropRatio = targetRatio;
@@ -893,28 +1004,23 @@
         dropVel = (dropVel - omega * (dropVel + omega * d) * dt) * e;
       }
 
-      var metrics = getTrackMetrics();
-      var padTop = metrics.padTop;
-      var span = metrics.span;
+      var padTop = cachedPadTop;
+      var span = cachedRailSpan;
       var cx = cw * 0.5;
       var dropY = padTop + dropRatio * span;
 
-      rainCanvas.dataset.dropY = dropY.toFixed(1);
+      rainCanvas.__dropY = dropY;
       ctx.clearRect(0, 0, cw, ch);
 
       // 1. Hairline tapered silver rain thread
-      var lineGrad = ctx.createLinearGradient(0, 4, 0, ch - 4);
-      lineGrad.addColorStop(0, "rgba(140, 162, 155, 0)");
-      lineGrad.addColorStop(0.16, "rgba(140, 162, 155, 0.22)");
-      lineGrad.addColorStop(0.5, "rgba(244, 243, 239, 0.24)");
-      lineGrad.addColorStop(0.84, "rgba(140, 162, 155, 0.22)");
-      lineGrad.addColorStop(1, "rgba(140, 162, 155, 0)");
-      ctx.strokeStyle = lineGrad;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(cx, 4);
-      ctx.lineTo(cx, ch - 4);
-      ctx.stroke();
+      if (cachedLineGrad) {
+        ctx.strokeStyle = cachedLineGrad;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(cx, 4);
+        ctx.lineTo(cx, ch - 4);
+        ctx.stroke();
+      }
 
       // 2. Ambient descending micro-rain filaments
       if (!reducedMotion) {
@@ -998,7 +1104,7 @@
       ctx.closePath();
       ctx.fill();
 
-      requestAnimationFrame(renderRail);
+      railRafId = requestAnimationFrame(renderRail);
     }
 
     function cancelProgrammaticScroll() {
@@ -1090,6 +1196,7 @@
 
     var raf = 0;
     window.addEventListener("scroll", function () {
+      latestScrollY = window.scrollY;
       if (scrubbing) return;
       if (!raf) {
         raf = requestAnimationFrame(function () {
@@ -1100,9 +1207,24 @@
     }, { passive: true });
 
     window.addEventListener("resize", function () {
+      latestScrollY = window.scrollY;
       detectCenter();
       resizeRailCanvas();
     }, { passive: true });
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () {
+        measureRail();
+      });
+    }
+
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden && rainCanvas && !railRafId) {
+        lastFrame = 0;
+        lastRailDraw = 0;
+        railRafId = requestAnimationFrame(renderRail);
+      }
+    });
 
     for (var s = 0; s < stops.length; s++) {
       stops[s].addEventListener("click", function () {
@@ -1136,13 +1258,11 @@
 
       function scrubY(clientY) {
         var rect = track.getBoundingClientRect();
-        var metrics = getTrackMetrics();
-        var relY = clientY - rect.top - metrics.padTop;
-        var ratio = Math.max(0, Math.min(1, relY / metrics.span));
+        var relY = clientY - rect.top - cachedPadTop;
+        var ratio = Math.max(0, Math.min(1, relY / cachedRailSpan));
         targetRatio = ratio;
-        var firstTop = acts[0].offsetTop;
-        var lastTop = acts[acts.length - 1].offsetTop;
-        var scrollYTarget = Math.round(firstTop + ratio * (lastTop - firstTop));
+        var scrollYTarget = Math.round(cachedFirstTop + ratio * cachedActSpan);
+        latestScrollY = scrollYTarget;
         document.documentElement.classList.add("is-programmatic-scroll");
         window.scrollTo({ top: scrollYTarget, behavior: "instant" });
         sync(Math.round(ratio * (acts.length - 1)));
@@ -1208,35 +1328,16 @@
 
     resizeRailCanvas();
     detectCenter();
+    latestScrollY = window.scrollY;
     dropRatio = computeScrollRatio();
     targetRatio = dropRatio;
     if (rainCanvas) {
-      requestAnimationFrame(renderRail);
+      railRafId = requestAnimationFrame(renderRail);
     }
   }
 
   /* =========================================================
-     5. Cursor Proximity Glow (Zero Wobble)
-     ========================================================= */
-  function initGlassEffects() {
-    var finePointer = window.matchMedia("(pointer: fine)").matches;
-    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!finePointer || reduced) return;
-
-    var surfaces = document.querySelectorAll(".spotlight, .proximity-rim");
-    for (var i = 0; i < surfaces.length; i++) {
-      (function (el) {
-        el.addEventListener("pointermove", function (e) {
-          var r = el.getBoundingClientRect();
-          el.style.setProperty("--mx", (e.clientX - r.left).toFixed(1) + "px");
-          el.style.setProperty("--my", (e.clientY - r.top).toFixed(1) + "px");
-        });
-      })(surfaces[i]);
-    }
-  }
-
-  /* =========================================================
-     6. Mobile Drawer & Language Memory
+     5. Mobile Drawer & Language Memory
      ========================================================= */
   function initMobileDrawer() {
     var toggle = document.getElementById("navToggle");
@@ -1308,7 +1409,6 @@
   initTurntableStage();
   initTeamDeck();
   initChapterRail();
-  initGlassEffects();
   initMobileDrawer();
   initLanguageChoice();
 })();

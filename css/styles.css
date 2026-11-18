@@ -1,6 +1,6 @@
 @font-face {
   font-family: "RealRain Serif SC";
-  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261119-1") format("woff2");
+  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261119-2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261119-1") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261119-2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261119-1") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261119-2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -128,24 +128,6 @@ button {
   pointer-events: none;
 }
 
-.ambient-vignette {
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(85% 75% at 50% 45%, rgba(5, 6, 6, 0.06), rgba(5, 6, 6, 0.72) 100%);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.optical-grain {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.026;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-}
-
 .container {
   position: relative;
   z-index: 2;
@@ -165,10 +147,8 @@ button {
   right: 0;
   z-index: 90;
   height: var(--header-h);
-  background: rgba(5, 6, 6, 0.56);
+  background: linear-gradient(180deg, rgba(5, 6, 6, 0.90) 0%, rgba(5, 6, 6, 0.74) 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.055);
-  backdrop-filter: blur(20px) saturate(110%);
-  -webkit-backdrop-filter: blur(20px) saturate(110%);
 }
 
 .header-inner {
@@ -684,8 +664,11 @@ html[lang="en"] .cover-title {
   left: 50%;
   top: 50%;
   transform-origin: center center;
-  will-change: transform, opacity;
   pointer-events: auto;
+}
+
+#platform.is-active .orbital-card {
+  will-change: transform, opacity;
 }
 
 .orbital-card:not(.is-center) {
@@ -874,7 +857,8 @@ html[lang="en"] .cover-title {
 }
 
 .plate-art-worlds .main-art,
-.plate-art-kodo .main-art {
+.plate-art-kodo .main-art,
+.plate-art-daily .main-art {
   position: relative;
   z-index: 1;
   max-width: 92%;
@@ -882,8 +866,8 @@ html[lang="en"] .cover-title {
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: 16px;
-  box-shadow: 0 26px 54px -18px rgba(0, 0, 0, 0.92), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 26px 54px -18px rgba(0, 0, 0, 0.92), 0 0 0 1px rgba(255, 255, 255, 0.09);
   pointer-events: none;
 }
 
@@ -894,23 +878,21 @@ html[lang="en"] .cover-title {
   bottom: 2%;
   width: clamp(104px, 31%, 168px);
   pointer-events: none;
-  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.86));
   transform: rotate(-3deg);
 }
 
-.plate-art-daily .daily-editorial-svg {
-  position: relative;
-  z-index: 1;
-  width: min(92%, 410px);
-  height: auto;
-  max-height: 94%;
-  border-radius: 16px;
-  background: radial-gradient(95% 95% at 50% 15%, #1A2120, #070909);
-  box-shadow:
-    0 26px 54px -18px rgba(0, 0, 0, 0.92),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 0 0 1px rgba(255, 255, 255, 0.06);
+.plate-art-cutout::after,
+.plate-art-duo::after {
+  content: "";
+  position: absolute;
+  bottom: 2%;
+  left: 16%;
+  right: 16%;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.72), transparent);
   pointer-events: none;
+  z-index: 0;
 }
 
 .plate-art-cutout > img {
@@ -920,7 +902,6 @@ html[lang="en"] .cover-title {
   max-width: 82%;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 24px 36px rgba(0, 0, 0, 0.9));
   pointer-events: none;
 }
 
@@ -935,7 +916,8 @@ html[lang="en"] .cover-title {
   max-width: 56%;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.84));
+  border-radius: 10px;
+  box-shadow: 0 20px 36px -12px rgba(0, 0, 0, 0.88);
   transform: rotate(-2deg);
   pointer-events: none;
 }
@@ -947,7 +929,6 @@ html[lang="en"] .cover-title {
   max-width: 40%;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.86));
   transform: rotate(3deg) translateY(6%);
   pointer-events: none;
 }

@@ -9,7 +9,8 @@
    - **右缘液态雨丝轨 `#rainRailCanvas`**：在竖直渐变雨丝上持续落下的银青色微雨流，滚屏水滴珠随 `scrollY` 连续平滑滑动并依速度拉伸水滴形态，停靠章节时荡出细微同心水波，点击采用可打断的 `360ms` 四次缓出顺滑滚屏；
    - **第 1 幕 `#top`**：桌面全视口光标朝向追踪的 `3D` 点阵球体（`#orbCanvas`）＋ 全屏 WebGL 烟熏矿石水流（`#glCanvas`），零标题位移；
    - **第 2 幕 `#what`（无框理念三栏）**：固定三等分栏位＋顶部滑动 `1px` 高光光束，悬停或点击切换时仅改变微光光束与透明度，所有 `h3` 标题保持 `0px` 纵向零位移；
-   - **第 3 幕 `#platform`（去框 5 板块全生态 3D 舞台）**：完整展示 **交汇之地 Crossroads**、**造物工房 Merch Kodo**、**ACG Daily**、**立体亚克力立牌** 与 **双闪徽章冷烫典藏**，采用解析 **二阶临界阻尼谐振子**（`zeta=1.0, omega=15.5`）与纯 GPU `transform` + `opacity` 合成（零 `backdrop-filter` / `filter` 卡顿），支持直接点击任意露边生态卡片直转居中；
+   - **第 3 幕 `#platform`（去框 5 板块全生态 3D 舞台）**：完整展示 **交汇之地 Crossroads**、**造物工房 Merch Kodo**、**ACG Daily 实景界面（`acg-daily.webp`）**、**立体亚克力立牌** 与 **双闪徽章冷烫典藏**，采用解析 **二阶临界阻尼谐振子**（`zeta=1.0, omega=21`）与纯 GPU `transform` + `opacity` 合成（零 `backdrop-filter` / `filter` 卡顿、阴影落于轻量径向底影与硬件盒阴影、`will-change` 仅在激活时开启），支持直接点击任意露边生态卡片直转居中；
+   - **渲染与合成器性能基线**：`#glCanvas` 渲染缓冲限宽 `640px` 并将 2 层 `fbm` 与暗角噪点合入单次片元着色，移除全屏 `.optical-grain` / `.ambient-vignette` 与页头 `backdrop-filter`；`#orbCanvas` 与 `#rainRailCanvas` 缓存布局几何、预分配对象池、改用 JS 属性记录状态并支持空闲 `30fps` 节流与 `visibilitychange` 休眠；
    - **第 4 幕 `#team`（开放顶部发丝栏位）**：无框顶线人物栏位配无边框顾问名录，手机端平滑横滑；
    - **第 5 幕 `#contact`**：`Hack to the Wonderland` 唯一愿景收束与联系落款。
 
@@ -17,4 +18,4 @@
 
 - 非雨 RealRain 是高于单一产品线的母品牌与创作基础设施公司；文案保持官网正大气象，不使用“旗下社区”“旗下平台”等从属化表述。
 - 生态叙事严守 `Overview/docs/architecture.md` 边界：交汇之地 Crossroads（消费与共创）、造物工房 Merch Kodo（商家、开发与多渠道发行）、ACG Daily（个人日报与可编程媒体）；不宣传已搁置的版权交易市场。
-- 团队简介聚焦核心实力（不含《Physics Education》）；顾问不包含已替换成员；零破折号（全文零 `——`/`—`，包括内联 SVG）、零内部世界观词汇、零保密融资数字；`@font-face` 版本后缀与 HTML 严格同步（当前 `?v=20261119-1`）。
+- 团队简介聚焦核心实力（不含《Physics Education》）；顾问不包含已替换成员；零破折号（全文零 `——`/`—`，包括内联 SVG）、零内部世界观词汇、零保密融资数字；`@font-face` 版本后缀与 HTML 严格同步（当前 `?v=20261119-2`）。

@@ -15,10 +15,10 @@ npx --yes serve -l 8080 .
 ## 结构
 
 - `index.html`、`en/index.html`：五幕全视口吸附（`100dvh`）品牌体验页（公司封面与 3D 鼠标跟随雕塑 / 无框滑轨理念三栏 / 五板块无框全生态 3D 展台 / 开放顶线团队名录 / 唯一愿景 Hack to the Wonderland）
-- `css/styles.css`：Obsidian & Smoked Mineral 去工业框画廊设计系统、顶部滑动发丝光束、纯 GPU 3D 生态舞台与全尺寸响应式适配
-- `js/main.js`：WebGL 烟熏曜石极光（`#glCanvas`）、桌面光标朝向 3D 点阵雕塑（`#orbCanvas`）、60fps 液态雨水导航轨（`#rainRailCanvas`）、零标题位移三栏控制器（`initWhatTriptych`）与二阶临界阻尼 5 板块生态 3D 转盘（`initTurntableStage`）
+- `css/styles.css`：Obsidian & Smoked Mineral 去工业框画廊设计系统、顶部滑动发丝光束、零滤镜纯 GPU 3D 生态舞台与全尺寸响应式适配
+- `js/main.js`：限宽 `640px` 2 层 `fbm` WebGL 烟熏曜石极光（`#glCanvas`）、缓存几何与空闲节流的 3D 点阵雕塑（`#orbCanvas`）、零布局抖动液态雨水导航轨（`#rainRailCanvas`）、零标题位移三栏控制器（`initWhatTriptych`）与二阶临界阻尼 5 板块生态 3D 转盘（`initTurntableStage`）
 - `assets/fonts/`：自托管轻量中文展示衬线与正文无衬线子集（`noto-serif-sc-500.woff2` [wght=460]、`noto-sans-sc-400.woff2`、`noto-sans-sc-500.woff2`）
-- `assets/media/editions/`：交汇之地实机及同源器物展示图
+- `assets/media/editions/`：交汇之地、造物工房、ACG Daily 实景界面与同源器物轻量化展示图（`.webp`）
 - `assets/media/art/realrain-og.jpg`：由 `tools/render-og.cjs` 渲染的 OG 封面图
 - `BRAND.md`、`DESIGN.md`、`THIRD_PARTY_NOTICES.md`
 
