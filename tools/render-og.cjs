@@ -1,5 +1,4 @@
-// Render the architectural Open Graph image (1200x630) from inline HTML/SVG
-// with headless Chrome.
+// Render the Monograph Editorial Open Graph image (1200x630) with headless Chrome.
 //
 //   node tools/render-og.cjs
 const fs = require("fs");
@@ -11,169 +10,157 @@ const { chromium } = require(
 
 const ROOT = path.resolve(__dirname, "..");
 const TARGET = path.join(ROOT, "assets", "media", "art", "realrain-og.jpg");
-const LOGO_SVG = fs
+
+function readDataUri(relPath, mime) {
+  const buf = fs.readFileSync(path.join(ROOT, relPath));
+  return `data:${mime};base64,${buf.toString("base64")}`;
+}
+
+const EMBLEM_SVG = fs
   .readFileSync(path.join(ROOT, "assets", "logo", "realrain-logo-rain-celadon-reverse.svg"), "utf8")
   .replace(/<\?xml[^>]*\?>\s*/i, "");
+const WORDMARK_SVG = fs
+  .readFileSync(path.join(ROOT, "assets", "logo", "realrain-wordmark-light.svg"), "utf8")
+  .replace(/<\?xml[^>]*\?>\s*/i, "");
+
+const SERIF_FONT = readDataUri("assets/fonts/noto-serif-sc-600.woff2", "font/woff2");
+const SANS_FONT = readDataUri("assets/fonts/noto-sans-sc-400.woff2", "font/woff2");
+const BADGES_URI = readDataUri("assets/media/editions/edition-badges.webp", "image/webp");
 
 const HTML = `<!doctype html>
 <html lang="zh-Hans">
 <head>
 <meta charset="utf-8" />
 <style>
+  @font-face {
+    font-family: "RealRain Serif SC";
+    src: url("${SERIF_FONT}") format("woff2");
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: "RealRain Sans SC";
+    src: url("${SANS_FONT}") format("woff2");
+    font-weight: 400;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     width: 1200px;
     height: 630px;
     overflow: hidden;
-    background: #111214;
-    color: #ECECEE;
-    font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #0F1110;
+    color: #F5F6F4;
+    font-family: "RealRain Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     -webkit-font-smoothing: antialiased;
   }
   .frame {
     position: relative;
     width: 1200px;
     height: 630px;
-    padding: 58px 72px;
+    padding: 52px 68px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     background:
-      radial-gradient(640px 420px at 82% 24%, rgba(112, 143, 136, 0.16), transparent 72%),
-      radial-gradient(480px 320px at 18% 92%, rgba(168, 189, 182, 0.08), transparent 70%),
-      #111214;
+      radial-gradient(620px 440px at 82% 52%, rgba(112, 143, 136, 0.22), rgba(15, 17, 16, 0) 74%),
+      #0F1110;
   }
-  .grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-    background-size: 96px 96px;
-    mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, #000 35%, transparent 100%);
-    pointer-events: none;
-  }
-  .rails {
-    position: absolute;
-    inset: 0 72px;
-    border-inline: 1px solid rgba(255, 255, 255, 0.08);
-    pointer-events: none;
-  }
-  .watermark {
-    position: absolute;
-    right: -40px;
-    bottom: -70px;
-    width: 460px;
-    height: 460px;
-    opacity: 0.09;
-    pointer-events: none;
-  }
-  .watermark svg { width: 100%; height: 100%; display: block; }
   .top {
-    position: relative;
-    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 28px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
   .brand {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
   }
-  .brand svg { width: 42px; height: 42px; display: block; }
-  .wordmark {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    color: #ECECEE;
-  }
-  .cn {
+  .brand .emblem svg { width: 24px; height: 24px; display: block; }
+  .brand .wordmark svg { height: 24px; width: auto; display: block; }
+  .brand-cn {
     padding-left: 16px;
-    border-left: 1px solid rgba(255, 255, 255, 0.18);
+    border-left: 1px solid rgba(255, 255, 255, 0.22);
     font-size: 16px;
-    color: #A8BDB6;
+    color: #A2BEB7;
+    letter-spacing: 0.08em;
   }
-  .tag {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  .domain {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: 14px;
     letter-spacing: 0.14em;
-    color: #A8BDB6;
-    text-transform: uppercase;
+    color: #A1A8A4;
   }
-  .center {
-    position: relative;
-    z-index: 2;
-    max-width: 880px;
-  }
-  .kicker {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 14px;
-    letter-spacing: 0.14em;
-    color: #708F88;
-    text-transform: uppercase;
-    margin-bottom: 22px;
+  .body {
+    display: grid;
+    grid-template-columns: 1.25fr 0.9fr;
+    align-items: center;
+    gap: 40px;
   }
   h1 {
-    font-size: 64px;
+    font-family: "RealRain Serif SC", Georgia, serif;
+    font-size: 56px;
     font-weight: 600;
-    line-height: 1.18;
-    letter-spacing: -0.028em;
-    color: #FFFFFF;
-  }
-  h1 span {
-    color: #A8BDB6;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: #F5F6F4;
   }
   .sub {
     margin-top: 22px;
-    font-size: 22px;
-    line-height: 1.55;
-    color: rgba(236, 236, 238, 0.72);
-    max-width: 740px;
+    font-size: 20px;
+    line-height: 1.62;
+    color: #A1A8A4;
+  }
+  .art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .art img {
+    width: 100%;
+    height: auto;
+    max-height: 295px;
+    object-fit: contain;
   }
   .bottom {
-    position: relative;
-    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.09);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 14px;
-    letter-spacing: 0.08em;
-    color: rgba(236, 236, 238, 0.64);
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 15px;
+    color: #A1A8A4;
   }
   .bottom b {
-    color: #A8BDB6;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-weight: 500;
+    letter-spacing: 0.12em;
+    color: #A2BEB7;
   }
 </style>
 </head>
 <body>
   <div class="frame">
-    <div class="grid"></div>
-    <div class="rails"></div>
-    <div class="watermark">${LOGO_SVG}</div>
     <div class="top">
       <div class="brand">
-        ${LOGO_SVG}
-        <span class="wordmark">REALRAIN</span>
-        <span class="cn">非雨</span>
+        <span class="emblem">${EMBLEM_SVG}</span>
+        <span class="wordmark">${WORDMARK_SVG}</span>
+        <span class="brand-cn">非雨</span>
       </div>
-      <div class="tag">REALRAIN.CO</div>
+      <div class="domain">REALRAIN.CO</div>
     </div>
-    <div class="center">
-      <div class="kicker">IP PUBLISHING PLATFORM</div>
-      <h1>让想象世界，<br /><span>进入现实生活。</span></h1>
-      <p class="sub">面向开放创作的 IP 商业化发行平台 · 交汇地 realrain.art</p>
+    <div class="body">
+      <div>
+        <h1>让想象世界，<br>进入现实生活。</h1>
+        <p class="sub">面向开放创作的 IP 商业化发行平台 · 交汇地 realrain.art</p>
+      </div>
+      <div class="art">
+        <img src="${BADGES_URI}" alt="" />
+      </div>
     </div>
     <div class="bottom">
-      <span>CONSUMER GOODS AS THE MEDIUM</span>
-      <b>CROSSROADS ↗</b>
+      <span>Hack to the Wonderland</span>
+      <b>CROSSROADS · REALRAIN.ART ↗</b>
     </div>
   </div>
 </body>
@@ -187,6 +174,7 @@ const HTML = `<!doctype html>
   try {
     const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
     await page.setContent(HTML, { waitUntil: "load" });
+    await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: TARGET, type: "jpeg", quality: 92 });
     console.log("rendered", path.relative(ROOT, TARGET));
   } finally {
