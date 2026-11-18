@@ -293,12 +293,16 @@
     var velY = 0;
     var pulse = 0;
     var dragging = false;
+    var activePointerId = null;
+    var hasDesktopGaze = false;
     var lastPX = 0;
     var lastPY = 0;
+    var lastDragMoveTime = 0;
     var orbCX = 0;
     var orbCY = 0;
     var lastOrbInteraction = performance.now();
     var lastOrbDraw = 0;
+    var lastRenderTime = 0;
 
     function updateOrbMetrics() {
       var r = canvas.getBoundingClientRect();
@@ -306,34 +310,47 @@
       orbCY = r.top + r.height * 0.5;
     }
 
+    canvas.addEventListener("touchmove", function (e) {
+      if (dragging) e.preventDefault();
+    }, { passive: false });
+
     canvas.addEventListener("pointerdown", function (e) {
       dragging = true;
+      activePointerId = e.pointerId;
       lastPX = e.clientX;
       lastPY = e.clientY;
       velX = 0;
       velY = 0;
       pulse = 1.0;
-      lastOrbInteraction = performance.now();
+      lastDragMoveTime = performance.now();
+      lastOrbInteraction = lastDragMoveTime;
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      if (visible && !document.hidden && !reducedMotion && !rafId) {
+        lastOrbDraw = 0;
+        rafId = requestAnimationFrame(render);
+      }
     });
 
     window.addEventListener("pointermove", function (e) {
-      if (dragging) {
+      if (dragging && e.pointerId === activePointerId) {
         var dx = e.clientX - lastPX;
         var dy = e.clientY - lastPY;
-        targetY += dx * 0.009;
-        targetX += dy * 0.009;
-        velY = dx * 0.0045;
-        velX = dy * 0.0035;
+        var sens = e.pointerType === "touch" ? 0.0115 : 0.0085;
+        targetY += dx * sens;
+        targetX = Math.max(-1.22, Math.min(1.22, targetX - dy * sens));
+        velY = velY * 0.42 + (dx * sens) * 0.58;
+        velX = velX * 0.42 + (-dy * sens) * 0.58;
         lastPX = e.clientX;
         lastPY = e.clientY;
-        lastOrbInteraction = performance.now();
-      } else if (visible && e.pointerType !== "touch") {
+        lastDragMoveTime = performance.now();
+        lastOrbInteraction = lastDragMoveTime;
+      } else if (!dragging && visible && e.pointerType !== "touch") {
         if (!orbCX && !orbCY) updateOrbMetrics();
         var spanX = Math.max(260, window.innerWidth * 0.52);
         var spanY = Math.max(220, window.innerHeight * 0.48);
         gazeX = Math.max(-1, Math.min(1, (e.clientX - orbCX) / spanX));
         gazeY = Math.max(-1, Math.min(1, (e.clientY - orbCY) / spanY));
+        hasDesktopGaze = true;
         targetY = gazeX * 0.68;
         targetX = -gazeY * 0.56;
         velX *= 0.2;
@@ -342,12 +359,19 @@
       }
     }, { passive: true });
 
-    window.addEventListener("pointerup", function () {
+    function finishOrbDrag(e) {
+      if (!dragging) return;
+      if (e && activePointerId !== null && e.pointerId !== activePointerId) return;
       dragging = false;
-    });
-    window.addEventListener("pointercancel", function () {
-      dragging = false;
-    });
+      activePointerId = null;
+      if ((performance.now() - lastDragMoveTime) > 80) {
+        velX = 0;
+        velY = 0;
+      }
+    }
+
+    window.addEventListener("pointerup", finishOrbDrag);
+    window.addEventListener("pointercancel", finishOrbDrag);
 
     var w = 0;
     var h = 0;
@@ -401,27 +425,33 @@
         return;
       }
       lastOrbDraw = tMs;
+      var dt60 = lastRenderTime ? Math.min(2.5, Math.max(0.25, (tMs - lastRenderTime) / 16.667)) : 1;
+      lastRenderTime = tMs;
 
       ctx.clearRect(0, 0, w, h);
 
       if (!dragging) {
-        targetY += velY;
-        targetX += velX;
-        velY *= 0.92;
-        velX *= 0.92;
+        targetY += velY * dt60;
+        targetX = Math.max(-1.22, Math.min(1.22, targetX + velX * dt60));
+        var decay = Math.pow(0.94, dt60);
+        velY *= decay;
+        velX *= decay;
       }
 
-      rotX += (targetX - rotX) * 0.18;
-      rotY += (targetY - rotY) * 0.18;
-      pulse *= 0.92;
+      var follow = dragging ? 0.58 : (1 - Math.pow(1 - 0.18, dt60));
+      rotX += (targetX - rotX) * follow;
+      rotY += (targetY - rotY) * follow;
+      pulse *= Math.pow(0.92, dt60);
 
       canvas.__rotX = rotX;
       canvas.__rotY = rotY;
 
       var t = reducedMotion ? 0 : tMs * 0.0018;
-      var radius = Math.min(w, h) * 0.38;
+      var radius = Math.min(w, h) * (w <= 260 ? 0.43 : 0.38);
       var cx = w * 0.5;
       var cy = h * 0.5;
+      var litX = hasDesktopGaze ? gazeX : -0.34;
+      var litY = hasDesktopGaze ? gazeY : -0.38;
 
       var cosY = Math.cos(rotY);
       var sinY = Math.sin(rotY);
@@ -429,8 +459,8 @@
       var sinX = Math.sin(rotX);
 
       var halo = ctx.createRadialGradient(
-        cx + gazeX * radius * 0.26,
-        cy + gazeY * radius * 0.26,
+        cx + litX * radius * 0.26,
+        cy + litY * radius * 0.26,
         radius * 0.1,
         cx,
         cy,
@@ -455,7 +485,7 @@
         var z2 = pt.ny * sinX + z1 * cosX;
 
         var persp = 2.6 / (2.6 - z2);
-        var cursorLit = Math.max(0, (x1 * gazeX + y2 * gazeY) * 0.28);
+        var cursorLit = Math.max(0, (x1 * litX + y2 * litY) * 0.28);
         var slot = projected[i];
         slot.sx = cx + x1 * radius * persp;
         slot.sy = cy + y2 * radius * persp;
@@ -495,57 +525,28 @@
     var deck = document.getElementById("whatTriptych");
     if (!deck) return;
     var panels = Array.prototype.slice.call(deck.querySelectorAll("[data-what-card]"));
-    var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-what-tab]"));
     var beam = document.getElementById("whatBeam");
     if (!panels.length) return;
 
-    function setActive(idx, scrollMobile) {
+    function setActive(idx) {
       for (var i = 0; i < panels.length; i++) {
         panels[i].classList.toggle("is-expanded", i === idx);
       }
       if (beam) {
         beam.style.setProperty("--active-what", String(idx));
       }
-      for (var t = 0; t < tabs.length; t++) {
-        var match = t === idx;
-        tabs[t].classList.toggle("is-active", match);
-        tabs[t].setAttribute("aria-selected", match ? "true" : "false");
-      }
-      if (scrollMobile && window.innerWidth <= 960 && panels[idx]) {
-        deck.scrollTo({ left: panels[idx].offsetLeft, behavior: "smooth" });
-      }
     }
 
     for (var i = 0; i < panels.length; i++) {
       (function (idx, el) {
         el.addEventListener("pointerenter", function () {
-          if (window.innerWidth > 960) setActive(idx, false);
-        });
-        el.addEventListener("focus", function () {
-          setActive(idx, false);
+          if (window.innerWidth > 960) setActive(idx);
         });
         el.addEventListener("click", function () {
-          setActive(idx, false);
+          setActive(idx);
         });
       })(i, panels[i]);
     }
-
-    for (var t = 0; t < tabs.length; t++) {
-      tabs[t].addEventListener("click", function () {
-        setActive(parseInt(this.getAttribute("data-what-tab"), 10), true);
-      });
-    }
-
-    var raf = 0;
-    deck.addEventListener("scroll", function () {
-      if (window.innerWidth > 960 || raf) return;
-      raf = requestAnimationFrame(function () {
-        raf = 0;
-        var w = Math.max(1, deck.clientWidth);
-        var idx = Math.max(0, Math.min(panels.length - 1, Math.round(deck.scrollLeft / w)));
-        setActive(idx, false);
-      });
-    }, { passive: true });
   }
 
   /* =========================================================
