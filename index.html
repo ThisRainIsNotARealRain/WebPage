@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>非雨 RealRain｜Hack to the Wonderland · 让想象世界，进入现实生活</title>
-  <meta name="description" content="非雨（RealRain）致力于搭建数字想象与物理现实之间的智能与造物底座，让每一份热爱、角色与灵感进入现实生活。唯一愿景：Hack to the Wonderland。旗下社区：交汇之地 Crossroads（realrain.art）。" />
+  <meta name="description" content="非雨 RealRain 连接数字想象与物理现实，以多模态智能、可编程权利契约与柔性造物网络，贯通交汇之地 Crossroads、造物工房 Merch Kodo 与 ACG Daily。唯一愿景：Hack to the Wonderland。" />
   <meta name="theme-color" content="#050606" />
   <link rel="canonical" href="https://realrain.co/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://realrain.co/" />
@@ -40,22 +40,22 @@
   <meta property="og:site_name" content="非雨 RealRain" />
   <meta property="og:locale" content="zh_CN" />
   <meta property="og:title" content="非雨 RealRain｜让想象世界，进入现实生活" />
-  <meta property="og:description" content="非雨（RealRain）致力于搭建数字想象与物理现实之间的智能与造物底座。唯一愿景：Hack to the Wonderland。旗下社区：交汇之地 Crossroads（realrain.art）。" />
+  <meta property="og:description" content="非雨 RealRain 贯通交汇之地 Crossroads、造物工房 Merch Kodo 与 ACG Daily。唯一愿景：Hack to the Wonderland。" />
   <meta property="og:url" content="https://realrain.co/" />
-  <meta property="og:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-8" />
+  <meta property="og:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261119-1" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="非雨 RealRain｜Hack to the Wonderland" />
-  <meta name="twitter:description" content="让想象世界，进入现实生活。非雨（RealRain）致力于搭建数字想象与物理现实之间的智能与造物底座。" />
-  <meta name="twitter:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-8" />
+  <meta name="twitter:description" content="让想象世界，进入现实生活。贯通交汇之地、造物工房与 ACG Daily。" />
+  <meta name="twitter:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261119-1" />
 
-  <link rel="icon" type="image/png" href="assets/logo/realrain-favicon-celadon.png?v=20261118-8" />
-  <link rel="preload" href="assets/fonts/noto-serif-sc-500.woff2?v=20261118-8" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="assets/fonts/noto-sans-sc-400.woff2?v=20261118-8" as="font" type="font/woff2" crossorigin />
+  <link rel="icon" type="image/png" href="assets/logo/realrain-favicon-celadon.png?v=20261119-1" />
+  <link rel="preload" href="assets/fonts/noto-serif-sc-500.woff2?v=20261119-1" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/noto-sans-sc-400.woff2?v=20261119-1" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500&display=swap" media="print" onload="this.media='all'" />
-  <link rel="stylesheet" href="css/styles.css?v=20261118-8" />
+  <link rel="stylesheet" href="css/styles.css?v=20261119-1" />
 
   <script type="application/ld+json">
     {
@@ -108,7 +108,7 @@
 
   <nav class="chapter-dots" id="chapterDots" aria-label="章节切换">
     <div class="dots-track" id="dotsTrack">
-      <div class="dots-indicator" id="dotsIndicator" aria-hidden="true"></div>
+      <canvas class="rain-rail-canvas" id="rainRailCanvas" aria-hidden="true"></canvas>
       <button class="dot-stop is-active" type="button" data-dot-index="0" aria-label="第 1 屏"></button>
       <button class="dot-stop" type="button" data-dot-index="1" aria-label="第 2 屏"></button>
       <button class="dot-stop" type="button" data-dot-index="2" aria-label="第 3 屏"></button>
@@ -125,10 +125,10 @@
       </div>
       <nav class="mobile-drawer-nav" aria-label="移动导航">
         <a href="#top"><span class="drawer-num">01</span><span>非雨 RealRain</span></a>
-        <a href="#what"><span class="drawer-num">02</span><span>理念与使命</span></a>
-        <a href="#platform"><span class="drawer-num">03</span><span>旗下生态</span></a>
-        <a href="#team"><span class="drawer-num">04</span><span>核心团队</span></a>
-        <a href="#contact"><span class="drawer-num">05</span><span>唯一愿景</span></a>
+        <a href="#what"><span class="drawer-num">02</span><span>理念</span></a>
+        <a href="#platform"><span class="drawer-num">03</span><span>生态</span></a>
+        <a href="#team"><span class="drawer-num">04</span><span>团队</span></a>
+        <a href="#contact"><span class="drawer-num">05</span><span>愿景</span></a>
       </nav>
       <div class="mobile-drawer-foot">
         <a class="btn btn-luminous drawer-cta" href="https://realrain.art/">进入交汇之地 ↗</a>
@@ -151,10 +151,10 @@
               <span>让想象世界，</span>
               <span class="platinum-text">进入现实生活。</span>
             </h1>
-            <p class="cover-sub reveal-fade">故事与幻想不该困于屏幕。非雨致力于搭建数字想象与物理现实之间的桥梁，以多模态智能、版权契约与实体造物，让每一份独特的热爱在现实人间生根。</p>
+            <p class="cover-sub reveal-fade">故事与幻想不该困于屏幕。非雨致力于搭建数字想象与物理现实之间的桥梁，以多模态智能、可编程权利契约与柔性造物，让每一份独特的热爱在现实人间生根。</p>
             <div class="cover-actions reveal-fade">
-              <a class="btn btn-luminous" href="#what">探索非雨 ↓</a>
-              <a class="btn btn-glass" href="https://realrain.art/">旗下社区 · 交汇之地 ↗</a>
+              <a class="btn btn-luminous" href="#what" data-chapter-jump="1">探索非雨 ↓</a>
+              <a class="btn btn-glass" href="https://realrain.art/">进入交汇之地 ↗</a>
             </div>
           </div>
 
@@ -163,17 +163,17 @@
           </div>
         </div>
 
-        <a class="scroll-drop" href="#what" aria-label="向下滚动">
+        <a class="scroll-drop" href="#what" data-chapter-jump="1" aria-label="向下滚动">
           <span class="scroll-drop-line"></span>
         </a>
       </div>
     </section>
 
-    <!-- CHAPTER 02: WHAT WE BUILD (KINETIC ARCHITECTURAL TRIPTYCH) -->
+    <!-- CHAPTER 02: MANIFESTO (DE-BOXED ARCHITECTURAL TRIPTYCH) -->
     <section class="act paradigm-act" id="what" data-chapter="1">
       <div class="container">
         <header class="act-header act-header-compact">
-          <p class="eyebrow">01 / 理念与使命 · Philosophy</p>
+          <p class="eyebrow">01 / 理念 · Manifesto</p>
           <h2 class="act-title reveal-line">
             <span>在虚拟与现实的交界，</span>
             <span>重塑创意生长的土壤。</span>
@@ -181,156 +181,163 @@
           <p class="act-lead">每一次心动的灵感，都值得拥有真实的重量。非雨在底层贯通创作者主权、审美智能与现实工艺。</p>
         </header>
 
+        <div class="triptych-rail" aria-hidden="true">
+          <span class="triptych-beam" id="whatBeam"></span>
+        </div>
+
         <div class="triptych-deck" id="whatTriptych">
-          <article class="triptych-panel glass-monolith proximity-rim is-expanded" data-what-card="0" tabindex="0">
-            <div class="panel-top">
-              <div class="card-head">
-                <span class="card-num">01</span>
-                <span class="card-en" lang="en">Creative Sovereignty</span>
-              </div>
+          <article class="triptych-panel is-expanded" data-what-card="0" tabindex="0">
+            <div class="panel-index">
+              <span class="card-num">01</span>
+              <span class="card-en" lang="en">Creative Sovereignty</span>
             </div>
-            <div class="panel-copy">
-              <h3>守护原创尊严的开放宇宙</h3>
-              <p class="card-brief">以清晰的权利脉络与自动分润契约，让每一部作品与角色都能在尊重原作的前提下自由延展、生生不息。</p>
-            </div>
+            <h3>守护原创尊严的开放宇宙</h3>
+            <p class="card-brief">以清晰的权利脉络与自动分润契约，让每一部作品与角色都能在尊重原作的前提下自由延展、生生不息。</p>
           </article>
 
-          <article class="triptych-panel glass-monolith proximity-rim" data-what-card="1" tabindex="0">
-            <div class="panel-top">
-              <div class="card-head">
-                <span class="card-num">02</span>
-                <span class="card-en" lang="en">Aesthetic Intelligence</span>
-              </div>
+          <article class="triptych-panel" data-what-card="1" tabindex="0">
+            <div class="panel-index">
+              <span class="card-num">02</span>
+              <span class="card-en" lang="en">Aesthetic Intelligence</span>
             </div>
-            <div class="panel-copy">
-              <h3>懂语境与审美的生成引擎</h3>
-              <p class="card-brief">自研多模态生成架构读懂角色神韵与个人偏爱，抹平繁琐的技术门槛，让每个人都能参与心仪之物的诞生。</p>
-            </div>
+            <h3>懂语境与审美的生成引擎</h3>
+            <p class="card-brief">自研多模态生成架构读懂角色神韵与个人偏爱，抹平繁琐的技术门槛，让每个人都能参与心仪之物的诞生。</p>
           </article>
 
-          <article class="triptych-panel glass-monolith proximity-rim" data-what-card="2" tabindex="0">
-            <div class="panel-top">
-              <div class="card-head">
-                <span class="card-num">03</span>
-                <span class="card-en" lang="en">Tactile Reality</span>
-              </div>
+          <article class="triptych-panel" data-what-card="2" tabindex="0">
+            <div class="panel-index">
+              <span class="card-num">03</span>
+              <span class="card-en" lang="en">Tactile Reality</span>
             </div>
-            <div class="panel-copy">
-              <h3>从像素到掌心的造物网络</h3>
-              <p class="card-brief">跨越数字画布与精密工艺的距离，将虚拟灵感凝结为徽章、立体立牌、冷烫典藏与日常器物，交付真实的温度。</p>
-            </div>
+            <h3>从像素到掌心的造物网络</h3>
+            <p class="card-brief">跨越数字画布与精密工艺的距离，将虚拟灵感凝结为徽章、立体立牌、冷烫典藏与日常器物，交付真实的温度。</p>
           </article>
         </div>
 
-        <div class="orbital-controls what-mobile-tabs" role="tablist" aria-label="理念板块切换">
-          <button class="orbital-pill is-active" type="button" role="tab" aria-selected="true" data-what-tab="0">01 · 创作主权</button>
-          <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-what-tab="1">02 · 审美引擎</button>
-          <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-what-tab="2">03 · 实体造物</button>
+        <div class="what-mobile-tabs" role="tablist" aria-label="理念板块切换">
+          <button class="eco-tab is-active" type="button" role="tab" aria-selected="true" data-what-tab="0">01 创作主权</button>
+          <button class="eco-tab" type="button" role="tab" aria-selected="false" data-what-tab="1">02 审美引擎</button>
+          <button class="eco-tab" type="button" role="tab" aria-selected="false" data-what-tab="2">03 实体造物</button>
         </div>
       </div>
     </section>
 
-    <!-- CHAPTER 03: CROSSROADS 360 3D TURNTABLE GALLERY -->
+    <!-- CHAPTER 03: COMPLETE ECOSYSTEM FRAMELESS 360 STAGE -->
     <section class="act stage-act" id="platform" data-chapter="2">
       <div class="container stage-container">
         <header class="act-header stage-header">
-          <p class="eyebrow">02 / 旗下生态 · Ecosystem</p>
+          <p class="eyebrow">02 / 生态 · Ecosystem</p>
           <h2 class="act-title reveal-line">
-            <span>让理念落地：交汇之地 Crossroads</span>
+            <span>从日常陪伴、灵感微调到柔性造物。</span>
           </h2>
-          <p class="stage-sub">非雨核心引擎驱动的首个开放创作与实体周边社区（realrain.art），连接创作者工坊与多渠道发行。</p>
+          <p class="stage-sub">以统一身份、权利契约与多模态设计运行时为底座，贯通交汇之地、造物工房与 ACG Daily。</p>
         </header>
 
         <div class="orbital-stage orbital-stage-quad" id="stageViewport">
-          <div class="orbital-ring" id="stageDeck" aria-label="交汇之地三维展台">
-            <figure class="orbital-card stage-monolith glass-monolith is-center" data-ring-card="0">
-              <div class="stage-visual">
-                <img src="assets/media/editions/edition-artwork.webp?v=20261118-8" alt="原创角色母版与数字插画设定" width="1280" height="1226" decoding="async" />
+          <div class="orbital-ring" id="stageDeck" aria-label="非雨全生态三维展台">
+            <figure class="orbital-card stage-plate is-center" data-ring-card="0">
+              <div class="plate-art plate-art-worlds">
+                <img class="main-art" src="assets/media/editions/edition-artwork.webp?v=20261119-1" alt="交汇之地原创角色与消费共创场域" width="1280" height="1226" decoding="async" />
               </div>
-              <figcaption class="stage-caption">
-                <div>
-                  <h3>原作与角色空间</h3>
-                  <p>入驻交汇之地，为原创世界、角色母版建立受保护的衍生空间。</p>
-                </div>
-                <span class="stage-badge">01</span>
+              <figcaption class="plate-meta">
+                <span class="plate-kicker">Crossroads · 消费与共创</span>
+                <h3>交汇之地</h3>
+                <p>面向用户与创作者的自有渠道与小程序，从心动原作自然微调出专属器物。</p>
               </figcaption>
             </figure>
 
-            <figure class="orbital-card stage-monolith glass-monolith" data-ring-card="1">
-              <div class="stage-visual stage-visual-studio">
-                <div class="scene-window">
-                  <div class="window-chrome" aria-hidden="true">
-                    <span></span><span></span><span></span>
-                    <b>realrain.art / workshop</b>
-                  </div>
-                  <img src="assets/media/editions/crossroads-workshop.webp?v=20261118-8" alt="交汇之地与造物工坊实时设计画布" width="1440" height="840" decoding="async" />
-                </div>
-                <div class="scene-float-badge">
-                  <img src="assets/media/editions/edition-badges.webp?v=20261118-8" alt="75mm 双闪马口铁徽章实物" width="1252" height="612" decoding="async" />
-                </div>
+            <figure class="orbital-card stage-plate" data-ring-card="1">
+              <div class="plate-art plate-art-kodo">
+                <img class="main-art" src="assets/media/editions/crossroads-workshop.webp?v=20261119-1" alt="造物工房 Merch Kodo 实时设计画布与多渠道发行工作台" width="1440" height="840" decoding="async" />
+                <img class="float-accent" src="assets/media/editions/edition-badges.webp?v=20261119-1" alt="75mm 双闪马口铁徽章实物" width="1252" height="612" decoding="async" />
               </div>
-              <figcaption class="stage-caption">
-                <div>
-                  <h3>实时工坊与审美定制</h3>
-                  <p>在画布间自然微调构图、边框与工艺规格，所见即所得。</p>
-                </div>
-                <span class="stage-badge">02</span>
+              <figcaption class="plate-meta">
+                <span class="plate-kicker">Merch Kodo · 商家与多渠道发行</span>
+                <h3>造物工房</h3>
+                <p>面向 IP 方、原创品牌与主催，打通商品开发、打样排产、独立店铺与多渠道履约。</p>
               </figcaption>
             </figure>
 
-            <figure class="orbital-card stage-monolith glass-monolith" data-ring-card="2">
-              <div class="stage-visual stage-visual-cutout">
-                <img src="assets/media/editions/edition-standee.webp?v=20261118-8" alt="三插立体亚克力桌面立牌" width="697" height="912" decoding="async" />
+            <figure class="orbital-card stage-plate" data-ring-card="2">
+              <div class="plate-art plate-art-daily">
+                <svg class="daily-editorial-svg" viewBox="0 0 420 260" width="420" height="260" role="img" aria-label="ACG Daily 可编程日报、追番日历与智能助手视觉图版">
+                  <defs>
+                    <linearGradient id="dailyArcGradZh" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#8CA29B" stop-opacity="0.18" />
+                      <stop offset="50%" stop-color="#F4F3EF" stop-opacity="0.65" />
+                      <stop offset="100%" stop-color="#8CA29B" stop-opacity="0.18" />
+                    </linearGradient>
+                  </defs>
+                  <line x1="36" y1="54" x2="384" y2="54" stroke="rgba(255,255,255,0.09)" stroke-width="1" />
+                  <text x="36" y="42" fill="#A1A09C" font-size="9.5" letter-spacing="2.6" font-family="Inter, sans-serif">RAIN DAILY · PROGRAMMABLE MEDIA</text>
+                  <text x="384" y="42" text-anchor="end" fill="#6E6E6A" font-size="9.5" letter-spacing="1.8" font-family="Inter, sans-serif">07:00 · 24:00</text>
+                  <path d="M 48 168 Q 210 74 372 168" fill="none" stroke="url(#dailyArcGradZh)" stroke-width="1.2" />
+                  <circle cx="106" cy="142" r="3" fill="#8CA29B" />
+                  <circle cx="210" cy="121" r="4.5" fill="#F4F3EF" />
+                  <circle cx="210" cy="121" r="14" fill="none" stroke="rgba(244,243,239,0.22)" stroke-width="1" />
+                  <circle cx="314" cy="142" r="3" fill="#8CA29B" />
+                  <text x="210" y="176" text-anchor="middle" fill="#F4F3EF" font-size="28" font-weight="500" letter-spacing="1" font-family="Cormorant Garamond, Georgia, serif">ACG Daily</text>
+                  <text x="210" y="200" text-anchor="middle" fill="#A1A09C" font-size="11" letter-spacing="3.2" font-family="Inter, sans-serif">CHRONICLE · CALENDAR · COMPANION</text>
+                  <line x1="90" y1="222" x2="330" y2="222" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+                </svg>
               </div>
-              <figcaption class="stage-caption">
-                <div>
-                  <h3>立体亚克力立牌</h3>
-                  <p>三插立体亚克力桌面立牌，以通透层次还原角色神韵。</p>
-                </div>
-                <span class="stage-badge">03</span>
+              <figcaption class="plate-meta">
+                <span class="plate-kicker">Rain Daily · 可编程内容入口</span>
+                <h3>ACG Daily</h3>
+                <p>围绕作品与 IP 的个人可编程日报、追番日历与智能助手，让日常热爱自然连接现实衍生。</p>
               </figcaption>
             </figure>
 
-            <figure class="orbital-card stage-monolith glass-monolith" data-ring-card="3">
-              <div class="stage-visual stage-visual-duo">
-                <img class="duo-cards" src="assets/media/editions/edition-cards.webp?v=20261118-8" alt="冷烫纪念收藏卡片" width="1112" height="702" decoding="async" />
-                <img class="duo-badges" src="assets/media/editions/edition-badges.webp?v=20261118-8" alt="75mm 双闪金属徽章" width="1252" height="612" decoding="async" />
+            <figure class="orbital-card stage-plate" data-ring-card="3">
+              <div class="plate-art plate-art-cutout">
+                <img src="assets/media/editions/edition-standee.webp?v=20261119-1" alt="三插立体亚克力桌面立牌" width="697" height="912" decoding="async" />
               </div>
-              <figcaption class="stage-caption">
-                <div>
-                  <h3>双闪徽章与冷烫典藏卡</h3>
-                  <p>75mm 双闪马口铁徽章与冷烫典藏卡，于社区市集直接发行。</p>
-                </div>
-                <span class="stage-badge">04</span>
+              <figcaption class="plate-meta">
+                <span class="plate-kicker">Spatial Craft · 柔性直产</span>
+                <h3>立体亚克力立牌</h3>
+                <p>设计状态直连参数化刀版与多层景深工艺，单件起订还原角色神韵。</p>
+              </figcaption>
+            </figure>
+
+            <figure class="orbital-card stage-plate" data-ring-card="4">
+              <div class="plate-art plate-art-duo">
+                <img class="duo-cards" src="assets/media/editions/edition-cards.webp?v=20261119-1" alt="冷烫纪念收藏卡片" width="1112" height="702" decoding="async" />
+                <img class="duo-badges" src="assets/media/editions/edition-badges.webp?v=20261119-1" alt="75mm 双闪金属徽章" width="1252" height="612" decoding="async" />
+              </div>
+              <figcaption class="plate-meta">
+                <span class="plate-kicker">Collector Editions · 自动分润</span>
+                <h3>双闪徽章与冷烫典藏</h3>
+                <p>75mm 双闪马口铁徽章与冷烫收藏卡，随每一次衍生定制自动执行授权结算。</p>
               </figcaption>
             </figure>
           </div>
         </div>
 
         <div class="stage-foot">
-          <div class="orbital-controls" role="tablist" aria-label="展品视角切换">
-            <button class="orbital-pill is-active" type="button" role="tab" aria-selected="true" data-stage-tab="0">01 原作空间</button>
-            <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-stage-tab="1">02 实时定制</button>
-            <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-stage-tab="2">03 立体立牌</button>
-            <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-stage-tab="3">04 徽章典藏</button>
+          <div class="eco-bar" role="tablist" aria-label="生态展品切换">
+            <button class="eco-tab is-active" type="button" role="tab" aria-selected="true" data-stage-tab="0">交汇之地</button>
+            <button class="eco-tab" type="button" role="tab" aria-selected="false" data-stage-tab="1">造物工房</button>
+            <button class="eco-tab" type="button" role="tab" aria-selected="false" data-stage-tab="2">ACG Daily</button>
+            <button class="eco-tab" type="button" role="tab" aria-selected="false" data-stage-tab="3">空间立牌</button>
+            <button class="eco-tab" type="button" role="tab" aria-selected="false" data-stage-tab="4">典藏印品</button>
           </div>
-          <a class="stage-link" href="https://realrain.art/">前往交汇之地 realrain.art ↗</a>
+          <a class="stage-link" href="https://realrain.art/">进入交汇之地 realrain.art ↗</a>
         </div>
       </div>
     </section>
 
-    <!-- CHAPTER 04: TEAM (PROXIMITY RIM-LIT MONOLITHS) -->
+    <!-- CHAPTER 04: TEAM (DE-BOXED ARCHITECTURAL COLUMNS) -->
     <section class="act team-act" id="team" data-chapter="3">
       <div class="container">
         <header class="act-header team-header">
-          <p class="eyebrow">03 / 核心团队</p>
+          <p class="eyebrow">03 / 团队 · Builders</p>
           <h2 class="act-title reveal-line">
             <span>横跨多模态智能、创作者文化与司法级版权基建。</span>
           </h2>
         </header>
 
         <div class="team-trio" id="teamTrack">
-          <article class="person-card glass-monolith proximity-rim" data-team-card="0">
+          <article class="person-card" data-team-card="0">
             <div class="person-top">
               <div class="person-head">
                 <h3>徐北辰</h3>
@@ -345,7 +352,7 @@
             </ul>
           </article>
 
-          <article class="person-card glass-monolith proximity-rim" data-team-card="1">
+          <article class="person-card" data-team-card="1">
             <div class="person-top">
               <div class="person-head">
                 <h3>周弈杉</h3>
@@ -360,7 +367,7 @@
             </ul>
           </article>
 
-          <article class="person-card glass-monolith proximity-rim" data-team-card="2">
+          <article class="person-card" data-team-card="2">
             <div class="person-top">
               <div class="person-head">
                 <h3>栗志果</h3>
@@ -376,10 +383,10 @@
           </article>
         </div>
 
-        <div class="orbital-controls team-tabs" role="tablist" aria-label="核心创始人">
-          <button class="orbital-pill is-active" type="button" role="tab" aria-selected="true" data-team-tab="0">徐北辰 CEO</button>
-          <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-team-tab="1">周弈杉 COO</button>
-          <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-team-tab="2">栗志果 CPO</button>
+        <div class="team-tabs" role="tablist" aria-label="核心创始人">
+          <button class="eco-tab is-active" type="button" role="tab" aria-selected="true" data-team-tab="0">徐北辰 CEO</button>
+          <button class="eco-tab" type="button" role="tab" aria-selected="false" data-team-tab="1">周弈杉 COO</button>
+          <button class="eco-tab" type="button" role="tab" aria-selected="false" data-team-tab="2">栗志果 CPO</button>
         </div>
 
         <div class="advisors-ledger">
@@ -410,11 +417,11 @@
         <div class="contact-spacer" aria-hidden="true"></div>
 
         <div class="contact-center" id="visionMonolith">
-          <p class="eyebrow">04 / 唯一愿景 · Our Sole Vision</p>
+          <p class="eyebrow">04 / 愿景 · Wonderland</p>
           <h2 class="slogan-monolith platinum-text" lang="en">Hack to the Wonderland</h2>
           <p class="vision-lead">想象力是人类最辽阔的原野，而美好的热爱值得被安放于日常。非雨愿与全球创作者、IP 伙伴与造梦者同行，跨越虚拟与现实的边界，让每个人心中独一无二的幻想世界，真正降临于触手可及的人间。</p>
           <div class="contact-actions">
-            <a class="btn btn-luminous" href="https://realrain.art/">前往旗下社区 · 交汇之地 ↗</a>
+            <a class="btn btn-luminous" href="https://realrain.art/">进入交汇之地 ↗</a>
             <a class="contact-mail" href="mailto:contact@realrain.co">contact@realrain.co</a>
           </div>
         </div>
@@ -435,6 +442,6 @@
     </section>
   </main>
 
-  <script src="js/main.js?v=20261118-8" defer></script>
+  <script src="js/main.js?v=20261119-1" defer></script>
 </body>
 </html>

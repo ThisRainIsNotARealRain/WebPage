@@ -419,18 +419,23 @@
   }
 
   /* =========================================================
-     3A. Chapter 02: Kinetic Architectural Triptych (#whatTriptych)
+     3A. Chapter 02: De-Boxed Architectural Triptych (#whatTriptych)
+         Fixed equal-width grid = zero downward title shift ever
      ========================================================= */
   function initWhatTriptych() {
     var deck = document.getElementById("whatTriptych");
     if (!deck) return;
     var panels = Array.prototype.slice.call(deck.querySelectorAll("[data-what-card]"));
     var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-what-tab]"));
+    var beam = document.getElementById("whatBeam");
     if (!panels.length) return;
 
     function setActive(idx, scrollMobile) {
       for (var i = 0; i < panels.length; i++) {
         panels[i].classList.toggle("is-expanded", i === idx);
+      }
+      if (beam) {
+        beam.style.setProperty("--active-what", String(idx));
       }
       for (var t = 0; t < tabs.length; t++) {
         var match = t === idx;
@@ -475,8 +480,9 @@
   }
 
   /* =========================================================
-     3B. Chapter 03: Click-First 360° 3D Turntable (#stageViewport)
-         Critical exponential damping = zero overshoot / zero wobble
+     3B. Chapter 03: Frameless 5-Plate Ecosystem Stage (#stageViewport)
+         Exact 2nd-order critically damped oscillator (zeta=1, omega=15.5)
+         Pure GPU transform + opacity (zero blur / filter reflow)
      ========================================================= */
   function shortestSignedDelta(idx, center, total) {
     var raw = ((idx - center) % total + total) % total;
@@ -491,6 +497,7 @@
     if (!stage || !ring) return;
 
     var cards = Array.prototype.slice.call(ring.querySelectorAll("[data-ring-card]"));
+    var metas = cards.map(function (c) { return c.querySelector(".plate-meta"); });
     var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-stage-tab]"));
     var total = cards.length;
     if (!total) return;
@@ -498,6 +505,7 @@
     var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var current = 0;
     var target = 0;
+    var velocity = 0;
     var activeIdx = 0;
     var hoveredIdx = -1;
     var rafId = 0;
@@ -510,6 +518,7 @@
     var startX = 0;
     var startY = 0;
     var lastX = 0;
+    var lastMoveTime = 0;
     var downTime = 0;
     var downCardIdx = null;
     var dragVel = 0;
@@ -532,9 +541,9 @@
     function layoutRing() {
       var stageW = stage.clientWidth || window.innerWidth;
       var isMobile = window.innerWidth <= 960;
-      var rx = isMobile ? Math.round(stageW * 0.44) : Math.min(418, Math.round(stageW * 0.375));
-      var rz = isMobile ? 110 : 140;
-      var maxTilt = isMobile ? 13 : 15;
+      var rx = isMobile ? Math.round(stageW * 0.45) : Math.min(410, Math.round(stageW * 0.37));
+      var rz = isMobile ? 105 : 145;
+      var maxTilt = isMobile ? 12 : 14;
       var stepAngle = (Math.PI * 2) / total;
 
       for (var i = 0; i < total; i++) {
@@ -543,31 +552,33 @@
         var cosT = Math.cos(theta);
         var sinT = Math.sin(theta);
 
-        var isFlankHover = hoveredIdx === i && Math.abs(delta) > 0.25 && cosT >= -0.35;
+        var isFlankHover = hoveredIdx === i && Math.abs(delta) > 0.25;
         var x = sinT * rx;
-        // Center card sits at +rz, flanking cards sit at z = 0 (never behind z=0 plane),
-        // keeping 3D hit-testing unambiguous on every exposed flanking card!
+        // Center sits forward (+rz), primary neighbors (+/-72 deg, cosT = +0.309) sit cleanly in front (z >= 0)
         var z = cosT * rz;
+        var y = Math.max(0, -cosT) * (isMobile ? -12 : -18);
         var rotY = -sinT * maxTilt;
-        var scale = 0.72 + 0.185 * ((cosT + 1) * 0.5) + (isFlankHover ? 0.024 : 0);
+        var scale = 0.66 + 0.24 * ((cosT + 1) * 0.5) + (isFlankHover ? 0.032 : 0);
 
         var dist = Math.abs(delta);
-        var opacity = cosT < -0.25
-          ? 0.08
-          : isFlankHover
-            ? 0.90
-            : Math.max(0.18, 1.0 - dist * (isMobile ? 0.58 : 0.30));
-        var bright = isFlankHover ? 0.95 : (0.80 + 0.20 * Math.max(0, cosT));
+        var baseOpacity = dist < 0.05
+          ? 1.0
+          : Math.max(isMobile ? 0.07 : 0.22, (isMobile ? 0.48 : 0.72) - dist * (isMobile ? 0.28 : 0.24));
+        var opacity = isFlankHover ? Math.min(0.95, baseOpacity + 0.22) : baseOpacity;
         var zIdx = Math.round((cosT + 2) * 20);
 
         var el = cards[i];
         el.style.transform =
-          "translate3d(calc(-50% + " + x.toFixed(1) + "px), -50%, " + z.toFixed(1) + "px) " +
+          "translate3d(calc(-50% + " + x.toFixed(1) + "px), calc(-50% + " + y.toFixed(1) + "px), " + z.toFixed(1) + "px) " +
           "rotateY(" + rotY.toFixed(2) + "deg) scale(" + scale.toFixed(3) + ")";
         el.style.opacity = opacity.toFixed(3);
         el.style.zIndex = String(zIdx);
-        el.style.filter = "brightness(" + bright.toFixed(2) + ")";
-        el.style.pointerEvents = cosT < -0.35 ? "none" : "auto";
+        el.style.pointerEvents = cosT < -0.92 ? "none" : "auto";
+
+        var meta = metas[i];
+        if (meta) {
+          meta.style.opacity = Math.max(0, Math.min(1, 1 - dist * 1.45)).toFixed(3);
+        }
       }
 
       syncTabs(Math.round(current));
@@ -577,20 +588,26 @@
       rafId = 0;
       if (reducedMotion && !dragging) {
         current = target;
+        velocity = 0;
         layoutRing();
         return;
       }
       if (!dragging) {
         var dt = lastTime ? Math.min(0.05, Math.max(0.004, (now - lastTime) * 0.001)) : 0.016;
         lastTime = now;
-        // Fast monotonic exponential critical damping: glides cleanly in ~200ms with 0% overshoot
-        var alpha = 1 - Math.exp(-20 * dt);
-        current += (target - current) * alpha;
+        // Analytical 2nd-order critically damped harmonic oscillator (zeta = 1, omega = 21)
+        var omega = 21.0;
+        var d0 = current - target;
+        var expTerm = Math.exp(-omega * dt);
+        var nextD = (d0 + (velocity + omega * d0) * dt) * expTerm;
+        velocity = (velocity - omega * (velocity + omega * d0) * dt) * expTerm;
+        current = target + nextD;
         layoutRing();
-        if (Math.abs(target - current) > 0.0012) {
+        if (Math.abs(nextD) > 0.0008 || Math.abs(velocity) > 0.004) {
           rafId = requestAnimationFrame(stepPhysics);
         } else {
           current = target;
+          velocity = 0;
           lastTime = 0;
           layoutRing();
         }
@@ -616,7 +633,6 @@
       });
     }
 
-    // Hover lift + direct click on any visible background card rotates straight to it
     for (var c = 0; c < cards.length; c++) {
       (function (idx, el) {
         el.addEventListener("pointerenter", function () {
@@ -650,14 +666,17 @@
       startX = e.clientX;
       startY = e.clientY;
       lastX = e.clientX;
-      downTime = performance.now();
+      lastMoveTime = performance.now();
+      downTime = lastMoveTime;
       downCardIdx = cardEl ? parseInt(cardEl.getAttribute("data-ring-card"), 10) : null;
       dragVel = 0;
       dragStartIdx = target;
+      velocity = 0;
     });
 
     stage.addEventListener("pointermove", function (e) {
       if (!pointerActive || pointerId !== e.pointerId) return;
+      var now = performance.now();
       var dx = e.clientX - startX;
       var dragThreshold = e.pointerType === "mouse" ? 18 : 8;
       if (!dragging && Math.abs(dx) > dragThreshold) {
@@ -669,8 +688,10 @@
       if (!dragging) return;
 
       var dragScale = Math.max(220, (stage.clientWidth || 360) * 0.44);
-      dragVel = (e.clientX - lastX) / dragScale;
+      var moveDt = Math.max(0.008, (now - lastMoveTime) * 0.001);
+      dragVel = ((e.clientX - lastX) / dragScale) / moveDt;
       lastX = e.clientX;
+      lastMoveTime = now;
       current = dragStartIdx - dx / dragScale;
       target = current;
       layoutRing();
@@ -701,13 +722,14 @@
       }
 
       var dragScale = Math.max(220, (stage.clientWidth || 360) * 0.44);
-      var projected = dragStartIdx - dx / dragScale - dragVel * 0.55;
+      var projected = dragStartIdx - dx / dragScale - dragVel * 0.09;
       var snapped = Math.round(projected);
       if (Math.abs(dx) > 32 && snapped === Math.round(dragStartIdx)) {
         snapped = Math.round(dragStartIdx) + (dx < 0 ? 1 : -1);
       }
 
       target = snapped;
+      velocity = Math.max(-18, Math.min(18, -dragVel));
       syncTabs(snapped);
       lastTime = performance.now();
       if (!rafId) rafId = requestAnimationFrame(stepPhysics);
@@ -717,7 +739,6 @@
     stage.addEventListener("pointerup", endDrag);
     stage.addEventListener("pointercancel", endDrag);
 
-    // Left / Right keyboard navigation when Chapter 03 is active
     document.addEventListener("keydown", function (e) {
       if (!platform || !platform.classList.contains("is-active")) return;
       var tag = (document.activeElement && document.activeElement.tagName) || "";
@@ -736,7 +757,7 @@
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.2 && Math.abs(e.deltaX) > 20) {
         e.preventDefault();
         var now = performance.now();
-        if (now - wheelLock > 180) {
+        if (now - wheelLock > 170) {
           wheelLock = now;
           spinTo(activeIdx + (e.deltaX > 0 ? 1 : -1));
         }
@@ -786,21 +807,244 @@
   }
 
   /* =========================================================
-     4. Chapter Snap Sync & Draggable Dots Rail
+     4. Chapter Snap Sync & Liquid Rain Thread Rail (#rainRailCanvas)
      ========================================================= */
   function initChapterRail() {
     var rail = document.getElementById("chapterDots");
     var track = document.getElementById("dotsTrack");
-    var indicator = document.getElementById("dotsIndicator");
+    var rainCanvas = document.getElementById("rainRailCanvas");
     var stops = rail ? Array.prototype.slice.call(rail.querySelectorAll("[data-dot-index]")) : [];
     var navLinks = Array.prototype.slice.call(document.querySelectorAll("[data-chapter-link]"));
+    var jumpLinks = Array.prototype.slice.call(document.querySelectorAll("[data-chapter-jump]"));
     var acts = Array.prototype.slice.call(document.querySelectorAll(".act[data-chapter]"));
     if (!acts.length) return;
 
+    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var current = 0;
     var scrubbing = false;
+    var scrollAnimId = 0;
+
+    // Continuous Raindrop Rail State
+    var dropRatio = 0;
+    var targetRatio = 0;
+    var dropVel = 0;
+    var ripples = [];
+    var streaks = [
+      { phase: 0.14, speed: 0.34, len: 0.14 },
+      { phase: 0.49, speed: 0.27, len: 0.11 },
+      { phase: 0.82, speed: 0.41, len: 0.16 }
+    ];
+    var ctx = rainCanvas ? rainCanvas.getContext("2d") : null;
+    var cw = 0;
+    var ch = 0;
+    var dpr = 1;
+    var lastFrame = 0;
+
+    function getTrackMetrics() {
+      if (!track || !stops.length) return { padTop: 18, span: 120 };
+      var firstY = stops[0].offsetTop + stops[0].offsetHeight * 0.5;
+      var lastY = stops[stops.length - 1].offsetTop + stops[stops.length - 1].offsetHeight * 0.5;
+      return { padTop: firstY, span: Math.max(20, lastY - firstY) };
+    }
+
+    function computeScrollRatio() {
+      var firstTop = acts[0].offsetTop;
+      var lastTop = acts[acts.length - 1].offsetTop;
+      var span = Math.max(1, lastTop - firstTop);
+      return Math.max(0, Math.min(1, (window.scrollY - firstTop) / span));
+    }
+
+    function spawnRipple(ratio) {
+      if (reducedMotion) return;
+      ripples.push({ ratio: ratio, age: 0 });
+      if (ripples.length > 4) ripples.shift();
+    }
+
+    function resizeRailCanvas() {
+      if (!rainCanvas || !track) return;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cw = track.clientWidth || 28;
+      ch = track.clientHeight || 180;
+      rainCanvas.width = Math.round(cw * dpr);
+      rainCanvas.height = Math.round(ch * dpr);
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function renderRail(now) {
+      if (!ctx || !cw || !ch) {
+        requestAnimationFrame(renderRail);
+        return;
+      }
+      var dt = lastFrame ? Math.min(0.05, Math.max(0.004, (now - lastFrame) * 0.001)) : 0.016;
+      lastFrame = now;
+
+      if (!scrubbing) {
+        targetRatio = computeScrollRatio();
+      }
+
+      if (reducedMotion) {
+        dropRatio = targetRatio;
+        dropVel = 0;
+      } else {
+        var omega = 24;
+        var d = dropRatio - targetRatio;
+        var e = Math.exp(-omega * dt);
+        dropRatio = targetRatio + (d + (dropVel + omega * d) * dt) * e;
+        dropVel = (dropVel - omega * (dropVel + omega * d) * dt) * e;
+      }
+
+      var metrics = getTrackMetrics();
+      var padTop = metrics.padTop;
+      var span = metrics.span;
+      var cx = cw * 0.5;
+      var dropY = padTop + dropRatio * span;
+
+      rainCanvas.dataset.dropY = dropY.toFixed(1);
+      ctx.clearRect(0, 0, cw, ch);
+
+      // 1. Hairline tapered silver rain thread
+      var lineGrad = ctx.createLinearGradient(0, 4, 0, ch - 4);
+      lineGrad.addColorStop(0, "rgba(140, 162, 155, 0)");
+      lineGrad.addColorStop(0.16, "rgba(140, 162, 155, 0.22)");
+      lineGrad.addColorStop(0.5, "rgba(244, 243, 239, 0.24)");
+      lineGrad.addColorStop(0.84, "rgba(140, 162, 155, 0.22)");
+      lineGrad.addColorStop(1, "rgba(140, 162, 155, 0)");
+      ctx.strokeStyle = lineGrad;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(cx, 4);
+      ctx.lineTo(cx, ch - 4);
+      ctx.stroke();
+
+      // 2. Ambient descending micro-rain filaments
+      if (!reducedMotion) {
+        for (var s = 0; s < streaks.length; s++) {
+          var st = streaks[s];
+          st.phase = (st.phase + st.speed * dt) % 1;
+          var yHead = 8 + st.phase * (ch - 16);
+          var segLen = st.len * ch;
+          var yTail = Math.max(4, yHead - segLen);
+          var sg = ctx.createLinearGradient(0, yTail, 0, yHead);
+          sg.addColorStop(0, "rgba(140, 162, 155, 0)");
+          sg.addColorStop(0.75, "rgba(244, 243, 239, 0.34)");
+          sg.addColorStop(1, "rgba(244, 243, 239, 0)");
+          ctx.strokeStyle = sg;
+          ctx.lineWidth = 1.1;
+          ctx.beginPath();
+          ctx.moveTo(cx, yTail);
+          ctx.lineTo(cx, yHead);
+          ctx.stroke();
+        }
+      }
+
+      // 3. Concentric water ripples at arrived chapter stops
+      for (var r = ripples.length - 1; r >= 0; r--) {
+        var rp = ripples[r];
+        rp.age += dt;
+        if (rp.age >= 0.72) {
+          ripples.splice(r, 1);
+          continue;
+        }
+        var t = rp.age / 0.72;
+        var ry = padTop + rp.ratio * span;
+        var rad = 3.5 + t * 10.5;
+        ctx.strokeStyle = "rgba(244, 243, 239, " + ((1 - t) * 0.42).toFixed(3) + ")";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(cx, ry, rad, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // 4. Organic teardrop bead with velocity-responsive elongation
+      var absVel = Math.min(4.5, Math.abs(dropVel));
+      var signV = dropVel >= 0 ? 1 : -1;
+      var rxDrop = Math.max(2.3, 3.2 - absVel * 0.16);
+      var tailOffset = (4.6 + absVel * 4.4) * (-signV);
+      var tipY = dropY + tailOffset * 1.45;
+      var bellyY = dropY + signV * (1.2 + absVel * 0.45);
+
+      var glow = ctx.createRadialGradient(cx, dropY, 1, cx, dropY, 11);
+      glow.addColorStop(0, "rgba(244, 243, 239, 0.28)");
+      glow.addColorStop(0.55, "rgba(140, 162, 155, 0.10)");
+      glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(cx, dropY, 11, 0, Math.PI * 2);
+      ctx.fill();
+
+      var dropGrad = ctx.createLinearGradient(cx, Math.min(tipY, bellyY - 3), cx, Math.max(tipY, bellyY + 4));
+      dropGrad.addColorStop(0, "#FFFFFF");
+      dropGrad.addColorStop(0.55, "#ECEBE6");
+      dropGrad.addColorStop(1, "#8CA29B");
+      ctx.fillStyle = dropGrad;
+      ctx.beginPath();
+      ctx.moveTo(cx, tipY);
+      ctx.bezierCurveTo(
+        cx + rxDrop * 0.65,
+        dropY + tailOffset * 0.28,
+        cx + rxDrop,
+        bellyY - signV * rxDrop * 0.4,
+        cx,
+        bellyY + signV * rxDrop
+      );
+      ctx.bezierCurveTo(
+        cx - rxDrop,
+        bellyY - signV * rxDrop * 0.4,
+        cx - rxDrop * 0.65,
+        dropY + tailOffset * 0.28,
+        cx,
+        tipY
+      );
+      ctx.closePath();
+      ctx.fill();
+
+      requestAnimationFrame(renderRail);
+    }
+
+    function cancelProgrammaticScroll() {
+      if (scrollAnimId) {
+        cancelAnimationFrame(scrollAnimId);
+        scrollAnimId = 0;
+        document.documentElement.classList.remove("is-programmatic-scroll");
+      }
+    }
+
+    function smoothScrollToY(targetY, durationMs) {
+      cancelProgrammaticScroll();
+      if (reducedMotion || durationMs <= 0) {
+        window.scrollTo({ top: targetY, behavior: "instant" });
+        return;
+      }
+      var startY = window.scrollY;
+      var deltaY = targetY - startY;
+      if (Math.abs(deltaY) < 2) {
+        window.scrollTo({ top: targetY, behavior: "instant" });
+        return;
+      }
+      var tStart = performance.now();
+      document.documentElement.classList.add("is-programmatic-scroll");
+
+      function tick(now) {
+        var elapsed = now - tStart;
+        var p = Math.min(1, elapsed / durationMs);
+        var eased = 1 - Math.pow(1 - p, 4);
+        window.scrollTo(0, Math.round(startY + deltaY * eased));
+        if (p < 1) {
+          scrollAnimId = requestAnimationFrame(tick);
+        } else {
+          scrollAnimId = 0;
+          window.scrollTo({ top: targetY, behavior: "instant" });
+          document.documentElement.classList.remove("is-programmatic-scroll");
+        }
+      }
+      scrollAnimId = requestAnimationFrame(tick);
+    }
+
+    window.addEventListener("wheel", cancelProgrammaticScroll, { passive: true });
+    window.addEventListener("touchstart", cancelProgrammaticScroll, { passive: true });
 
     function sync(idx) {
+      var prev = current;
       current = Math.max(0, Math.min(acts.length - 1, idx));
       for (var i = 0; i < acts.length; i++) {
         acts[i].classList.toggle("is-active", i === current);
@@ -812,10 +1056,8 @@
       for (var s = 0; s < stops.length; s++) {
         stops[s].classList.toggle("is-active", s === current);
       }
-      if (track && indicator && !scrubbing) {
-        var travel = Math.max(0, track.clientHeight - indicator.offsetHeight - 8);
-        var ratio = acts.length > 1 ? current / (acts.length - 1) : 0;
-        indicator.style.transform = "translate(-50%, " + (ratio * travel).toFixed(1) + "px)";
+      if (prev !== current && acts.length > 1) {
+        spawnRipple(current / (acts.length - 1));
       }
     }
 
@@ -836,11 +1078,14 @@
 
     function scrollToChapter(idx, instant) {
       var safe = Math.max(0, Math.min(acts.length - 1, idx));
-      window.scrollTo({
-        top: acts[safe].offsetTop,
-        behavior: instant ? "instant" : "smooth"
-      });
+      var destTop = acts[safe].offsetTop;
       sync(safe);
+      if (instant) {
+        cancelProgrammaticScroll();
+        window.scrollTo({ top: destTop, behavior: "instant" });
+      } else {
+        smoothScrollToY(destTop, 360);
+      }
     }
 
     var raf = 0;
@@ -854,7 +1099,10 @@
       }
     }, { passive: true });
 
-    window.addEventListener("resize", detectCenter, { passive: true });
+    window.addEventListener("resize", function () {
+      detectCenter();
+      resizeRailCanvas();
+    }, { passive: true });
 
     for (var s = 0; s < stops.length; s++) {
       stops[s].addEventListener("click", function () {
@@ -862,20 +1110,46 @@
       });
     }
 
-    if (rail && track && indicator) {
+    for (var k = 0; k < navLinks.length; k++) {
+      navLinks[k].addEventListener("click", function (e) {
+        var idx = parseInt(this.getAttribute("data-chapter-link"), 10);
+        if (!isNaN(idx)) {
+          e.preventDefault();
+          scrollToChapter(idx, false);
+        }
+      });
+    }
+
+    for (var j = 0; j < jumpLinks.length; j++) {
+      jumpLinks[j].addEventListener("click", function (e) {
+        var idx = parseInt(this.getAttribute("data-chapter-jump"), 10);
+        if (!isNaN(idx)) {
+          e.preventDefault();
+          scrollToChapter(idx, false);
+        }
+      });
+    }
+
+    if (rail && track) {
       var dragPending = false;
       var dragStartY = 0;
 
       function scrubY(clientY) {
         var rect = track.getBoundingClientRect();
-        var ratio = Math.max(0, Math.min(1, (clientY - rect.top) / Math.max(1, rect.height)));
-        var travel = Math.max(0, track.clientHeight - indicator.offsetHeight - 8);
-        indicator.style.transform = "translate(-50%, " + (ratio * travel).toFixed(1) + "px)";
-        var target = Math.round(ratio * (acts.length - 1));
-        if (target !== current) scrollToChapter(target, true);
+        var metrics = getTrackMetrics();
+        var relY = clientY - rect.top - metrics.padTop;
+        var ratio = Math.max(0, Math.min(1, relY / metrics.span));
+        targetRatio = ratio;
+        var firstTop = acts[0].offsetTop;
+        var lastTop = acts[acts.length - 1].offsetTop;
+        var scrollYTarget = Math.round(firstTop + ratio * (lastTop - firstTop));
+        document.documentElement.classList.add("is-programmatic-scroll");
+        window.scrollTo({ top: scrollYTarget, behavior: "instant" });
+        sync(Math.round(ratio * (acts.length - 1)));
       }
 
       track.addEventListener("pointerdown", function (e) {
+        cancelProgrammaticScroll();
         var onStop = e.target && e.target.closest && e.target.closest(".dot-stop");
         dragStartY = e.clientY;
         if (onStop) {
@@ -889,7 +1163,7 @@
       });
 
       track.addEventListener("pointermove", function (e) {
-        if (dragPending && Math.abs(e.clientY - dragStartY) > 6) {
+        if (dragPending && Math.abs(e.clientY - dragStartY) > 5) {
           dragPending = false;
           scrubbing = true;
           rail.classList.add("is-dragging");
@@ -904,8 +1178,10 @@
         if (!scrubbing) return;
         scrubbing = false;
         rail.classList.remove("is-dragging");
+        document.documentElement.classList.remove("is-programmatic-scroll");
         try { track.releasePointerCapture(e.pointerId); } catch (err) {}
-        sync(current);
+        var snappedIdx = Math.round(targetRatio * (acts.length - 1));
+        scrollToChapter(snappedIdx, false);
       }
 
       track.addEventListener("pointerup", endScrub);
@@ -930,7 +1206,13 @@
       }
     });
 
+    resizeRailCanvas();
     detectCenter();
+    dropRatio = computeScrollRatio();
+    targetRatio = dropRatio;
+    if (rainCanvas) {
+      requestAnimationFrame(renderRail);
+    }
   }
 
   /* =========================================================

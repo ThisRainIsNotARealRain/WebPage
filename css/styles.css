@@ -1,6 +1,6 @@
 @font-face {
   font-family: "RealRain Serif SC";
-  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261118-8") format("woff2");
+  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261119-1") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261118-8") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261119-1") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261118-8") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261119-1") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -53,6 +53,11 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   background: var(--bg-obsidian);
+}
+
+html.is-programmatic-scroll {
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
 }
 
 body {
@@ -311,7 +316,7 @@ button {
 }
 
 /* =========================================================
-   Minimalist Right Progress Rail
+   Liquid Rain Thread Right Progress Rail
    ========================================================= */
 .chapter-dots {
   position: fixed;
@@ -329,47 +334,25 @@ button {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 20px;
-  height: 130px;
-  padding-block: 4px;
+  width: 28px;
+  height: clamp(164px, 25dvh, 212px);
+  padding-block: 10px;
   cursor: ns-resize;
 }
 
-.dots-track::before {
-  content: "";
+.rain-rail-canvas {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 1px;
-  background: rgba(255, 255, 255, 0.14);
-  transform: translateX(-50%);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-}
-
-.dots-indicator {
-  position: absolute;
-  left: 50%;
-  top: 4px;
-  width: 5px;
-  height: 18px;
-  border-radius: 4px;
-  background: var(--ink-ivory);
-  box-shadow: 0 0 10px rgba(244, 243, 239, 0.28);
-  transform: translate(-50%, 0);
-  transition: transform 160ms cubic-bezier(0.2, 0.9, 0.3, 1);
-  pointer-events: none;
-}
-
-.chapter-dots.is-dragging .dots-indicator {
-  transition: none;
 }
 
 .dot-stop {
   position: relative;
   z-index: 2;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -381,14 +364,17 @@ button {
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.28);
-  transition: transform 140ms ease, background-color 140ms ease;
+  background: rgba(244, 243, 239, 0.28);
+  transition: transform 160ms ease, opacity 160ms ease, background-color 160ms ease;
 }
 
-.dot-stop:hover::after,
-.dot-stop.is-active::after {
+.dot-stop:hover::after {
   background: var(--ink-ivory);
-  transform: scale(1.25);
+  transform: scale(1.4);
+}
+
+.dot-stop.is-active::after {
+  opacity: 0;
 }
 
 /* =========================================================
@@ -497,12 +483,11 @@ button {
 }
 
 .act > .container {
-  transition: transform 200ms cubic-bezier(0.2, 0.9, 0.3, 1), opacity 180ms ease;
+  transition: opacity 220ms ease;
 }
 
 .js-ready .act:not(.is-active) > .container {
-  transform: translate3d(0, 6px, 0);
-  opacity: 0.86;
+  opacity: 0.72;
 }
 
 .eyebrow {
@@ -521,7 +506,7 @@ button {
 }
 
 .act-header-compact {
-  margin-bottom: clamp(14px, 2.2dvh, 24px);
+  margin-bottom: clamp(16px, 2.6dvh, 28px);
 }
 
 .act-title {
@@ -561,19 +546,13 @@ html[lang="en"] .act-title {
   color: transparent;
 }
 
-/* Masked line entrance */
 .reveal-line > span {
   display: block;
 }
 
-.js-ready .act:not(.is-active) .reveal-line > span,
-.js-ready .act:not(.is-active) .reveal-fade {
-  transform: translate3d(0, 8px, 0);
-}
-
 .reveal-line > span,
 .reveal-fade {
-  transition: transform 220ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  transition: opacity 220ms ease;
 }
 
 /* =========================================================
@@ -677,70 +656,12 @@ html[lang="en"] .cover-title {
 }
 
 /* =========================================================
-   COUTURE TOP-LIT OBSIDIAN MONOLITH & 3D ORBITAL RINGS
+   COUTURE FRAMELESS 3D STAGE & CHAPTER 02/03 HAIRLINE ORDER
    ========================================================= */
-.glass-monolith {
-  position: relative;
-  border-radius: 14px;
-  background: linear-gradient(180deg, rgba(26, 28, 28, 0.72) 0%, rgba(11, 12, 12, 0.88) 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.048),
-    0 28px 56px -24px rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(22px) saturate(115%);
-  -webkit-backdrop-filter: blur(22px) saturate(115%);
-  overflow: hidden;
-  transform-style: preserve-3d;
-}
-
-.spotlight::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    260px circle at var(--mx, 50%) var(--my, 15%),
-    rgba(244, 243, 239, 0.065),
-    transparent 68%
-  );
-  opacity: 0;
-  transition: opacity 150ms ease;
-  pointer-events: none;
-  z-index: 4;
-}
-
-.spotlight:hover::before {
-  opacity: 1;
-}
-
-.proximity-rim::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: radial-gradient(
-    220px circle at var(--mx, 50%) var(--my, 0%),
-    rgba(244, 243, 239, 0.32),
-    transparent 70%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 150ms ease;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.proximity-rim:hover::after {
-  opacity: 1;
-}
-
 .orbital-stage {
   position: relative;
   width: 100%;
-  perspective: 1500px;
+  perspective: 1600px;
   touch-action: pan-y;
   user-select: none;
   cursor: grab;
@@ -769,108 +690,68 @@ html[lang="en"] .cover-title {
 
 .orbital-card:not(.is-center) {
   cursor: pointer;
-  transition: box-shadow 140ms ease, filter 140ms ease;
-}
-
-.orbital-card:not(.is-center):hover {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.34),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 30px 60px -22px rgba(0, 0, 0, 0.92);
-}
-
-.orbital-card.is-center {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.085),
-    0 32px 64px -24px rgba(0, 0, 0, 0.94);
-}
-
-.orbital-controls {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-}
-
-.orbital-pill {
-  padding: 7px 14px;
-  border-radius: 999px;
-  font-family: var(--font-eyebrow);
-  font-variant-numeric: tabular-nums;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--ink-subtle);
-  background: rgba(255, 255, 255, 0.025);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-  white-space: nowrap;
-  transition: color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
-}
-
-.orbital-pill:hover {
-  color: var(--ink-muted);
-}
-
-.orbital-pill.is-active {
-  color: var(--ink-ivory);
-  background: rgba(255, 255, 255, 0.09);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
 
 /* =========================================================
-   CHAPTER 02: KINETIC ARCHITECTURAL TRIPTYCH (#what)
+   CHAPTER 02: DE-BOXED ARCHITECTURAL TRIPTYCH (#what)
+   Fixed grid widths = zero vertical title shift on focus/click
    ========================================================= */
+.triptych-rail {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.09);
+  overflow: hidden;
+}
+
+.triptych-beam {
+  display: block;
+  width: 33.3333%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(244, 243, 239, 0.12), rgba(244, 243, 239, 0.92), rgba(140, 162, 155, 0.45));
+  transform: translate3d(calc(var(--active-what, 0) * 100%), 0, 0);
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
 .triptych-deck {
-  display: flex;
-  align-items: stretch;
-  gap: clamp(14px, 2vw, 22px);
-  min-height: clamp(210px, 32dvh, 275px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 0;
 }
 
 .triptych-panel {
-  flex: 1 1 0%;
-  padding: clamp(22px, 2.5vw, 30px);
+  position: relative;
+  padding: clamp(22px, 3dvh, 34px) clamp(20px, 2.4vw, 34px) clamp(12px, 2dvh, 22px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(18px, 2.8dvh, 26px);
+  justify-content: flex-start;
+  gap: 12px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
   cursor: pointer;
-  transition:
-    flex-grow 210ms cubic-bezier(0.2, 0.9, 0.3, 1),
-    background 160ms ease,
-    box-shadow 160ms ease;
 }
 
-.triptych-panel.is-expanded {
-  flex-grow: 1.42;
-  background: linear-gradient(180deg, rgba(32, 35, 35, 0.80) 0%, rgba(12, 14, 14, 0.92) 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.085),
-    0 30px 60px -24px rgba(0, 0, 0, 0.92);
+.triptych-panel:first-child {
+  padding-left: 0;
 }
 
-.panel-top {
+.triptych-panel:not(:first-child)::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+
+.panel-index {
   display: flex;
-  flex-direction: column;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  transition: border-color 160ms ease;
-}
-
-.triptych-panel.is-expanded .panel-top {
-  border-bottom-color: rgba(255, 255, 255, 0.14);
-}
-
-.panel-copy {
-  display: flex;
-  flex-direction: column;
-}
-
-.card-head {
-  display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 12px;
 }
@@ -881,6 +762,11 @@ html[lang="en"] .cover-title {
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.12em;
+  color: var(--ink-subtle);
+  transition: color 180ms ease;
+}
+
+.triptych-panel.is-expanded .card-num {
   color: var(--accent-mineral);
 }
 
@@ -897,24 +783,37 @@ html[lang="en"] .cover-title {
   display: none;
 }
 
-.glass-monolith h3 {
-  margin: 0 0 10px;
-  font-family: var(--font-sans);
-  font-size: clamp(1.1rem, 1.46vw, 1.32rem);
+.triptych-panel h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.22rem, 1.62vw, 1.48rem);
   font-weight: 500;
+  line-height: 1.28;
   letter-spacing: -0.015em;
   color: var(--ink-ivory);
+  opacity: 0.72;
+  transition: opacity 200ms ease;
+}
+
+.triptych-panel.is-expanded h3 {
+  opacity: 1;
 }
 
 .card-brief {
   margin: 0;
   font-size: 14px;
-  line-height: 1.62;
+  line-height: 1.64;
   color: var(--ink-muted);
+  opacity: 0.54;
+  transition: opacity 200ms ease;
+}
+
+.triptych-panel.is-expanded .card-brief {
+  opacity: 1;
 }
 
 /* =========================================================
-   CHAPTER 03: CROSSROADS 360 3D CYLINDRICAL GALLERY RING
+   CHAPTER 03: FRAMELESS ECOSYSTEM 3D STAGE
    ========================================================= */
 .stage-container {
   display: flex;
@@ -924,12 +823,12 @@ html[lang="en"] .cover-title {
 
 .stage-header {
   text-align: center;
-  margin-bottom: clamp(12px, 2dvh, 20px);
+  margin-bottom: clamp(10px, 1.8dvh, 18px);
 }
 
 .stage-sub {
   margin: clamp(6px, 1dvh, 10px) auto 0;
-  max-width: 56ch;
+  max-width: 58ch;
   font-size: clamp(13px, 1.05vw, 14.5px);
   line-height: 1.52;
   color: var(--ink-muted);
@@ -937,166 +836,208 @@ html[lang="en"] .cover-title {
 }
 
 .orbital-stage-quad {
-  height: clamp(265px, 44dvh, 405px);
+  height: clamp(275px, 46dvh, 415px);
 }
 
-.stage-monolith {
-  width: min(74vw, 468px);
+.stage-plate {
+  width: min(74vw, 456px);
   height: 100%;
   margin: 0;
-  padding: clamp(12px, 1.5vw, 16px);
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
 }
 
-.stage-visual {
+.plate-art {
   position: relative;
+  width: 100%;
   flex: 1 1 auto;
   min-height: 0;
-  border-radius: 8px;
-  background: radial-gradient(75% 75% at 50% 45%, rgba(255, 255, 255, 0.05), rgba(6, 7, 7, 0.96));
-  padding: 10px;
-  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-.stage-visual > img {
-  max-width: 100%;
-  max-height: 100%;
+.plate-art::before {
+  content: "";
+  position: absolute;
+  inset: 6% 10%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(140, 162, 155, 0.09), transparent 76%);
+  pointer-events: none;
+}
+
+.plate-art-worlds .main-art,
+.plate-art-kodo .main-art {
+  position: relative;
+  z-index: 1;
+  max-width: 92%;
+  max-height: 94%;
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: 6px;
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6);
+  border-radius: 16px;
+  box-shadow: 0 26px 54px -18px rgba(0, 0, 0, 0.92), 0 0 0 1px rgba(255, 255, 255, 0.08);
   pointer-events: none;
 }
 
-.stage-visual-studio {
-  padding: 12px;
-}
-
-.scene-window {
-  width: 92%;
-  max-height: 92%;
-  border-radius: 8px;
-  background: #0D0F0F;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 20px 40px -16px rgba(0, 0, 0, 0.85);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.window-chrome {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
-  background: rgba(255, 255, 255, 0.035);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-.window-chrome span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.window-chrome b {
-  margin-left: 6px;
-  font-family: var(--font-eyebrow);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  color: var(--ink-muted);
-}
-
-.scene-window img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  pointer-events: none;
-}
-
-.scene-float-badge {
+.plate-art-kodo .float-accent {
   position: absolute;
-  right: 12px;
-  bottom: 10px;
-  width: clamp(110px, 32%, 185px);
+  z-index: 2;
+  right: 2%;
+  bottom: 2%;
+  width: clamp(104px, 31%, 168px);
   pointer-events: none;
-  filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.78));
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.86));
   transform: rotate(-3deg);
 }
 
-.stage-visual-cutout > img {
-  box-shadow: none;
-  filter: drop-shadow(0 22px 34px rgba(0, 0, 0, 0.85));
+.plate-art-daily .daily-editorial-svg {
+  position: relative;
+  z-index: 1;
+  width: min(92%, 410px);
+  height: auto;
+  max-height: 94%;
+  border-radius: 16px;
+  background: radial-gradient(95% 95% at 50% 15%, #1A2120, #070909);
+  box-shadow:
+    0 26px 54px -18px rgba(0, 0, 0, 0.92),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+  pointer-events: none;
 }
 
-.stage-visual-duo {
-  gap: 10px;
+.plate-art-cutout > img {
+  position: relative;
+  z-index: 1;
+  max-height: 95%;
+  max-width: 82%;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 24px 36px rgba(0, 0, 0, 0.9));
+  pointer-events: none;
 }
 
-.stage-visual-duo .duo-cards {
+.plate-art-duo {
+  gap: 8px;
+}
+
+.plate-art-duo .duo-cards {
+  position: relative;
+  z-index: 1;
   max-height: 82%;
   max-width: 56%;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.75));
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.84));
   transform: rotate(-2deg);
   pointer-events: none;
 }
 
-.stage-visual-duo .duo-badges {
+.plate-art-duo .duo-badges {
+  position: relative;
+  z-index: 1;
   max-height: 70%;
   max-width: 40%;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.78));
-  transform: rotate(3deg) translateY(8%);
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.86));
+  transform: rotate(3deg) translateY(6%);
   pointer-events: none;
 }
 
-.stage-caption {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  padding-inline: 4px;
+.plate-meta {
+  text-align: center;
+  max-width: 44ch;
+  padding-inline: 8px;
+  transition: opacity 180ms ease;
 }
 
-.stage-caption h3 {
+.plate-kicker {
+  display: block;
+  margin-bottom: 3px;
+  font-family: var(--font-eyebrow);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-mineral);
+}
+
+.plate-meta h3 {
   margin: 0;
-  font-family: var(--font-sans);
-  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.12rem, 1.45vw, 1.32rem);
   font-weight: 500;
   color: var(--ink-ivory);
 }
 
-.stage-caption p {
-  margin: 2px 0 0;
-  font-size: 12.5px;
+.plate-meta p {
+  margin: 3px 0 0;
+  font-size: 12.8px;
+  line-height: 1.5;
   color: var(--ink-muted);
 }
 
-.stage-badge {
-  font-family: var(--font-eyebrow);
-  font-variant-numeric: tabular-nums;
-  font-size: 11px;
-  color: var(--ink-subtle);
-}
-
 .stage-foot {
-  margin-top: clamp(14px, 2.4dvh, 22px);
+  margin-top: clamp(12px, 2dvh, 20px);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   gap: 12px 28px;
+}
+
+.eco-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.eco-tab {
+  position: relative;
+  padding: 7px 2px 9px;
+  font-family: var(--font-eyebrow);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--ink-subtle);
+  white-space: nowrap;
+  transition: color 150ms ease;
+}
+
+.eco-tab:hover {
+  color: var(--ink-muted);
+}
+
+.eco-tab.is-active {
+  color: var(--ink-ivory);
+}
+
+.eco-tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--ink-ivory);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.eco-tab.is-active::after {
+  transform: scaleX(1);
 }
 
 .stage-link {
@@ -1124,24 +1065,25 @@ html[lang="en"] .cover-title {
 .team-trio {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(14px, 2vw, 24px);
+  gap: clamp(16px, 2.4vw, 32px);
   margin-bottom: clamp(16px, 2.6dvh, 26px);
 }
 
 .team-trio .person-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: clamp(12px, 1.8dvh, 16px);
-  padding: clamp(18px, 2.2vw, 26px);
-  transition: background 160ms ease, box-shadow 160ms ease;
+  padding: clamp(18px, 2.2dvh, 24px) clamp(6px, 1vw, 12px) 6px 0;
+  background: transparent;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0;
+  box-shadow: none;
+  transition: border-color 160ms ease;
 }
 
 .team-trio .person-card:hover {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.085),
-    0 30px 60px -24px rgba(0, 0, 0, 0.94);
+  border-top-color: rgba(244, 243, 239, 0.44);
 }
 
 .team-tabs {
@@ -1411,11 +1353,15 @@ html[lang="en"] .cover-title {
     height: clamp(190px, 32dvh, 285px);
   }
 
+  .triptych-rail {
+    display: none;
+  }
+
   .triptych-deck {
+    display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
-    min-height: 0;
     gap: 12px;
     margin-bottom: 14px;
   }
@@ -1427,29 +1373,27 @@ html[lang="en"] .cover-title {
   .triptych-panel {
     flex: 0 0 100%;
     scroll-snap-align: center;
-    padding: 18px 20px;
-    gap: 14px;
+    padding: 16px 0 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    gap: 10px;
   }
 
-  .triptych-panel.is-expanded {
-    flex-grow: 0;
-  }
-
-  .panel-top {
-    padding-bottom: 10px;
+  .triptych-panel:not(:first-child)::before {
+    display: none;
   }
 
   .what-mobile-tabs {
     display: flex;
+    gap: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .orbital-stage-quad {
-    height: clamp(220px, 37dvh, 300px);
+    height: clamp(235px, 39dvh, 320px);
   }
 
-  .stage-monolith {
-    width: min(82vw, 430px);
-    padding: 10px;
+  .stage-plate {
+    width: min(82vw, 410px);
     gap: 8px;
   }
 
@@ -1470,11 +1414,13 @@ html[lang="en"] .cover-title {
   .team-trio .person-card {
     flex: 0 0 100%;
     scroll-snap-align: center;
-    padding: 16px 18px;
+    padding: 16px 0 8px;
   }
 
   .team-tabs {
     display: flex;
+    gap: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     margin-bottom: 14px;
   }
 
@@ -1517,13 +1463,9 @@ html[lang="en"] .cover-title {
   }
 
   .dots-track {
-    width: 12px;
-    height: 96px;
-  }
-
-  .dots-indicator {
-    width: 4px;
-    height: 15px;
+    width: 18px;
+    height: 124px;
+    padding-block: 6px;
   }
 
   .cover-title {
@@ -1567,9 +1509,14 @@ html[lang="en"] .cover-title {
     margin-bottom: clamp(10px, 1.8dvh, 16px);
   }
 
-  .orbital-pill {
-    padding: 6px 10px;
+  .eco-tab {
     font-size: 11px;
+    padding: 5px 1px 6px;
+  }
+
+  .eco-bar {
+    gap: 2px 12px;
+    border-bottom: 0;
   }
 
   .triptych-deck {
@@ -1577,22 +1524,22 @@ html[lang="en"] .cover-title {
   }
 
   .triptych-panel {
-    padding: 16px;
-    gap: 10px;
+    padding: 14px 0 6px;
+    gap: 8px;
   }
 
   .orbital-stage-quad {
     height: clamp(210px, 35dvh, 270px);
   }
 
-  .stage-monolith {
-    width: 82vw;
+  .stage-plate {
+    width: 84vw;
   }
 
-  .scene-float-badge {
-    width: 38%;
-    right: 8px;
-    bottom: 6px;
+  .plate-art-kodo .float-accent {
+    width: 34%;
+    right: 2%;
+    bottom: 2%;
   }
 
   .team-trio {
@@ -1600,7 +1547,7 @@ html[lang="en"] .cover-title {
   }
 
   .team-trio .person-card {
-    padding: 14px 16px;
+    padding: 14px 0 6px;
     gap: 10px;
   }
 
@@ -1617,17 +1564,6 @@ html[lang="en"] .cover-title {
 
   .team-tabs {
     margin-bottom: 10px;
-  }
-
-  .stage-foot .orbital-controls {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: min(100%, 300px);
-    gap: 6px;
-  }
-
-  .stage-foot .orbital-pill {
-    text-align: center;
   }
 
   .vision-lead {
@@ -1698,8 +1634,8 @@ html[lang="en"] .cover-title {
   }
 
   .triptych-panel {
-    padding: 12px 14px;
-    gap: 8px;
+    padding: 12px 0 6px;
+    gap: 6px;
   }
 
   .orbital-stage-quad {
@@ -1707,8 +1643,17 @@ html[lang="en"] .cover-title {
   }
 
   .stage-foot {
-    margin-top: 10px;
+    margin-top: 8px;
     gap: 8px;
+  }
+
+  .eco-bar {
+    gap: 2px 10px;
+  }
+
+  .eco-tab {
+    font-size: 11px;
+    padding: 4px 1px 6px;
   }
 
   .slogan-monolith {
@@ -1727,7 +1672,7 @@ html[lang="en"] .cover-title {
   }
 
   .team-trio .person-card {
-    padding: 12px 14px;
+    padding: 12px 0 4px;
     gap: 7px;
   }
 
@@ -1737,8 +1682,9 @@ html[lang="en"] .cover-title {
 
   .card-brief,
   .person-points li,
-  .advisor-org {
-    font-size: 11.8px;
+  .advisor-org,
+  .plate-meta p {
+    font-size: 11.6px;
     line-height: 1.34;
   }
 

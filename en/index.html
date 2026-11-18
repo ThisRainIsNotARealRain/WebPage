@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>RealRain | Hack to the Wonderland · Where Imagined Worlds Become Real</title>
-  <meta name="description" content="RealRain builds the creative AI and physical publishing foundation between digital imagination and everyday reality. Sole vision: Hack to the Wonderland. Flagship community: Crossroads (realrain.art)." />
+  <meta name="description" content="RealRain bridges digital imagination and physical craft through multimodal intelligence, programmable rights, and tactile publishing across Crossroads, Merch Kodo, and ACG Daily. Sole vision: Hack to the Wonderland." />
   <meta name="theme-color" content="#050606" />
   <link rel="canonical" href="https://realrain.co/en/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://realrain.co/" />
@@ -31,22 +31,22 @@
   <meta property="og:site_name" content="RealRain" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:title" content="RealRain | Where Imagined Worlds Enter Everyday Life" />
-  <meta property="og:description" content="RealRain builds the creative AI and physical publishing foundation between digital imagination and everyday reality. Hack to the Wonderland." />
+  <meta property="og:description" content="RealRain connects Crossroads, Merch Kodo, and ACG Daily through multimodal intelligence and tactile craft. Hack to the Wonderland." />
   <meta property="og:url" content="https://realrain.co/en/" />
-  <meta property="og:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-8" />
+  <meta property="og:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261119-1" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="RealRain | Hack to the Wonderland" />
-  <meta name="twitter:description" content="RealRain builds the bridge between digital imagination and physical craft. Hack to the Wonderland." />
-  <meta name="twitter:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261118-8" />
+  <meta name="twitter:description" content="RealRain bridges digital imagination and physical craft across Crossroads, Merch Kodo, and ACG Daily." />
+  <meta name="twitter:image" content="https://realrain.co/assets/media/art/realrain-og.jpg?v=20261119-1" />
 
-  <link rel="icon" type="image/png" href="../assets/logo/realrain-favicon-celadon.png?v=20261118-8" />
-  <link rel="preload" href="../assets/fonts/noto-serif-sc-500.woff2?v=20261118-8" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="../assets/fonts/noto-sans-sc-400.woff2?v=20261118-8" as="font" type="font/woff2" crossorigin />
+  <link rel="icon" type="image/png" href="../assets/logo/realrain-favicon-celadon.png?v=20261119-1" />
+  <link rel="preload" href="../assets/fonts/noto-serif-sc-500.woff2?v=20261119-1" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/noto-sans-sc-400.woff2?v=20261119-1" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500&display=swap" media="print" onload="this.media='all'" />
-  <link rel="stylesheet" href="../css/styles.css?v=20261118-8" />
+  <link rel="stylesheet" href="../css/styles.css?v=20261119-1" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -82,7 +82,7 @@
 
   <nav class="chapter-dots" id="chapterDots" aria-label="Chapter navigation">
     <div class="dots-track" id="dotsTrack">
-      <div class="dots-indicator" id="dotsIndicator" aria-hidden="true"></div>
+      <canvas class="rain-rail-canvas" id="rainRailCanvas" aria-hidden="true"></canvas>
       <button class="dot-stop is-active" type="button" data-dot-index="0" aria-label="Chapter 1"></button>
       <button class="dot-stop" type="button" data-dot-index="1" aria-label="Chapter 2"></button>
       <button class="dot-stop" type="button" data-dot-index="2" aria-label="Chapter 3"></button>
@@ -99,10 +99,10 @@
       </div>
       <nav class="mobile-drawer-nav" aria-label="Mobile navigation">
         <a href="#top"><span class="drawer-num">01</span><span>RealRain</span></a>
-        <a href="#what"><span class="drawer-num">02</span><span>Philosophy</span></a>
+        <a href="#what"><span class="drawer-num">02</span><span>Manifesto</span></a>
         <a href="#platform"><span class="drawer-num">03</span><span>Ecosystem</span></a>
-        <a href="#team"><span class="drawer-num">04</span><span>Founding Team</span></a>
-        <a href="#contact"><span class="drawer-num">05</span><span>Sole Vision</span></a>
+        <a href="#team"><span class="drawer-num">04</span><span>Builders</span></a>
+        <a href="#contact"><span class="drawer-num">05</span><span>Wonderland</span></a>
       </nav>
       <div class="mobile-drawer-foot">
         <a class="btn btn-luminous drawer-cta" href="https://realrain.art/">Enter Crossroads ↗</a>
@@ -125,10 +125,10 @@
               <span>Where imagined worlds</span>
               <span class="platinum-text">enter everyday life.</span>
             </h1>
-            <p class="cover-sub reveal-fade">Stories and worlds were never meant to stay behind glass. RealRain builds the bridge between digital imagination and physical craft, bringing beloved characters, ideas, and personal taste into the world we touch.</p>
+            <p class="cover-sub reveal-fade">Stories and worlds were never meant to stay behind glass. RealRain builds the bridge between digital imagination and physical craft across multimodal AI, programmable rights, and tactile editions.</p>
             <div class="cover-actions reveal-fade">
-              <a class="btn btn-luminous" href="#what">Explore RealRain ↓</a>
-              <a class="btn btn-glass" href="https://realrain.art/">Crossroads · realrain.art ↗</a>
+              <a class="btn btn-luminous" href="#what" data-chapter-jump="1">Explore RealRain ↓</a>
+              <a class="btn btn-glass" href="https://realrain.art/">Enter Crossroads ↗</a>
             </div>
           </div>
 
@@ -137,17 +137,17 @@
           </div>
         </div>
 
-        <a class="scroll-drop" href="#what" aria-label="Scroll to next section">
+        <a class="scroll-drop" href="#what" data-chapter-jump="1" aria-label="Scroll to next section">
           <span class="scroll-drop-line"></span>
         </a>
       </div>
     </section>
 
-    <!-- CHAPTER 02: WHAT WE BUILD (KINETIC ARCHITECTURAL TRIPTYCH) -->
+    <!-- CHAPTER 02: MANIFESTO (DE-BOXED ARCHITECTURAL TRIPTYCH) -->
     <section class="act paradigm-act" id="what" data-chapter="1">
       <div class="container">
         <header class="act-header act-header-compact">
-          <p class="eyebrow">01 / Philosophy &amp; Mission</p>
+          <p class="eyebrow">01 / Philosophy · Manifesto</p>
           <h2 class="act-title reveal-line">
             <span>At the border of dream and matter,</span>
             <span>a new ground for creation.</span>
@@ -155,156 +155,163 @@
           <p class="act-lead">Every spark of imagination deserves physical weight. RealRain unites creative sovereignty, aesthetic intelligence, and tactile craft.</p>
         </header>
 
+        <div class="triptych-rail" aria-hidden="true">
+          <span class="triptych-beam" id="whatBeam"></span>
+        </div>
+
         <div class="triptych-deck" id="whatTriptych">
-          <article class="triptych-panel glass-monolith proximity-rim is-expanded" data-what-card="0" tabindex="0">
-            <div class="panel-top">
-              <div class="card-head">
-                <span class="card-num">01</span>
-                <span class="card-en">Creative Sovereignty</span>
-              </div>
+          <article class="triptych-panel is-expanded" data-what-card="0" tabindex="0">
+            <div class="panel-index">
+              <span class="card-num">01</span>
+              <span class="card-en">Creative Sovereignty</span>
             </div>
-            <div class="panel-copy">
-              <h3>Sovereign Creative Worlds</h3>
-              <p class="card-brief">Clear licensing boundaries and automated royalties let artists and IP owners open their worlds with confidence and dignity.</p>
-            </div>
+            <h3>Sovereign Creative Worlds</h3>
+            <p class="card-brief">Clear licensing boundaries and automated royalties let artists and IP owners open their worlds with confidence and dignity.</p>
           </article>
 
-          <article class="triptych-panel glass-monolith proximity-rim" data-what-card="1" tabindex="0">
-            <div class="panel-top">
-              <div class="card-head">
-                <span class="card-num">02</span>
-                <span class="card-en">Aesthetic Intelligence</span>
-              </div>
+          <article class="triptych-panel" data-what-card="1" tabindex="0">
+            <div class="panel-index">
+              <span class="card-num">02</span>
+              <span class="card-en">Aesthetic Intelligence</span>
             </div>
-            <div class="panel-copy">
-              <h3>Context-Native AI Engine</h3>
-              <p class="card-brief">Our multimodal engine understands character nuance and personal taste without complex prompts, turning inspiration into bespoke design.</p>
-            </div>
+            <h3>Context-Native AI Engine</h3>
+            <p class="card-brief">Our multimodal engine understands character nuance and personal taste without complex prompts, turning inspiration into bespoke design.</p>
           </article>
 
-          <article class="triptych-panel glass-monolith proximity-rim" data-what-card="2" tabindex="0">
-            <div class="panel-top">
-              <div class="card-head">
-                <span class="card-num">03</span>
-                <span class="card-en">Tactile Reality</span>
-              </div>
+          <article class="triptych-panel" data-what-card="2" tabindex="0">
+            <div class="panel-index">
+              <span class="card-num">03</span>
+              <span class="card-en">Tactile Reality</span>
             </div>
-            <div class="panel-copy">
-              <h3>From Pixel to Physical Craft</h3>
-              <p class="card-brief">Bridging digital canvases and precision manufacturing to deliver badges, acrylic standees, foil prints, and everyday objects.</p>
-            </div>
+            <h3>From Pixel to Physical Craft</h3>
+            <p class="card-brief">Bridging digital canvases and precision manufacturing to deliver badges, acrylic standees, foil prints, and everyday objects.</p>
           </article>
         </div>
 
-        <div class="orbital-controls what-mobile-tabs" role="tablist" aria-label="Select capability">
-          <button class="orbital-pill is-active" type="button" role="tab" aria-selected="true" data-what-tab="0">01 · Sovereignty</button>
-          <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-what-tab="1">02 · AI Engine</button>
-          <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-what-tab="2">03 · Tactile Craft</button>
+        <div class="what-mobile-tabs" role="tablist" aria-label="Select capability">
+          <button class="eco-tab is-active" type="button" role="tab" aria-selected="true" data-what-tab="0">01 Sovereignty</button>
+          <button class="eco-tab" type="button" role="tab" aria-selected="false" data-what-tab="1">02 AI Engine</button>
+          <button class="eco-tab" type="button" role="tab" aria-selected="false" data-what-tab="2">03 Tactile Craft</button>
         </div>
       </div>
     </section>
 
-    <!-- CHAPTER 03: CROSSROADS 360 3D TURNTABLE GALLERY -->
+    <!-- CHAPTER 03: COMPLETE ECOSYSTEM FRAMELESS 360 STAGE -->
     <section class="act stage-act" id="platform" data-chapter="2">
       <div class="container stage-container">
         <header class="act-header stage-header">
-          <p class="eyebrow">02 / Ecosystem &amp; Editions</p>
+          <p class="eyebrow">02 / Ecosystem</p>
           <h2 class="act-title reveal-line">
-            <span>Philosophy in Practice: Crossroads</span>
+            <span>From daily companionship to bespoke craft.</span>
           </h2>
-          <p class="stage-sub">Powered by RealRain's core engine, Crossroads (realrain.art) unites creator studios, live customization, and physical publishing.</p>
+          <p class="stage-sub">Unified identity, programmable rights, and our multimodal design runtime powering Crossroads, Merch Kodo, and ACG Daily.</p>
         </header>
 
         <div class="orbital-stage orbital-stage-quad" id="stageViewport">
-          <div class="orbital-ring" id="stageDeck" aria-label="Crossroads 3D showcase turntable">
-            <figure class="orbital-card stage-monolith glass-monolith is-center" data-ring-card="0">
-              <div class="stage-visual">
-                <img src="../assets/media/editions/edition-artwork.webp?v=20261118-8" alt="Original character master illustration" width="1280" height="1226" decoding="async" />
+          <div class="orbital-ring" id="stageDeck" aria-label="RealRain ecosystem 3D showcase">
+            <figure class="orbital-card stage-plate is-center" data-ring-card="0">
+              <div class="plate-art plate-art-worlds">
+                <img class="main-art" src="../assets/media/editions/edition-artwork.webp?v=20261119-1" alt="Crossroads original worlds and consumer remix storefront" width="1280" height="1226" decoding="async" />
               </div>
-              <figcaption class="stage-caption">
-                <div>
-                  <h3>Original Worlds</h3>
-                  <p>Character settings, master art, and protected remix boundaries.</p>
-                </div>
-                <span class="stage-badge">01</span>
+              <figcaption class="plate-meta">
+                <span class="plate-kicker">Crossroads · Consumer &amp; Remix</span>
+                <h3>Crossroads</h3>
+                <p>Web and mini-program storefront where fans discover original worlds and personalize editions effortlessly.</p>
               </figcaption>
             </figure>
 
-            <figure class="orbital-card stage-monolith glass-monolith" data-ring-card="1">
-              <div class="stage-visual stage-visual-studio">
-                <div class="scene-window">
-                  <div class="window-chrome" aria-hidden="true">
-                    <span></span><span></span><span></span>
-                    <b>realrain.art / workshop</b>
-                  </div>
-                  <img src="../assets/media/editions/crossroads-workshop.webp?v=20261118-8" alt="Crossroads interactive design studio canvas" width="1440" height="840" decoding="async" />
-                </div>
-                <div class="scene-float-badge">
-                  <img src="../assets/media/editions/edition-badges.webp?v=20261118-8" alt="75mm holographic metallic badges" width="1252" height="612" decoding="async" />
-                </div>
+            <figure class="orbital-card stage-plate" data-ring-card="1">
+              <div class="plate-art plate-art-kodo">
+                <img class="main-art" src="../assets/media/editions/crossroads-workshop.webp?v=20261119-1" alt="Merch Kodo design studio canvas and merchant publishing hub" width="1440" height="840" decoding="async" />
+                <img class="float-accent" src="../assets/media/editions/edition-badges.webp?v=20261119-1" alt="75mm holographic metallic badges" width="1252" height="612" decoding="async" />
               </div>
-              <figcaption class="stage-caption">
-                <div>
-                  <h3>Live Studio</h3>
-                  <p>Refine composition, frames, and craft specs live on canvas.</p>
-                </div>
-                <span class="stage-badge">02</span>
+              <figcaption class="plate-meta">
+                <span class="plate-kicker">Merch Kodo · Merchant Publishing</span>
+                <h3>Merch Kodo</h3>
+                <p>End-to-end merchandise studio, on-demand supply chain, branded storefronts, and multichannel fulfillment for IP and creators.</p>
               </figcaption>
             </figure>
 
-            <figure class="orbital-card stage-monolith glass-monolith" data-ring-card="2">
-              <div class="stage-visual stage-visual-cutout">
-                <img src="../assets/media/editions/edition-standee.webp?v=20261118-8" alt="Multi-layer acrylic desktop standee" width="697" height="912" decoding="async" />
+            <figure class="orbital-card stage-plate" data-ring-card="2">
+              <div class="plate-art plate-art-daily">
+                <svg class="daily-editorial-svg" viewBox="0 0 420 260" width="420" height="260" role="img" aria-label="ACG Daily programmable media, release calendar, and AI companion">
+                  <defs>
+                    <linearGradient id="dailyArcGradEn" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#8CA29B" stop-opacity="0.18" />
+                      <stop offset="50%" stop-color="#F4F3EF" stop-opacity="0.65" />
+                      <stop offset="100%" stop-color="#8CA29B" stop-opacity="0.18" />
+                    </linearGradient>
+                  </defs>
+                  <line x1="36" y1="54" x2="384" y2="54" stroke="rgba(255,255,255,0.09)" stroke-width="1" />
+                  <text x="36" y="42" fill="#A1A09C" font-size="9.5" letter-spacing="2.6" font-family="Inter, sans-serif">RAIN DAILY · PROGRAMMABLE MEDIA</text>
+                  <text x="384" y="42" text-anchor="end" fill="#6E6E6A" font-size="9.5" letter-spacing="1.8" font-family="Inter, sans-serif">07:00 · 24:00</text>
+                  <path d="M 48 168 Q 210 74 372 168" fill="none" stroke="url(#dailyArcGradEn)" stroke-width="1.2" />
+                  <circle cx="106" cy="142" r="3" fill="#8CA29B" />
+                  <circle cx="210" cy="121" r="4.5" fill="#F4F3EF" />
+                  <circle cx="210" cy="121" r="14" fill="none" stroke="rgba(244,243,239,0.22)" stroke-width="1" />
+                  <circle cx="314" cy="142" r="3" fill="#8CA29B" />
+                  <text x="210" y="176" text-anchor="middle" fill="#F4F3EF" font-size="28" font-weight="500" letter-spacing="1" font-family="Cormorant Garamond, Georgia, serif">ACG Daily</text>
+                  <text x="210" y="200" text-anchor="middle" fill="#A1A09C" font-size="11" letter-spacing="3.2" font-family="Inter, sans-serif">CHRONICLE · CALENDAR · COMPANION</text>
+                  <line x1="90" y1="222" x2="330" y2="222" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+                </svg>
               </div>
-              <figcaption class="stage-caption">
-                <div>
-                  <h3>Acrylic Standees</h3>
-                  <p>Multi-layer acrylic desktop standees crafted from master art.</p>
-                </div>
-                <span class="stage-badge">03</span>
+              <figcaption class="plate-meta">
+                <span class="plate-kicker">Rain Daily · Programmable Media</span>
+                <h3>ACG Daily</h3>
+                <p>Personal ACG chronicle, release calendar, and AI companion connecting daily fandom with physical editions.</p>
               </figcaption>
             </figure>
 
-            <figure class="orbital-card stage-monolith glass-monolith" data-ring-card="3">
-              <div class="stage-visual stage-visual-duo">
-                <img class="duo-cards" src="../assets/media/editions/edition-cards.webp?v=20261118-8" alt="Foil collector card editions" width="1112" height="702" decoding="async" />
-                <img class="duo-badges" src="../assets/media/editions/edition-badges.webp?v=20261118-8" alt="75mm double-flash metal badges" width="1252" height="612" decoding="async" />
+            <figure class="orbital-card stage-plate" data-ring-card="3">
+              <div class="plate-art plate-art-cutout">
+                <img src="../assets/media/editions/edition-standee.webp?v=20261119-1" alt="Multi-layer acrylic desktop standee" width="697" height="912" decoding="async" />
               </div>
-              <figcaption class="stage-caption">
-                <div>
-                  <h3>Badges &amp; Foil Prints</h3>
-                  <p>75mm metallic badges and foil collector cards published on Crossroads.</p>
-                </div>
-                <span class="stage-badge">04</span>
+              <figcaption class="plate-meta">
+                <span class="plate-kicker">Spatial Craft · On-Demand</span>
+                <h3>Layered Acrylic Standees</h3>
+                <p>Live design state compiled directly into multi-plane die-cut acrylic editions.</p>
+              </figcaption>
+            </figure>
+
+            <figure class="orbital-card stage-plate" data-ring-card="4">
+              <div class="plate-art plate-art-duo">
+                <img class="duo-cards" src="../assets/media/editions/edition-cards.webp?v=20261119-1" alt="Foil collector card editions" width="1112" height="702" decoding="async" />
+                <img class="duo-badges" src="../assets/media/editions/edition-badges.webp?v=20261119-1" alt="75mm double-flash metal badges" width="1252" height="612" decoding="async" />
+              </div>
+              <figcaption class="plate-meta">
+                <span class="plate-kicker">Collector Editions · Royalties</span>
+                <h3>Badges &amp; Cold-Foil Prints</h3>
+                <p>75mm holographic badges and cold-foil collector cards with automated creator royalties.</p>
               </figcaption>
             </figure>
           </div>
         </div>
 
         <div class="stage-foot">
-          <div class="orbital-controls" role="tablist" aria-label="Switch perspective">
-            <button class="orbital-pill is-active" type="button" role="tab" aria-selected="true" data-stage-tab="0">01 Worlds</button>
-            <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-stage-tab="1">02 Studio</button>
-            <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-stage-tab="2">03 Standees</button>
-            <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-stage-tab="3">04 Editions</button>
+          <div class="eco-bar" role="tablist" aria-label="Switch ecosystem showcase">
+            <button class="eco-tab is-active" type="button" role="tab" aria-selected="true" data-stage-tab="0">Crossroads</button>
+            <button class="eco-tab" type="button" role="tab" aria-selected="false" data-stage-tab="1">Merch Kodo</button>
+            <button class="eco-tab" type="button" role="tab" aria-selected="false" data-stage-tab="2">ACG Daily</button>
+            <button class="eco-tab" type="button" role="tab" aria-selected="false" data-stage-tab="3">Standees</button>
+            <button class="eco-tab" type="button" role="tab" aria-selected="false" data-stage-tab="4">Foil &amp; Badges</button>
           </div>
-          <a class="stage-link" href="https://realrain.art/">Explore Crossroads · realrain.art ↗</a>
+          <a class="stage-link" href="https://realrain.art/">Enter Crossroads · realrain.art ↗</a>
         </div>
       </div>
     </section>
 
-    <!-- CHAPTER 04: TEAM (PROXIMITY RIM-LIT MONOLITHS) -->
+    <!-- CHAPTER 04: TEAM (DE-BOXED ARCHITECTURAL COLUMNS) -->
     <section class="act team-act" id="team" data-chapter="3">
       <div class="container">
         <header class="act-header team-header">
-          <p class="eyebrow">03 / Founding Team</p>
+          <p class="eyebrow">03 / Team · Builders</p>
           <h2 class="act-title reveal-line">
             <span>Built across multimodal AI, creator culture, and judicial-grade rights.</span>
           </h2>
         </header>
 
         <div class="team-trio" id="teamTrack">
-          <article class="person-card glass-monolith proximity-rim" data-team-card="0">
+          <article class="person-card" data-team-card="0">
             <div class="person-top">
               <div class="person-head">
                 <h3>Beichen Xu</h3>
@@ -319,7 +326,7 @@
             </ul>
           </article>
 
-          <article class="person-card glass-monolith proximity-rim" data-team-card="1">
+          <article class="person-card" data-team-card="1">
             <div class="person-top">
               <div class="person-head">
                 <h3>Yishan Zhou</h3>
@@ -334,7 +341,7 @@
             </ul>
           </article>
 
-          <article class="person-card glass-monolith proximity-rim" data-team-card="2">
+          <article class="person-card" data-team-card="2">
             <div class="person-top">
               <div class="person-head">
                 <h3>Zhiguo Li</h3>
@@ -350,10 +357,10 @@
           </article>
         </div>
 
-        <div class="orbital-controls team-tabs" role="tablist" aria-label="Founding members">
-          <button class="orbital-pill is-active" type="button" role="tab" aria-selected="true" data-team-tab="0">Beichen Xu</button>
-          <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-team-tab="1">Yishan Zhou</button>
-          <button class="orbital-pill" type="button" role="tab" aria-selected="false" data-team-tab="2">Zhiguo Li</button>
+        <div class="team-tabs" role="tablist" aria-label="Founding members">
+          <button class="eco-tab is-active" type="button" role="tab" aria-selected="true" data-team-tab="0">Beichen Xu</button>
+          <button class="eco-tab" type="button" role="tab" aria-selected="false" data-team-tab="1">Yishan Zhou</button>
+          <button class="eco-tab" type="button" role="tab" aria-selected="false" data-team-tab="2">Zhiguo Li</button>
         </div>
 
         <div class="advisors-ledger">
@@ -384,11 +391,11 @@
         <div class="contact-spacer" aria-hidden="true"></div>
 
         <div class="contact-center" id="visionMonolith">
-          <p class="eyebrow">04 / Our Sole Vision</p>
+          <p class="eyebrow">04 / Vision · Wonderland</p>
           <h2 class="slogan-monolith platinum-text">Hack to the Wonderland</h2>
           <p class="vision-lead">Imagination is humanity's widest frontier, and what we love deserves a lasting place in daily life. Alongside creators, IP partners, and dreamers worldwide, RealRain is opening the passage from digital wonder to tactile reality.</p>
           <div class="contact-actions">
-            <a class="btn btn-luminous" href="https://realrain.art/">Visit Crossroads · realrain.art ↗</a>
+            <a class="btn btn-luminous" href="https://realrain.art/">Enter Crossroads ↗</a>
             <a class="contact-mail" href="mailto:contact@realrain.co">contact@realrain.co</a>
           </div>
         </div>
@@ -408,6 +415,6 @@
     </section>
   </main>
 
-  <script src="../js/main.js?v=20261118-8" defer></script>
+  <script src="../js/main.js?v=20261119-1" defer></script>
 </body>
 </html>
