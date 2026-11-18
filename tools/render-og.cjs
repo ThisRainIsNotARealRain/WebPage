@@ -218,7 +218,7 @@ const HTML = `<!doctype html>
     <div class="center">
       <div class="seal">REALRAIN · HACK TO THE WONDERLAND</div>
       <h1>让想象世界，<br>进入现实生活。</h1>
-      <p class="sub">正版 IP · AI 设计 · 实体周边发行 · 交汇之地 realrain.art</p>
+      <p class="sub">搭建数字想象与物理现实之间的桥梁 · 旗下社区：交汇之地 realrain.art</p>
     </div>
     <div class="bottom">
       <span>Hack to the Wonderland</span>

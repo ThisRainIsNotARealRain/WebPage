@@ -173,9 +173,9 @@
         var startT = performance.now();
         var drawGL = function () {
           var nowSec = performance.now() * 0.001;
-          state.scroll += (state.scrollTarget - state.scroll) * 0.08;
-          state.mx += (state.mxTarget - state.mx) * 0.08;
-          state.my += (state.myTarget - state.my) * 0.08;
+          state.scroll += (state.scrollTarget - state.scroll) * 0.14;
+          state.mx += (state.mxTarget - state.mx) * 0.14;
+          state.my += (state.myTarget - state.my) * 0.14;
 
           gl.uniform2f(uRes, canvas.width, canvas.height);
           gl.uniform1f(uTime, reducedMotion ? 1.5 : (performance.now() - startT) * 0.001);
@@ -246,10 +246,12 @@
       }
     }
 
-    var rotX = 0.22;
-    var rotY = -0.28;
-    var targetX = 0.22;
-    var targetY = -0.28;
+    var rotX = 0.14;
+    var rotY = -0.18;
+    var targetX = 0.14;
+    var targetY = -0.18;
+    var gazeX = 0;
+    var gazeY = 0;
     var velX = 0;
     var velY = 0;
     var pulse = 0;
@@ -267,26 +269,39 @@
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
     });
 
-    canvas.addEventListener("pointermove", function (e) {
+    window.addEventListener("pointermove", function (e) {
       if (dragging) {
         var dx = e.clientX - lastPX;
         var dy = e.clientY - lastPY;
-        targetY += dx * 0.0085;
-        targetX += dy * 0.0085;
+        targetY += dx * 0.009;
+        targetX += dy * 0.009;
         velY = dx * 0.0045;
         velX = dy * 0.0035;
         lastPX = e.clientX;
         lastPY = e.clientY;
-      } else {
+      } else if (visible && e.pointerType !== "touch") {
         var r = canvas.getBoundingClientRect();
-        var lx = (e.clientX - r.left) / Math.max(1, r.width) - 0.5;
-        var ly = (e.clientY - r.top) / Math.max(1, r.height) - 0.5;
-        targetY = -0.24 + lx * 0.16;
-        targetX = 0.20 + ly * 0.14;
+        if (!r.width || !r.height) return;
+        var orbCX = r.left + r.width * 0.5;
+        var orbCY = r.top + r.height * 0.5;
+        var spanX = Math.max(260, window.innerWidth * 0.52);
+        var spanY = Math.max(220, window.innerHeight * 0.48);
+        gazeX = Math.max(-1, Math.min(1, (e.clientX - orbCX) / spanX));
+        gazeY = Math.max(-1, Math.min(1, (e.clientY - orbCY) / spanY));
+        // Front hemisphere has nz > 0; x1 = nx*cosY + nz*sinY, y2 = ny*cosX - z1*sinX
+        // So targetY = +gazeX turns the front dome horizontally toward the cursor,
+        // and targetX = -gazeY tilts it vertically toward the cursor!
+        targetY = gazeX * 0.68;
+        targetX = -gazeY * 0.56;
+        velX *= 0.2;
+        velY *= 0.2;
       }
-    });
+    }, { passive: true });
 
     window.addEventListener("pointerup", function () {
+      dragging = false;
+    });
+    window.addEventListener("pointercancel", function () {
       dragging = false;
     });
 
@@ -321,13 +336,16 @@
       if (!dragging) {
         targetY += velY;
         targetX += velX;
-        velY *= 0.94;
-        velX *= 0.94;
+        velY *= 0.92;
+        velX *= 0.92;
       }
 
-      rotX += (targetX - rotX) * 0.09;
-      rotY += (targetY - rotY) * 0.09;
-      pulse *= 0.93;
+      rotX += (targetX - rotX) * 0.18;
+      rotY += (targetY - rotY) * 0.18;
+      pulse *= 0.92;
+
+      canvas.dataset.rotX = rotX.toFixed(3);
+      canvas.dataset.rotY = rotY.toFixed(3);
 
       var t = reducedMotion ? 0 : performance.now() * 0.0018;
       var radius = Math.min(w, h) * 0.38;
@@ -339,9 +357,16 @@
       var cosX = Math.cos(rotX);
       var sinX = Math.sin(rotX);
 
-      var halo = ctx.createRadialGradient(cx, cy, radius * 0.1, cx, cy, radius * 1.25);
-      halo.addColorStop(0, "rgba(218, 220, 215, 0.12)");
-      halo.addColorStop(0.6, "rgba(140, 162, 155, 0.04)");
+      var halo = ctx.createRadialGradient(
+        cx + gazeX * radius * 0.26,
+        cy + gazeY * radius * 0.26,
+        radius * 0.1,
+        cx,
+        cy,
+        radius * 1.25
+      );
+      halo.addColorStop(0, "rgba(218, 220, 215, 0.14)");
+      halo.addColorStop(0.6, "rgba(140, 162, 155, 0.045)");
       halo.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = halo;
       ctx.beginPath();
@@ -360,12 +385,14 @@
         var z2 = pt.ny * sinX + z1 * cosX;
 
         var persp = 2.6 / (2.6 - z2);
+        var cursorLit = Math.max(0, (x1 * gazeX + y2 * gazeY) * 0.28);
         projected.push({
           sx: cx + x1 * radius * persp,
           sy: cy + y2 * radius * persp,
           r: Math.max(0.7, pt.baseR * (radius * 0.032) * persp),
           z: z2,
-          alpha: Math.min(0.95, Math.max(0.16, (0.45 + z2 * 0.55) * pt.baseR + pulse * 0.2))
+          lit: cursorLit,
+          alpha: Math.min(0.96, Math.max(0.16, (0.45 + z2 * 0.55) * pt.baseR + pulse * 0.2 + cursorLit * 0.28))
         });
       }
 
@@ -373,7 +400,7 @@
 
       for (var j = 0; j < projected.length; j++) {
         var p = projected[j];
-        var mixLight = Math.max(0, Math.min(1, p.z + 0.4));
+        var mixLight = Math.max(0, Math.min(1, p.z + 0.4 + p.lit * 0.7));
         var rCol = Math.round(142 + mixLight * 98);
         var gCol = Math.round(146 + mixLight * 95);
         var bCol = Math.round(142 + mixLight * 92);
@@ -465,8 +492,6 @@
 
     var cards = Array.prototype.slice.call(ring.querySelectorAll("[data-ring-card]"));
     var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-stage-tab]"));
-    var prevBtn = document.getElementById("stagePrev");
-    var nextBtn = document.getElementById("stageNext");
     var total = cards.length;
     if (!total) return;
 
@@ -474,6 +499,7 @@
     var current = 0;
     var target = 0;
     var activeIdx = 0;
+    var hoveredIdx = -1;
     var rafId = 0;
     var lastTime = 0;
 
@@ -482,7 +508,10 @@
     var didDrag = false;
     var pointerId = null;
     var startX = 0;
+    var startY = 0;
     var lastX = 0;
+    var downTime = 0;
+    var downCardIdx = null;
     var dragVel = 0;
     var dragStartIdx = 0;
 
@@ -503,8 +532,8 @@
     function layoutRing() {
       var stageW = stage.clientWidth || window.innerWidth;
       var isMobile = window.innerWidth <= 960;
-      var rx = isMobile ? Math.round(stageW * 0.44) : Math.min(395, Math.round(stageW * 0.35));
-      var rz = isMobile ? 125 : 150;
+      var rx = isMobile ? Math.round(stageW * 0.44) : Math.min(418, Math.round(stageW * 0.375));
+      var rz = isMobile ? 110 : 140;
       var maxTilt = isMobile ? 13 : 15;
       var stepAngle = (Math.PI * 2) / total;
 
@@ -514,16 +543,21 @@
         var cosT = Math.cos(theta);
         var sinT = Math.sin(theta);
 
+        var isFlankHover = hoveredIdx === i && Math.abs(delta) > 0.25 && cosT >= -0.35;
         var x = sinT * rx;
-        var z = (cosT - 1) * rz;
+        // Center card sits at +rz, flanking cards sit at z = 0 (never behind z=0 plane),
+        // keeping 3D hit-testing unambiguous on every exposed flanking card!
+        var z = cosT * rz;
         var rotY = -sinT * maxTilt;
-        var scale = 0.78 + 0.22 * ((cosT + 1) * 0.5);
+        var scale = 0.72 + 0.185 * ((cosT + 1) * 0.5) + (isFlankHover ? 0.024 : 0);
 
         var dist = Math.abs(delta);
         var opacity = cosT < -0.25
           ? 0.08
-          : Math.max(0.14, 1.0 - dist * (isMobile ? 0.60 : 0.38));
-        var bright = 0.70 + 0.30 * Math.max(0, cosT);
+          : isFlankHover
+            ? 0.90
+            : Math.max(0.18, 1.0 - dist * (isMobile ? 0.58 : 0.30));
+        var bright = isFlankHover ? 0.95 : (0.80 + 0.20 * Math.max(0, cosT));
         var zIdx = Math.round((cosT + 2) * 20);
 
         var el = cards[i];
@@ -549,8 +583,8 @@
       if (!dragging) {
         var dt = lastTime ? Math.min(0.05, Math.max(0.004, (now - lastTime) * 0.001)) : 0.016;
         lastTime = now;
-        // Monotonic exponential critical damping: glides cleanly with 0% overshoot
-        var alpha = 1 - Math.exp(-11 * dt);
+        // Fast monotonic exponential critical damping: glides cleanly in ~200ms with 0% overshoot
+        var alpha = 1 - Math.exp(-20 * dt);
         current += (target - current) * alpha;
         layoutRing();
         if (Math.abs(target - current) > 0.0012) {
@@ -582,51 +616,55 @@
       });
     }
 
-    if (prevBtn) {
-      prevBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        spinTo(activeIdx - 1);
-      });
-    }
-    if (nextBtn) {
-      nextBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        spinTo(activeIdx + 1);
-      });
-    }
-
-    // Click any visible card to smoothly rotate directly to it (desktop click-first!)
+    // Hover lift + direct click on any visible background card rotates straight to it
     for (var c = 0; c < cards.length; c++) {
-      cards[c].addEventListener("click", function (e) {
-        if (didDrag) return;
-        if (e.target && e.target.closest && e.target.closest("a, button")) return;
-        var cardIdx = parseInt(this.getAttribute("data-ring-card"), 10);
-        if (cardIdx !== activeIdx) {
-          spinTo(cardIdx);
-        }
-      });
+      (function (idx, el) {
+        el.addEventListener("pointerenter", function () {
+          if (window.innerWidth <= 960) return;
+          hoveredIdx = idx;
+          if (!rafId && !dragging) layoutRing();
+        });
+        el.addEventListener("pointerleave", function () {
+          if (hoveredIdx === idx) {
+            hoveredIdx = -1;
+            if (!rafId && !dragging) layoutRing();
+          }
+        });
+        el.addEventListener("click", function (e) {
+          if (didDrag) return;
+          if (e.target && e.target.closest && e.target.closest("a, button")) return;
+          if (idx !== activeIdx) {
+            spinTo(idx);
+          }
+        });
+      })(c, cards[c]);
     }
 
-    ring.addEventListener("pointerdown", function (e) {
+    stage.addEventListener("pointerdown", function (e) {
       if (e.target && e.target.closest && e.target.closest("a, button")) return;
+      var cardEl = e.target && e.target.closest ? e.target.closest("[data-ring-card]") : null;
       pointerActive = true;
       dragging = false;
       didDrag = false;
       pointerId = e.pointerId;
       startX = e.clientX;
+      startY = e.clientY;
       lastX = e.clientX;
+      downTime = performance.now();
+      downCardIdx = cardEl ? parseInt(cardEl.getAttribute("data-ring-card"), 10) : null;
       dragVel = 0;
       dragStartIdx = target;
     });
 
-    ring.addEventListener("pointermove", function (e) {
+    stage.addEventListener("pointermove", function (e) {
       if (!pointerActive || pointerId !== e.pointerId) return;
       var dx = e.clientX - startX;
-      if (!dragging && Math.abs(dx) > 8) {
+      var dragThreshold = e.pointerType === "mouse" ? 18 : 8;
+      if (!dragging && Math.abs(dx) > dragThreshold) {
         dragging = true;
         didDrag = true;
-        ring.classList.add("is-dragging");
-        try { ring.setPointerCapture(e.pointerId); } catch (err) {}
+        stage.classList.add("is-dragging");
+        try { stage.setPointerCapture(e.pointerId); } catch (err) {}
       }
       if (!dragging) return;
 
@@ -641,16 +679,26 @@
     function endDrag(e) {
       if (!pointerActive || pointerId !== e.pointerId) return;
       pointerActive = false;
+      var dx = e.clientX - startX;
+      var dy = e.clientY - startY;
+      var dist = Math.hypot(dx, dy);
+      var elapsed = performance.now() - downTime;
+
       if (!dragging) {
         pointerId = null;
         return;
       }
 
-      var dx = e.clientX - startX;
       dragging = false;
       pointerId = null;
-      ring.classList.remove("is-dragging");
-      try { ring.releasePointerCapture(e.pointerId); } catch (err) {}
+      stage.classList.remove("is-dragging");
+      try { stage.releasePointerCapture(e.pointerId); } catch (err) {}
+
+      if (dist < 26 && elapsed < 340 && downCardIdx !== null && downCardIdx !== activeIdx) {
+        spinTo(downCardIdx);
+        setTimeout(function () { didDrag = false; }, 60);
+        return;
+      }
 
       var dragScale = Math.max(220, (stage.clientWidth || 360) * 0.44);
       var projected = dragStartIdx - dx / dragScale - dragVel * 0.55;
@@ -663,11 +711,11 @@
       syncTabs(snapped);
       lastTime = performance.now();
       if (!rafId) rafId = requestAnimationFrame(stepPhysics);
-      setTimeout(function () { didDrag = false; }, 80);
+      setTimeout(function () { didDrag = false; }, 60);
     }
 
-    ring.addEventListener("pointerup", endDrag);
-    ring.addEventListener("pointercancel", endDrag);
+    stage.addEventListener("pointerup", endDrag);
+    stage.addEventListener("pointercancel", endDrag);
 
     // Left / Right keyboard navigation when Chapter 03 is active
     document.addEventListener("keydown", function (e) {
@@ -688,7 +736,7 @@
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.2 && Math.abs(e.deltaX) > 20) {
         e.preventDefault();
         var now = performance.now();
-        if (now - wheelLock > 260) {
+        if (now - wheelLock > 180) {
           wheelLock = now;
           spinTo(activeIdx + (e.deltaX > 0 ? 1 : -1));
         }
