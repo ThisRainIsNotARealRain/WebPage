@@ -23,7 +23,7 @@ const WORDMARK_SVG = fs
   .readFileSync(path.join(ROOT, "assets", "logo", "realrain-wordmark-light.svg"), "utf8")
   .replace(/<\?xml[^>]*\?>\s*/i, "");
 
-const SERIF_FONT = readDataUri("assets/fonts/noto-serif-sc-600.woff2", "font/woff2");
+const SERIF_FONT = readDataUri("assets/fonts/noto-serif-sc-500.woff2", "font/woff2");
 const SANS_FONT = readDataUri("assets/fonts/noto-sans-sc-400.woff2", "font/woff2");
 
 // Parametric 3D dot-wave SVG sculpture matching #orbCanvas
@@ -60,9 +60,9 @@ function buildDotWaveSvg() {
         const rad = Math.max(0.8, baseR * radius * 0.032 * persp).toFixed(2);
         const alpha = Math.min(0.95, Math.max(0.18, (0.45 + z2 * 0.55) * baseR)).toFixed(3);
         const mix = Math.max(0, Math.min(1, z2 + 0.4));
-        const cr = Math.round(112 + mix * 110);
-        const cg = Math.round(143 + mix * 98);
-        const cb = Math.round(136 + mix * 96);
+        const cr = Math.round(142 + mix * 98);
+        const cg = Math.round(146 + mix * 95);
+        const cb = Math.round(142 + mix * 92);
         dots.push(`<circle cx="${sx}" cy="${sy}" r="${rad}" fill="rgb(${cr},${cg},${cb})" fill-opacity="${alpha}" />`);
       }
     }
@@ -71,13 +71,13 @@ function buildDotWaveSvg() {
     <svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <radialGradient id="orb-halo" cx="80%" cy="51%" r="40%">
-          <stop offset="0%" stop-color="#A4C8BF" stop-opacity="0.22" />
-          <stop offset="55%" stop-color="#708F88" stop-opacity="0.06" />
-          <stop offset="100%" stop-color="#040606" stop-opacity="0" />
+          <stop offset="0%" stop-color="#D4D8D5" stop-opacity="0.14" />
+          <stop offset="55%" stop-color="#8CA29B" stop-opacity="0.04" />
+          <stop offset="100%" stop-color="#050606" stop-opacity="0" />
         </radialGradient>
         <radialGradient id="aurora" cx="24%" cy="80%" r="55%">
-          <stop offset="0%" stop-color="#1E3934" stop-opacity="0.45" />
-          <stop offset="100%" stop-color="#040606" stop-opacity="0" />
+          <stop offset="0%" stop-color="#141C1B" stop-opacity="0.45" />
+          <stop offset="100%" stop-color="#050606" stop-opacity="0" />
         </radialGradient>
       </defs>
       <rect width="1200" height="630" fill="url(#aurora)" />
@@ -96,7 +96,7 @@ const HTML = `<!doctype html>
   @font-face {
     font-family: "RealRain Serif SC";
     src: url("${SERIF_FONT}") format("woff2");
-    font-weight: 600;
+    font-weight: 500;
   }
   @font-face {
     font-family: "RealRain Sans SC";
@@ -108,8 +108,8 @@ const HTML = `<!doctype html>
     width: 1200px;
     height: 630px;
     overflow: hidden;
-    background: #040606;
-    color: #F6F8F6;
+    background: #050606;
+    color: #F4F3EF;
     font-family: "RealRain Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     -webkit-font-smoothing: antialiased;
   }
@@ -121,7 +121,7 @@ const HTML = `<!doctype html>
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: #040606;
+    background: #050606;
   }
   .bg-layer {
     position: absolute;
@@ -142,7 +142,7 @@ const HTML = `<!doctype html>
     align-items: center;
     justify-content: space-between;
     padding-bottom: 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
   .brand {
     display: flex;
@@ -153,54 +153,54 @@ const HTML = `<!doctype html>
   .brand .wordmark svg { height: 24px; width: auto; display: block; }
   .brand-cn {
     padding-left: 16px;
-    border-left: 1px solid rgba(255, 255, 255, 0.22);
-    font-size: 16px;
-    color: #A4C8BF;
+    border-left: 1px solid rgba(255, 255, 255, 0.16);
+    font-size: 15px;
+    color: #A1A09C;
     letter-spacing: 0.08em;
   }
   .domain {
-    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-    font-size: 14px;
-    letter-spacing: 0.14em;
-    color: #98A39D;
+    font-family: "Inter", "RealRain Sans SC", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    color: #6E6E6A;
   }
   .center {
     max-width: 720px;
   }
   .seal {
-    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-    font-size: 13px;
+    font-family: "Inter", "RealRain Sans SC", sans-serif;
+    font-size: 11.5px;
     letter-spacing: 0.18em;
-    color: #A4C8BF;
+    color: #8E8E8A;
     margin-bottom: 18px;
   }
   h1 {
     font-family: "RealRain Serif SC", Georgia, serif;
     font-size: 62px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.16;
     letter-spacing: -0.02em;
-    color: #F6F8F6;
+    color: #F4F3EF;
   }
   .sub {
     margin-top: 20px;
-    font-size: 20px;
-    color: #98A39D;
+    font-size: 19px;
+    color: #8E8E8A;
   }
   .bottom {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-top: 22px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 15px;
-    color: #98A39D;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 14px;
+    color: #8E8E8A;
   }
   .bottom b {
-    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-family: "Inter", "RealRain Sans SC", sans-serif;
     font-weight: 500;
-    letter-spacing: 0.12em;
-    color: #A4C8BF;
+    letter-spacing: 0.14em;
+    color: #F4F3EF;
   }
 </style>
 </head>

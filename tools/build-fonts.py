@@ -100,12 +100,12 @@ def main() -> None:
     sans_src = resolve_font(SANS_PRIMARY, SANS_FALLBACK, "Noto Sans SC")
     text = collect_text()
 
-    build_weight(serif_src, 600, FONTS_DIR / "noto-serif-sc-600.woff2", text)
+    build_weight(serif_src, 460, FONTS_DIR / "noto-serif-sc-500.woff2", text)
     build_weight(sans_src, 400, FONTS_DIR / "noto-sans-sc-400.woff2", text)
     build_weight(sans_src, 500, FONTS_DIR / "noto-sans-sc-500.woff2", text)
 
-    # Remove obsolete subsets superseded by Serif 600 + Sans 400/500.
-    for obsolete in ("noto-sans-sc-600.woff2", "noto-serif-sc-500.woff2"):
+    # Remove obsolete subsets superseded by Serif 500 (instantiated @ 460) + Sans 400/500.
+    for obsolete in ("noto-sans-sc-600.woff2", "noto-serif-sc-600.woff2"):
         old = FONTS_DIR / obsolete
         if old.exists():
             old.unlink()

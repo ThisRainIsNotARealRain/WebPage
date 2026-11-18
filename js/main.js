@@ -4,8 +4,8 @@
   document.documentElement.classList.add("js-ready");
 
   /* =========================================================
-     1. WebGL Volumetric Liquid Aurora & Caustic Ripple Shader
-        (with seamless 2D Canvas atmospheric fallback)
+     1. WebGL Volumetric Smoked Mineral Aurora & Ripple Shader
+        (with seamless 2D Canvas fallback)
      ========================================================= */
   function initVolumetricBackdrop() {
     var canvas = document.getElementById("glCanvas");
@@ -102,26 +102,24 @@
         "  vec2 q = vec2(fbm(p * 1.4 + t + uScroll * 1.1), fbm(p * 1.4 + vec2(4.2, 1.7) - t * 0.8));",
         "  float f = fbm(p * 1.9 + q * 1.65 + vec2(uScroll * 0.8, -uScroll * 0.5));",
         "",
-        "  // Caustic ribbon highlight",
         "  float ribbon = smoothstep(0.42, 0.78, f);",
-        "  float filament = pow(smoothstep(0.55, 0.88, f), 2.2);",
+        "  float filament = pow(smoothstep(0.56, 0.88, f), 2.2);",
         "",
-        "  // Interactive shockwave ripple",
         "  vec2 rp = (uv - uRipple) * vec2(aspect, 1.0);",
         "  float rd = length(rp);",
         "  float wave = 0.0;",
         "  if (uRippleAge >= 0.0 && uRippleAge < 2.2) {",
         "    float radius = uRippleAge * 0.55;",
-        "    wave = exp(-abs(rd - radius) * 28.0) * exp(-uRippleAge * 1.4) * 0.35;",
+        "    wave = exp(-abs(rd - radius) * 28.0) * exp(-uRippleAge * 1.4) * 0.30;",
         "  }",
         "",
-        "  vec3 baseObsidian = vec3(0.016, 0.024, 0.022);",
-        "  vec3 deepCeladon = vec3(0.085, 0.160, 0.145);",
-        "  vec3 silkMist = vec3(0.34, 0.48, 0.44);",
+        "  vec3 baseObsidian = vec3(0.018, 0.020, 0.020);",
+        "  vec3 mineralStone = vec3(0.062, 0.088, 0.084);",
+        "  vec3 silverMist = vec3(0.30, 0.34, 0.33);",
         "",
-        "  vec3 col = mix(baseObsidian, deepCeladon, ribbon * 0.94);",
-        "  col += silkMist * (filament * 0.28 + wave);",
-        "  col += vec3(0.20, 0.29, 0.27) * exp(-md * 2.8) * 0.24;",
+        "  vec3 col = mix(baseObsidian, mineralStone, ribbon * 0.92);",
+        "  col += silverMist * (filament * 0.25 + wave);",
+        "  col += vec3(0.18, 0.20, 0.19) * exp(-md * 2.8) * 0.22;",
         "",
         "  gl_FragColor = vec4(col, 1.0);",
         "}"
@@ -196,7 +194,6 @@
       }
     }
 
-    // Fallback 2D atmospheric canvas if WebGL is unavailable
     var ctx = canvas.getContext("2d");
     if (!ctx) return;
     function resize2D() {
@@ -208,12 +205,12 @@
     function draw2D() {
       var w = canvas.width;
       var h = canvas.height;
-      ctx.fillStyle = "#040606";
+      ctx.fillStyle = "#050606";
       ctx.fillRect(0, 0, w, h);
       var g = ctx.createRadialGradient(w * state.mxTarget, h * (1 - state.myTarget), 20, w * 0.5, h * 0.5, Math.max(w, h) * 0.75);
-      g.addColorStop(0, "rgba(112, 143, 136, 0.22)");
-      g.addColorStop(0.55, "rgba(42, 68, 63, 0.08)");
-      g.addColorStop(1, "rgba(4, 6, 6, 0)");
+      g.addColorStop(0, "rgba(140, 162, 155, 0.16)");
+      g.addColorStop(0.55, "rgba(38, 46, 44, 0.07)");
+      g.addColorStop(1, "rgba(5, 6, 6, 0)");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, w, h);
       if (!reducedMotion) requestAnimationFrame(draw2D);
@@ -222,8 +219,8 @@
   }
 
   /* =========================================================
-     2. Interactive 3D RealRain Parametric Dot-Wave Sculpture (#orbCanvas)
-        Derived from RealRain's 19x19 Concentric Logo Matrix
+     2. Interactive 3D RealRain Dot-Wave Sculpture (#orbCanvas)
+        with Inertial Spin Physics
      ========================================================= */
   function initOrbSculpture() {
     var canvas = document.getElementById("orbCanvas");
@@ -232,7 +229,6 @@
     if (!ctx) return;
     var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // 19x19 circular brand dot grid
     var points = [];
     for (var row = 0; row < 19; row++) {
       for (var col = 0; col < 19; col++) {
@@ -254,6 +250,8 @@
     var rotY = -0.28;
     var targetX = 0.22;
     var targetY = -0.28;
+    var velX = 0;
+    var velY = 0;
     var pulse = 0;
     var dragging = false;
     var lastPX = 0;
@@ -263,14 +261,20 @@
       dragging = true;
       lastPX = e.clientX;
       lastPY = e.clientY;
+      velX = 0;
+      velY = 0;
       pulse = 1.0;
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
     });
 
     canvas.addEventListener("pointermove", function (e) {
       if (dragging) {
-        targetY += (e.clientX - lastPX) * 0.008;
-        targetX += (e.clientY - lastPY) * 0.008;
+        var dx = e.clientX - lastPX;
+        var dy = e.clientY - lastPY;
+        targetY += dx * 0.0085;
+        targetX += dy * 0.0085;
+        velY = dx * 0.0045;
+        velX = dy * 0.0035;
         lastPX = e.clientX;
         lastPY = e.clientY;
       } else {
@@ -285,6 +289,11 @@
     window.addEventListener("pointerup", function () {
       dragging = false;
     });
+
+    window.addEventListener("scroll", function () {
+      var heroFactor = Math.min(1, window.scrollY / Math.max(1, window.innerHeight));
+      targetX = 0.22 + heroFactor * 0.35;
+    }, { passive: true });
 
     var w = 0;
     var h = 0;
@@ -314,8 +323,15 @@
       rafId = 0;
       ctx.clearRect(0, 0, w, h);
 
-      rotX += (targetX - rotX) * 0.07;
-      rotY += (targetY - rotY) * 0.07;
+      if (!dragging) {
+        targetY += velY;
+        targetX += velX;
+        velY *= 0.94;
+        velX *= 0.94;
+      }
+
+      rotX += (targetX - rotX) * 0.09;
+      rotY += (targetY - rotY) * 0.09;
       pulse *= 0.93;
 
       var t = reducedMotion ? 0 : performance.now() * 0.0018;
@@ -328,10 +344,9 @@
       var cosX = Math.cos(rotX);
       var sinX = Math.sin(rotX);
 
-      // Ambient halo behind sculpture
       var halo = ctx.createRadialGradient(cx, cy, radius * 0.1, cx, cy, radius * 1.25);
-      halo.addColorStop(0, "rgba(164, 200, 191, 0.20)");
-      halo.addColorStop(0.6, "rgba(112, 143, 136, 0.06)");
+      halo.addColorStop(0, "rgba(218, 220, 215, 0.12)");
+      halo.addColorStop(0.6, "rgba(140, 162, 155, 0.04)");
       halo.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = halo;
       ctx.beginPath();
@@ -344,7 +359,6 @@
         var wave = Math.sin(pt.dist * 6.4 - t) * 0.12 + Math.sin(pt.dist * 10 - t * 1.8) * pulse * 0.18;
         var nz = Math.sqrt(Math.max(0.0, 1.0 - pt.dist * pt.dist * 0.65)) * 0.42 + wave;
 
-        // Rotate Y then X
         var x1 = pt.nx * cosY + nz * sinY;
         var z1 = -pt.nx * sinY + nz * cosY;
         var y2 = pt.ny * cosX - z1 * sinX;
@@ -356,7 +370,7 @@
           sy: cy + y2 * radius * persp,
           r: Math.max(0.7, pt.baseR * (radius * 0.032) * persp),
           z: z2,
-          alpha: Math.min(0.96, Math.max(0.16, (0.45 + z2 * 0.55) * pt.baseR + pulse * 0.2))
+          alpha: Math.min(0.95, Math.max(0.16, (0.45 + z2 * 0.55) * pt.baseR + pulse * 0.2))
         });
       }
 
@@ -365,9 +379,9 @@
       for (var j = 0; j < projected.length; j++) {
         var p = projected[j];
         var mixLight = Math.max(0, Math.min(1, p.z + 0.4));
-        var rCol = Math.round(112 + mixLight * 110);
-        var gCol = Math.round(143 + mixLight * 98);
-        var bCol = Math.round(136 + mixLight * 96);
+        var rCol = Math.round(142 + mixLight * 98);
+        var gCol = Math.round(146 + mixLight * 95);
+        var bCol = Math.round(142 + mixLight * 92);
         ctx.fillStyle = "rgba(" + rCol + "," + gCol + "," + bCol + "," + p.alpha.toFixed(3) + ")";
         ctx.beginPath();
         ctx.arc(p.sx, p.sy, p.r, 0, Math.PI * 2);
@@ -383,178 +397,278 @@
   }
 
   /* =========================================================
-     3. Optical Showcase Stage in Chapter 03 (#stageViewport)
+     3. Physics-Driven 3D Orbital Ring Carousel Engine
+        Used in Chapter 02, Chapter 03 (360°), and Chapter 04 (<=960px)
      ========================================================= */
-  function initShowcaseStage() {
-    var platform = document.getElementById("platform");
-    var layout = platform ? platform.querySelector(".showcase-layout") : null;
-    var viewport = document.getElementById("stageViewport");
-    var sheen = document.getElementById("stageSheen");
-    var captionEl = document.getElementById("showcaseMobileCaption");
-    var scenes = viewport ? Array.prototype.slice.call(viewport.querySelectorAll(".stage-scene")) : [];
-    var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-stage-tab]"));
-    if (!viewport || !scenes.length) return;
-
-    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var finePointer = window.matchMedia("(pointer: fine)").matches;
-    var total = scenes.length;
-    var active = 0;
-    var autoTimer = 0;
-    var paused = false;
-
-    function triggerSheen() {
-      if (!sheen || reducedMotion) return;
-      sheen.classList.remove("is-sweeping");
-      void sheen.offsetWidth;
-      sheen.classList.add("is-sweeping");
-    }
-
-    function selectScene(nextIdx, animateSheen) {
-      var target = ((nextIdx % total) + total) % total;
-      var dir = nextIdx > active ? 1 : -1;
-      if (target === 0 && active === total - 1 && nextIdx >= total) dir = 1;
-      if (target === total - 1 && active === 0 && nextIdx < 0) dir = -1;
-
-      active = target;
-      viewport.style.setProperty("--dir", String(dir));
-
-      for (var i = 0; i < scenes.length; i++) {
-        scenes[i].classList.toggle("is-active", i === active);
-      }
-
-      for (var t = 0; t < tabs.length; t++) {
-        var idx = parseInt(tabs[t].getAttribute("data-stage-tab"), 10);
-        var isMatch = idx === active;
-        tabs[t].classList.toggle("is-active", isMatch);
-        tabs[t].setAttribute("aria-selected", isMatch ? "true" : "false");
-        if (isMatch && captionEl) {
-          captionEl.textContent = tabs[t].getAttribute("data-caption") || "";
-        }
-      }
-
-      if (animateSheen !== false) triggerSheen();
-    }
-
-    function scheduleAuto() {
-      if (autoTimer) {
-        clearInterval(autoTimer);
-        autoTimer = 0;
-      }
-      if (reducedMotion || paused) return;
-      autoTimer = setInterval(function () {
-        if (platform && platform.classList.contains("is-active")) {
-          selectScene(active + 1, true);
-        }
-      }, 5600);
-    }
-
-    function setPaused(nextPaused) {
-      paused = nextPaused;
-      if (layout) layout.classList.toggle("is-paused", paused);
-      if (paused && autoTimer) {
-        clearInterval(autoTimer);
-        autoTimer = 0;
-      } else if (!paused) {
-        scheduleAuto();
-      }
-    }
-
-    for (var t = 0; t < tabs.length; t++) {
-      tabs[t].addEventListener("click", function () {
-        var next = parseInt(this.getAttribute("data-stage-tab"), 10);
-        if (next !== active) selectScene(next, true);
-        scheduleAuto();
-      });
-    }
-
-    if (layout) {
-      layout.addEventListener("pointerenter", function () { setPaused(true); });
-      layout.addEventListener("pointerleave", function () { setPaused(false); });
-      layout.addEventListener("focusin", function () { setPaused(true); });
-      layout.addEventListener("focusout", function () { setPaused(false); });
-    }
-
-    if (finePointer && !reducedMotion) {
-      viewport.addEventListener("pointermove", function (e) {
-        var r = viewport.getBoundingClientRect();
-        var nx = (e.clientX - r.left) / Math.max(1, r.width) - 0.5;
-        var ny = (e.clientY - r.top) / Math.max(1, r.height) - 0.5;
-        viewport.style.setProperty("--px", (nx * 18).toFixed(1) + "px");
-        viewport.style.setProperty("--py", (ny * 14).toFixed(1) + "px");
-      });
-      viewport.addEventListener("pointerleave", function () {
-        viewport.style.setProperty("--px", "0px");
-        viewport.style.setProperty("--py", "0px");
-      });
-    }
-
-    // Horizontal swipe/drag gesture on optical stage
-    var pointerId = null;
-    var startX = 0;
-
-    viewport.addEventListener("pointerdown", function (e) {
-      pointerId = e.pointerId;
-      startX = e.clientX;
-      viewport.classList.add("is-dragging");
-      try { viewport.setPointerCapture(e.pointerId); } catch (err) {}
-    });
-
-    function onEnd(e) {
-      if (pointerId !== e.pointerId) return;
-      var dx = e.clientX - startX;
-      pointerId = null;
-      viewport.classList.remove("is-dragging");
-      try { viewport.releasePointerCapture(e.pointerId); } catch (err) {}
-
-      if (Math.abs(dx) > 32) {
-        selectScene(dx < 0 ? active + 1 : active - 1, true);
-        scheduleAuto();
-      }
-    }
-
-    viewport.addEventListener("pointerup", onEnd);
-    viewport.addEventListener("pointercancel", onEnd);
-
-    selectScene(0, false);
-    scheduleAuto();
+  function shortestSignedDelta(idx, center, total) {
+    var raw = ((idx - center) % total + total) % total;
+    if (raw > total * 0.5) raw -= total;
+    return raw;
   }
 
-  function initTeamCarousel() {
-    var track = document.getElementById("teamTrack");
-    var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-team-tab]"));
-    var cards = track ? Array.prototype.slice.call(track.querySelectorAll("[data-team-card]")) : [];
-    if (!track || !tabs.length || !cards.length) return;
+  function createOrbitalRing(cfg) {
+    var stage = cfg.stage;
+    var ring = cfg.ring;
+    if (!stage || !ring) return null;
 
-    function syncTab(idx) {
+    var cards = Array.prototype.slice.call(ring.querySelectorAll("[data-ring-card]"));
+    var tabs = cfg.tabSelector ? Array.prototype.slice.call(document.querySelectorAll(cfg.tabSelector)) : [];
+    var total = cards.length;
+    if (!total) return null;
+
+    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var current = 0;
+    var target = 0;
+    var velocity = 0;
+    var activeIdx = 0;
+    var rafId = 0;
+    var dragging = false;
+    var dragStartIdx = 0;
+    var pointerId = null;
+    var startX = 0;
+    var lastX = 0;
+    var dragVel = 0;
+    var didDrag = false;
+
+    function isActiveMode() {
+      return typeof cfg.enabled === "function" ? cfg.enabled() : true;
+    }
+
+    function syncTabs(idx) {
+      var mod = ((idx % total) + total) % total;
+      if (mod === activeIdx && cards[mod] && cards[mod].classList.contains("is-center")) return;
+      activeIdx = mod;
       for (var t = 0; t < tabs.length; t++) {
-        var match = t === idx;
+        var tabIdx = parseInt(tabs[t].getAttribute(cfg.tabAttr), 10);
+        var match = tabIdx === mod;
         tabs[t].classList.toggle("is-active", match);
         tabs[t].setAttribute("aria-selected", match ? "true" : "false");
       }
+      for (var c = 0; c < cards.length; c++) {
+        cards[c].classList.toggle("is-center", c === mod);
+      }
+    }
+
+    function clearInlineStyles() {
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].style.transform = "";
+        cards[i].style.opacity = "";
+        cards[i].style.zIndex = "";
+        cards[i].style.filter = "";
+        cards[i].style.pointerEvents = "";
+      }
+    }
+
+    function layoutRing() {
+      if (!isActiveMode()) {
+        clearInlineStyles();
+        return;
+      }
+
+      var stageW = stage.clientWidth || window.innerWidth;
+      var isMobile = window.innerWidth <= 960;
+      var rx = isMobile
+        ? Math.round(stageW * (cfg.rxRatioMobile || 0.43))
+        : Math.min(cfg.rxMax || 370, Math.round(stageW * (cfg.rxRatio || 0.34)));
+      var rz = isMobile ? (cfg.rzMobile || 140) : (cfg.rzDesktop || 175);
+      var maxTilt = isMobile ? 22 : (cfg.maxTilt || 28);
+      var stepAngle = (Math.PI * 2) / total;
+
+      for (var i = 0; i < total; i++) {
+        var delta = shortestSignedDelta(i, current, total);
+        var theta = delta * stepAngle;
+        var cosT = Math.cos(theta);
+        var sinT = Math.sin(theta);
+
+        var x = sinT * rx;
+        var z = (cosT - 1) * rz;
+        var rotY = -sinT * maxTilt;
+        var scale = 0.72 + 0.28 * ((cosT + 1) * 0.5);
+
+        // Front visibility emphasizes center card and recedes side wings cleanly
+        var dist = Math.abs(delta);
+        var opacity = Math.max(0.06, cosT < -0.25 ? 0.14 : (1.0 - dist * (isMobile ? 0.58 : 0.42)));
+        var bright = 0.62 + 0.38 * Math.max(0, cosT);
+        var blurPx = dist < 0.25 ? 0 : Math.min(3.5, dist * (isMobile ? 1.8 : 1.1));
+        var zIdx = Math.round((cosT + 2) * 20);
+
+        var el = cards[i];
+        el.style.transform =
+          "translate3d(calc(-50% + " + x.toFixed(1) + "px), -50%, " + z.toFixed(1) + "px) " +
+          "rotateY(" + rotY.toFixed(2) + "deg) scale(" + scale.toFixed(3) + ")";
+        el.style.opacity = opacity.toFixed(3);
+        el.style.zIndex = String(zIdx);
+        el.style.filter = blurPx > 0.2
+          ? "brightness(" + bright.toFixed(2) + ") blur(" + blurPx.toFixed(1) + "px)"
+          : "brightness(" + bright.toFixed(2) + ")";
+        el.style.pointerEvents = cosT < -0.35 ? "none" : "auto";
+      }
+
+      syncTabs(Math.round(current));
+    }
+
+    function stepPhysics() {
+      rafId = 0;
+      if (!isActiveMode()) {
+        clearInlineStyles();
+        return;
+      }
+
+      if (reducedMotion && !dragging) {
+        current = target;
+        velocity = 0;
+        layoutRing();
+        return;
+      }
+
+      if (!dragging) {
+        var force = (target - current) * 0.24;
+        velocity = (velocity + force) * 0.72;
+        current += velocity;
+        layoutRing();
+        if (Math.abs(target - current) > 0.0015 || Math.abs(velocity) > 0.0015) {
+          rafId = requestAnimationFrame(stepPhysics);
+        } else {
+          current = target;
+          velocity = 0;
+          layoutRing();
+        }
+      } else {
+        layoutRing();
+      }
+    }
+
+    function spinTo(idx) {
+      var mod = ((idx % total) + total) % total;
+      var delta = shortestSignedDelta(mod, Math.round(target), total);
+      target = Math.round(target) + delta;
+      syncTabs(mod);
+      if (!rafId) rafId = requestAnimationFrame(stepPhysics);
     }
 
     for (var t = 0; t < tabs.length; t++) {
       tabs[t].addEventListener("click", function () {
-        var idx = parseInt(this.getAttribute("data-team-tab"), 10);
-        if (!cards[idx]) return;
-        track.scrollTo({
-          left: cards[idx].offsetLeft,
-          behavior: "smooth"
-        });
-        syncTab(idx);
+        spinTo(parseInt(this.getAttribute(cfg.tabAttr), 10));
       });
     }
 
-    var raf = 0;
-    track.addEventListener("scroll", function () {
-      if (raf) return;
-      raf = requestAnimationFrame(function () {
-        raf = 0;
-        var w = Math.max(1, track.clientWidth);
-        var idx = Math.round(track.scrollLeft / w);
-        syncTab(Math.max(0, Math.min(cards.length - 1, idx)));
+    for (var c = 0; c < cards.length; c++) {
+      cards[c].addEventListener("click", function () {
+        if (didDrag || !isActiveMode()) return;
+        var cardIdx = parseInt(this.getAttribute("data-ring-card"), 10);
+        if (cardIdx !== activeIdx) spinTo(cardIdx);
       });
-    }, { passive: true });
+    }
+
+    ring.addEventListener("pointerdown", function (e) {
+      if (!isActiveMode()) return;
+      if (e.target && e.target.closest && e.target.closest("a, button")) return;
+      pointerId = e.pointerId;
+      dragging = true;
+      didDrag = false;
+      startX = e.clientX;
+      lastX = e.clientX;
+      dragVel = 0;
+      velocity = 0;
+      dragStartIdx = target;
+      ring.classList.add("is-dragging");
+      try { ring.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+
+    ring.addEventListener("pointermove", function (e) {
+      if (!dragging || pointerId !== e.pointerId) return;
+      var dx = e.clientX - startX;
+      if (Math.abs(dx) > 6) didDrag = true;
+      var dragScale = Math.max(210, (stage.clientWidth || 360) * 0.42);
+      dragVel = (e.clientX - lastX) / dragScale;
+      lastX = e.clientX;
+      current = dragStartIdx - dx / dragScale;
+      target = current;
+      layoutRing();
+    });
+
+    function endDrag(e) {
+      if (!dragging || pointerId !== e.pointerId) return;
+      var dx = e.clientX - startX;
+      dragging = false;
+      pointerId = null;
+      ring.classList.remove("is-dragging");
+      try { ring.releasePointerCapture(e.pointerId); } catch (err) {}
+
+      var dragScale = Math.max(210, (stage.clientWidth || 360) * 0.42);
+      var projected = dragStartIdx - dx / dragScale - dragVel * 0.9;
+      var snapped = Math.round(projected);
+
+      if (Math.abs(dx) > 30 && snapped === Math.round(dragStartIdx)) {
+        snapped = Math.round(dragStartIdx) + (dx < 0 ? 1 : -1);
+      }
+
+      target = snapped;
+      syncTabs(snapped);
+      if (!rafId) rafId = requestAnimationFrame(stepPhysics);
+      setTimeout(function () { didDrag = false; }, 60);
+    }
+
+    ring.addEventListener("pointerup", endDrag);
+    ring.addEventListener("pointercancel", endDrag);
+
+    // Support crisp horizontal trackpad swipe over 3D rings
+    var wheelLock = 0;
+    stage.addEventListener("wheel", function (e) {
+      if (!isActiveMode()) return;
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.2 && Math.abs(e.deltaX) > 20) {
+        e.preventDefault();
+        var now = performance.now();
+        if (now - wheelLock > 240) {
+          wheelLock = now;
+          spinTo(activeIdx + (e.deltaX > 0 ? 1 : -1));
+        }
+      }
+    }, { passive: false });
+
+    window.addEventListener("resize", layoutRing, { passive: true });
+    layoutRing();
+
+    return { spinTo: spinTo, layout: layoutRing };
+  }
+
+  function initOrbitalRings() {
+    createOrbitalRing({
+      stage: document.getElementById("whatStage"),
+      ring: document.getElementById("whatRing"),
+      tabSelector: "[data-what-tab]",
+      tabAttr: "data-what-tab",
+      rxMax: 350,
+      rxRatio: 0.31,
+      rxRatioMobile: 0.43,
+      rzDesktop: 140,
+      rzMobile: 120,
+      maxTilt: 24
+    });
+
+    createOrbitalRing({
+      stage: document.getElementById("stageViewport"),
+      ring: document.getElementById("stageDeck"),
+      tabSelector: "[data-stage-tab]",
+      tabAttr: "data-stage-tab",
+      rxMax: 390,
+      rxRatio: 0.34,
+      rxRatioMobile: 0.44,
+      rzDesktop: 185,
+      rzMobile: 145,
+      maxTilt: 28
+    });
+
+    createOrbitalRing({
+      stage: document.getElementById("teamStage"),
+      ring: document.getElementById("teamTrack"),
+      tabSelector: "[data-team-tab]",
+      tabAttr: "data-team-tab",
+      enabled: function () { return window.innerWidth <= 960; },
+      rxRatioMobile: 0.44,
+      rzMobile: 125,
+      maxTilt: 24
+    });
   }
 
   /* =========================================================
@@ -706,7 +820,7 @@
   }
 
   /* =========================================================
-     5. Cursor Spotlight + 3D Perspective Tilt + Magnetic CTAs
+     5. Cursor Spotlight, Vision 3D Monolith & Magnetic CTAs
      ========================================================= */
   function initGlassEffects() {
     var finePointer = window.matchMedia("(pointer: fine)").matches;
@@ -718,21 +832,8 @@
       (function (el) {
         el.addEventListener("pointermove", function (e) {
           var r = el.getBoundingClientRect();
-          var x = e.clientX - r.left;
-          var y = e.clientY - r.top;
-          el.style.setProperty("--mx", x.toFixed(1) + "px");
-          el.style.setProperty("--my", y.toFixed(1) + "px");
-
-          if (el.classList.contains("tilt-card")) {
-            var rx = ((y / r.height) - 0.5) * -7;
-            var ry = ((x / r.width) - 0.5) * 8;
-            el.style.transform = "rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg) translateY(-2px)";
-          }
-        });
-        el.addEventListener("pointerleave", function () {
-          if (el.classList.contains("tilt-card")) {
-            el.style.transform = "";
-          }
+          el.style.setProperty("--mx", (e.clientX - r.left).toFixed(1) + "px");
+          el.style.setProperty("--my", (e.clientY - r.top).toFixed(1) + "px");
         });
       })(spotlights[i]);
     }
@@ -750,6 +851,20 @@
           el.style.transform = "";
         });
       })(magnetics[m]);
+    }
+
+    var vision = document.getElementById("visionMonolith");
+    var contact = document.getElementById("contact");
+    if (vision && contact) {
+      contact.addEventListener("pointermove", function (e) {
+        var r = contact.getBoundingClientRect();
+        var nx = (e.clientX - r.left) / Math.max(1, r.width) - 0.5;
+        var ny = (e.clientY - r.top) / Math.max(1, r.height) - 0.5;
+        vision.style.transform = "rotateY(" + (nx * 4.5).toFixed(2) + "deg) rotateX(" + (ny * -3.5).toFixed(2) + "deg)";
+      });
+      contact.addEventListener("pointerleave", function () {
+        vision.style.transform = "";
+      });
     }
   }
 
@@ -822,8 +937,7 @@
 
   initVolumetricBackdrop();
   initOrbSculpture();
-  initShowcaseStage();
-  initTeamCarousel();
+  initOrbitalRings();
   initChapterRail();
   initGlassEffects();
   initMobileDrawer();
