@@ -281,19 +281,14 @@
         var r = canvas.getBoundingClientRect();
         var lx = (e.clientX - r.left) / Math.max(1, r.width) - 0.5;
         var ly = (e.clientY - r.top) / Math.max(1, r.height) - 0.5;
-        targetY = -0.28 + lx * 0.55;
-        targetX = 0.22 + ly * 0.45;
+        targetY = -0.24 + lx * 0.16;
+        targetX = 0.20 + ly * 0.14;
       }
     });
 
     window.addEventListener("pointerup", function () {
       dragging = false;
     });
-
-    window.addEventListener("scroll", function () {
-      var heroFactor = Math.min(1, window.scrollY / Math.max(1, window.innerHeight));
-      targetX = 0.22 + heroFactor * 0.35;
-    }, { passive: true });
 
     var w = 0;
     var h = 0;
@@ -397,8 +392,64 @@
   }
 
   /* =========================================================
-     3. Physics-Driven 3D Orbital Ring Carousel Engine
-        Used in Chapter 02, Chapter 03 (360°), and Chapter 04 (<=960px)
+     3A. Chapter 02: Kinetic Architectural Triptych (#whatTriptych)
+     ========================================================= */
+  function initWhatTriptych() {
+    var deck = document.getElementById("whatTriptych");
+    if (!deck) return;
+    var panels = Array.prototype.slice.call(deck.querySelectorAll("[data-what-card]"));
+    var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-what-tab]"));
+    if (!panels.length) return;
+
+    function setActive(idx, scrollMobile) {
+      for (var i = 0; i < panels.length; i++) {
+        panels[i].classList.toggle("is-expanded", i === idx);
+      }
+      for (var t = 0; t < tabs.length; t++) {
+        var match = t === idx;
+        tabs[t].classList.toggle("is-active", match);
+        tabs[t].setAttribute("aria-selected", match ? "true" : "false");
+      }
+      if (scrollMobile && window.innerWidth <= 960 && panels[idx]) {
+        deck.scrollTo({ left: panels[idx].offsetLeft, behavior: "smooth" });
+      }
+    }
+
+    for (var i = 0; i < panels.length; i++) {
+      (function (idx, el) {
+        el.addEventListener("pointerenter", function () {
+          if (window.innerWidth > 960) setActive(idx, false);
+        });
+        el.addEventListener("focus", function () {
+          setActive(idx, false);
+        });
+        el.addEventListener("click", function () {
+          setActive(idx, false);
+        });
+      })(i, panels[i]);
+    }
+
+    for (var t = 0; t < tabs.length; t++) {
+      tabs[t].addEventListener("click", function () {
+        setActive(parseInt(this.getAttribute("data-what-tab"), 10), true);
+      });
+    }
+
+    var raf = 0;
+    deck.addEventListener("scroll", function () {
+      if (window.innerWidth > 960 || raf) return;
+      raf = requestAnimationFrame(function () {
+        raf = 0;
+        var w = Math.max(1, deck.clientWidth);
+        var idx = Math.max(0, Math.min(panels.length - 1, Math.round(deck.scrollLeft / w)));
+        setActive(idx, false);
+      });
+    }, { passive: true });
+  }
+
+  /* =========================================================
+     3B. Chapter 03: Click-First 360° 3D Turntable (#stageViewport)
+         Critical exponential damping = zero overshoot / zero wobble
      ========================================================= */
   function shortestSignedDelta(idx, center, total) {
     var raw = ((idx - center) % total + total) % total;
@@ -406,40 +457,40 @@
     return raw;
   }
 
-  function createOrbitalRing(cfg) {
-    var stage = cfg.stage;
-    var ring = cfg.ring;
-    if (!stage || !ring) return null;
+  function initTurntableStage() {
+    var stage = document.getElementById("stageViewport");
+    var ring = document.getElementById("stageDeck");
+    var platform = document.getElementById("platform");
+    if (!stage || !ring) return;
 
     var cards = Array.prototype.slice.call(ring.querySelectorAll("[data-ring-card]"));
-    var tabs = cfg.tabSelector ? Array.prototype.slice.call(document.querySelectorAll(cfg.tabSelector)) : [];
+    var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-stage-tab]"));
+    var prevBtn = document.getElementById("stagePrev");
+    var nextBtn = document.getElementById("stageNext");
     var total = cards.length;
-    if (!total) return null;
+    if (!total) return;
 
     var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var current = 0;
     var target = 0;
-    var velocity = 0;
     var activeIdx = 0;
     var rafId = 0;
+    var lastTime = 0;
+
+    var pointerActive = false;
     var dragging = false;
-    var dragStartIdx = 0;
+    var didDrag = false;
     var pointerId = null;
     var startX = 0;
     var lastX = 0;
     var dragVel = 0;
-    var didDrag = false;
-
-    function isActiveMode() {
-      return typeof cfg.enabled === "function" ? cfg.enabled() : true;
-    }
+    var dragStartIdx = 0;
 
     function syncTabs(idx) {
       var mod = ((idx % total) + total) % total;
-      if (mod === activeIdx && cards[mod] && cards[mod].classList.contains("is-center")) return;
       activeIdx = mod;
       for (var t = 0; t < tabs.length; t++) {
-        var tabIdx = parseInt(tabs[t].getAttribute(cfg.tabAttr), 10);
+        var tabIdx = parseInt(tabs[t].getAttribute("data-stage-tab"), 10);
         var match = tabIdx === mod;
         tabs[t].classList.toggle("is-active", match);
         tabs[t].setAttribute("aria-selected", match ? "true" : "false");
@@ -449,29 +500,12 @@
       }
     }
 
-    function clearInlineStyles() {
-      for (var i = 0; i < cards.length; i++) {
-        cards[i].style.transform = "";
-        cards[i].style.opacity = "";
-        cards[i].style.zIndex = "";
-        cards[i].style.filter = "";
-        cards[i].style.pointerEvents = "";
-      }
-    }
-
     function layoutRing() {
-      if (!isActiveMode()) {
-        clearInlineStyles();
-        return;
-      }
-
       var stageW = stage.clientWidth || window.innerWidth;
       var isMobile = window.innerWidth <= 960;
-      var rx = isMobile
-        ? Math.round(stageW * (cfg.rxRatioMobile || 0.43))
-        : Math.min(cfg.rxMax || 370, Math.round(stageW * (cfg.rxRatio || 0.34)));
-      var rz = isMobile ? (cfg.rzMobile || 140) : (cfg.rzDesktop || 175);
-      var maxTilt = isMobile ? 22 : (cfg.maxTilt || 28);
+      var rx = isMobile ? Math.round(stageW * 0.44) : Math.min(395, Math.round(stageW * 0.35));
+      var rz = isMobile ? 125 : 150;
+      var maxTilt = isMobile ? 13 : 15;
       var stepAngle = (Math.PI * 2) / total;
 
       for (var i = 0; i < total; i++) {
@@ -483,13 +517,13 @@
         var x = sinT * rx;
         var z = (cosT - 1) * rz;
         var rotY = -sinT * maxTilt;
-        var scale = 0.72 + 0.28 * ((cosT + 1) * 0.5);
+        var scale = 0.78 + 0.22 * ((cosT + 1) * 0.5);
 
-        // Front visibility emphasizes center card and recedes side wings cleanly
         var dist = Math.abs(delta);
-        var opacity = Math.max(0.06, cosT < -0.25 ? 0.14 : (1.0 - dist * (isMobile ? 0.58 : 0.42)));
-        var bright = 0.62 + 0.38 * Math.max(0, cosT);
-        var blurPx = dist < 0.25 ? 0 : Math.min(3.5, dist * (isMobile ? 1.8 : 1.1));
+        var opacity = cosT < -0.25
+          ? 0.08
+          : Math.max(0.14, 1.0 - dist * (isMobile ? 0.60 : 0.38));
+        var bright = 0.70 + 0.30 * Math.max(0, cosT);
         var zIdx = Math.round((cosT + 2) * 20);
 
         var el = cards[i];
@@ -498,39 +532,32 @@
           "rotateY(" + rotY.toFixed(2) + "deg) scale(" + scale.toFixed(3) + ")";
         el.style.opacity = opacity.toFixed(3);
         el.style.zIndex = String(zIdx);
-        el.style.filter = blurPx > 0.2
-          ? "brightness(" + bright.toFixed(2) + ") blur(" + blurPx.toFixed(1) + "px)"
-          : "brightness(" + bright.toFixed(2) + ")";
+        el.style.filter = "brightness(" + bright.toFixed(2) + ")";
         el.style.pointerEvents = cosT < -0.35 ? "none" : "auto";
       }
 
       syncTabs(Math.round(current));
     }
 
-    function stepPhysics() {
+    function stepPhysics(now) {
       rafId = 0;
-      if (!isActiveMode()) {
-        clearInlineStyles();
-        return;
-      }
-
       if (reducedMotion && !dragging) {
         current = target;
-        velocity = 0;
         layoutRing();
         return;
       }
-
       if (!dragging) {
-        var force = (target - current) * 0.24;
-        velocity = (velocity + force) * 0.72;
-        current += velocity;
+        var dt = lastTime ? Math.min(0.05, Math.max(0.004, (now - lastTime) * 0.001)) : 0.016;
+        lastTime = now;
+        // Monotonic exponential critical damping: glides cleanly with 0% overshoot
+        var alpha = 1 - Math.exp(-11 * dt);
+        current += (target - current) * alpha;
         layoutRing();
-        if (Math.abs(target - current) > 0.0015 || Math.abs(velocity) > 0.0015) {
+        if (Math.abs(target - current) > 0.0012) {
           rafId = requestAnimationFrame(stepPhysics);
         } else {
           current = target;
-          velocity = 0;
+          lastTime = 0;
           layoutRing();
         }
       } else {
@@ -543,43 +570,67 @@
       var delta = shortestSignedDelta(mod, Math.round(target), total);
       target = Math.round(target) + delta;
       syncTabs(mod);
-      if (!rafId) rafId = requestAnimationFrame(stepPhysics);
+      if (!rafId) {
+        lastTime = performance.now();
+        rafId = requestAnimationFrame(stepPhysics);
+      }
     }
 
     for (var t = 0; t < tabs.length; t++) {
       tabs[t].addEventListener("click", function () {
-        spinTo(parseInt(this.getAttribute(cfg.tabAttr), 10));
+        spinTo(parseInt(this.getAttribute("data-stage-tab"), 10));
       });
     }
 
+    if (prevBtn) {
+      prevBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        spinTo(activeIdx - 1);
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        spinTo(activeIdx + 1);
+      });
+    }
+
+    // Click any visible card to smoothly rotate directly to it (desktop click-first!)
     for (var c = 0; c < cards.length; c++) {
-      cards[c].addEventListener("click", function () {
-        if (didDrag || !isActiveMode()) return;
+      cards[c].addEventListener("click", function (e) {
+        if (didDrag) return;
+        if (e.target && e.target.closest && e.target.closest("a, button")) return;
         var cardIdx = parseInt(this.getAttribute("data-ring-card"), 10);
-        if (cardIdx !== activeIdx) spinTo(cardIdx);
+        if (cardIdx !== activeIdx) {
+          spinTo(cardIdx);
+        }
       });
     }
 
     ring.addEventListener("pointerdown", function (e) {
-      if (!isActiveMode()) return;
       if (e.target && e.target.closest && e.target.closest("a, button")) return;
-      pointerId = e.pointerId;
-      dragging = true;
+      pointerActive = true;
+      dragging = false;
       didDrag = false;
+      pointerId = e.pointerId;
       startX = e.clientX;
       lastX = e.clientX;
       dragVel = 0;
-      velocity = 0;
       dragStartIdx = target;
-      ring.classList.add("is-dragging");
-      try { ring.setPointerCapture(e.pointerId); } catch (err) {}
     });
 
     ring.addEventListener("pointermove", function (e) {
-      if (!dragging || pointerId !== e.pointerId) return;
+      if (!pointerActive || pointerId !== e.pointerId) return;
       var dx = e.clientX - startX;
-      if (Math.abs(dx) > 6) didDrag = true;
-      var dragScale = Math.max(210, (stage.clientWidth || 360) * 0.42);
+      if (!dragging && Math.abs(dx) > 8) {
+        dragging = true;
+        didDrag = true;
+        ring.classList.add("is-dragging");
+        try { ring.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+      if (!dragging) return;
+
+      var dragScale = Math.max(220, (stage.clientWidth || 360) * 0.44);
       dragVel = (e.clientX - lastX) / dragScale;
       lastX = e.clientX;
       current = dragStartIdx - dx / dragScale;
@@ -588,38 +639,56 @@
     });
 
     function endDrag(e) {
-      if (!dragging || pointerId !== e.pointerId) return;
+      if (!pointerActive || pointerId !== e.pointerId) return;
+      pointerActive = false;
+      if (!dragging) {
+        pointerId = null;
+        return;
+      }
+
       var dx = e.clientX - startX;
       dragging = false;
       pointerId = null;
       ring.classList.remove("is-dragging");
       try { ring.releasePointerCapture(e.pointerId); } catch (err) {}
 
-      var dragScale = Math.max(210, (stage.clientWidth || 360) * 0.42);
-      var projected = dragStartIdx - dx / dragScale - dragVel * 0.9;
+      var dragScale = Math.max(220, (stage.clientWidth || 360) * 0.44);
+      var projected = dragStartIdx - dx / dragScale - dragVel * 0.55;
       var snapped = Math.round(projected);
-
-      if (Math.abs(dx) > 30 && snapped === Math.round(dragStartIdx)) {
+      if (Math.abs(dx) > 32 && snapped === Math.round(dragStartIdx)) {
         snapped = Math.round(dragStartIdx) + (dx < 0 ? 1 : -1);
       }
 
       target = snapped;
       syncTabs(snapped);
+      lastTime = performance.now();
       if (!rafId) rafId = requestAnimationFrame(stepPhysics);
-      setTimeout(function () { didDrag = false; }, 60);
+      setTimeout(function () { didDrag = false; }, 80);
     }
 
     ring.addEventListener("pointerup", endDrag);
     ring.addEventListener("pointercancel", endDrag);
 
-    // Support crisp horizontal trackpad swipe over 3D rings
+    // Left / Right keyboard navigation when Chapter 03 is active
+    document.addEventListener("keydown", function (e) {
+      if (!platform || !platform.classList.contains("is-active")) return;
+      var tag = (document.activeElement && document.activeElement.tagName) || "";
+      if (/INPUT|TEXTAREA|SELECT/.test(tag)) return;
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        spinTo(activeIdx + 1);
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        spinTo(activeIdx - 1);
+      }
+    });
+
     var wheelLock = 0;
     stage.addEventListener("wheel", function (e) {
-      if (!isActiveMode()) return;
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.2 && Math.abs(e.deltaX) > 20) {
         e.preventDefault();
         var now = performance.now();
-        if (now - wheelLock > 240) {
+        if (now - wheelLock > 260) {
           wheelLock = now;
           spinTo(activeIdx + (e.deltaX > 0 ? 1 : -1));
         }
@@ -628,47 +697,44 @@
 
     window.addEventListener("resize", layoutRing, { passive: true });
     layoutRing();
-
-    return { spinTo: spinTo, layout: layoutRing };
   }
 
-  function initOrbitalRings() {
-    createOrbitalRing({
-      stage: document.getElementById("whatStage"),
-      ring: document.getElementById("whatRing"),
-      tabSelector: "[data-what-tab]",
-      tabAttr: "data-what-tab",
-      rxMax: 350,
-      rxRatio: 0.31,
-      rxRatioMobile: 0.43,
-      rzDesktop: 140,
-      rzMobile: 120,
-      maxTilt: 24
-    });
+  /* =========================================================
+     3C. Chapter 04: Mobile Founding Team Deck (#teamTrack)
+     ========================================================= */
+  function initTeamDeck() {
+    var track = document.getElementById("teamTrack");
+    var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-team-tab]"));
+    var cards = track ? Array.prototype.slice.call(track.querySelectorAll("[data-team-card]")) : [];
+    if (!track || !tabs.length || !cards.length) return;
 
-    createOrbitalRing({
-      stage: document.getElementById("stageViewport"),
-      ring: document.getElementById("stageDeck"),
-      tabSelector: "[data-stage-tab]",
-      tabAttr: "data-stage-tab",
-      rxMax: 390,
-      rxRatio: 0.34,
-      rxRatioMobile: 0.44,
-      rzDesktop: 185,
-      rzMobile: 145,
-      maxTilt: 28
-    });
+    function syncTab(idx) {
+      for (var t = 0; t < tabs.length; t++) {
+        var match = t === idx;
+        tabs[t].classList.toggle("is-active", match);
+        tabs[t].setAttribute("aria-selected", match ? "true" : "false");
+      }
+    }
 
-    createOrbitalRing({
-      stage: document.getElementById("teamStage"),
-      ring: document.getElementById("teamTrack"),
-      tabSelector: "[data-team-tab]",
-      tabAttr: "data-team-tab",
-      enabled: function () { return window.innerWidth <= 960; },
-      rxRatioMobile: 0.44,
-      rzMobile: 125,
-      maxTilt: 24
-    });
+    for (var t = 0; t < tabs.length; t++) {
+      tabs[t].addEventListener("click", function () {
+        var idx = parseInt(this.getAttribute("data-team-tab"), 10);
+        if (!cards[idx]) return;
+        track.scrollTo({ left: cards[idx].offsetLeft, behavior: "smooth" });
+        syncTab(idx);
+      });
+    }
+
+    var raf = 0;
+    track.addEventListener("scroll", function () {
+      if (window.innerWidth > 960 || raf) return;
+      raf = requestAnimationFrame(function () {
+        raf = 0;
+        var w = Math.max(1, track.clientWidth);
+        var idx = Math.max(0, Math.min(cards.length - 1, Math.round(track.scrollLeft / w)));
+        syncTab(idx);
+      });
+    }, { passive: true });
   }
 
   /* =========================================================
@@ -820,51 +886,22 @@
   }
 
   /* =========================================================
-     5. Cursor Spotlight, Vision 3D Monolith & Magnetic CTAs
+     5. Cursor Proximity Glow (Zero Wobble)
      ========================================================= */
   function initGlassEffects() {
     var finePointer = window.matchMedia("(pointer: fine)").matches;
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!finePointer || reduced) return;
 
-    var spotlights = document.querySelectorAll(".spotlight");
-    for (var i = 0; i < spotlights.length; i++) {
+    var surfaces = document.querySelectorAll(".spotlight, .proximity-rim");
+    for (var i = 0; i < surfaces.length; i++) {
       (function (el) {
         el.addEventListener("pointermove", function (e) {
           var r = el.getBoundingClientRect();
           el.style.setProperty("--mx", (e.clientX - r.left).toFixed(1) + "px");
           el.style.setProperty("--my", (e.clientY - r.top).toFixed(1) + "px");
         });
-      })(spotlights[i]);
-    }
-
-    var magnetics = document.querySelectorAll(".magnetic");
-    for (var m = 0; m < magnetics.length; m++) {
-      (function (el) {
-        el.addEventListener("pointermove", function (e) {
-          var r = el.getBoundingClientRect();
-          var x = (e.clientX - r.left - r.width * 0.5) * 0.16;
-          var y = (e.clientY - r.top - r.height * 0.5) * 0.16;
-          el.style.transform = "translate3d(" + x.toFixed(1) + "px, " + y.toFixed(1) + "px, 0)";
-        });
-        el.addEventListener("pointerleave", function () {
-          el.style.transform = "";
-        });
-      })(magnetics[m]);
-    }
-
-    var vision = document.getElementById("visionMonolith");
-    var contact = document.getElementById("contact");
-    if (vision && contact) {
-      contact.addEventListener("pointermove", function (e) {
-        var r = contact.getBoundingClientRect();
-        var nx = (e.clientX - r.left) / Math.max(1, r.width) - 0.5;
-        var ny = (e.clientY - r.top) / Math.max(1, r.height) - 0.5;
-        vision.style.transform = "rotateY(" + (nx * 4.5).toFixed(2) + "deg) rotateX(" + (ny * -3.5).toFixed(2) + "deg)";
-      });
-      contact.addEventListener("pointerleave", function () {
-        vision.style.transform = "";
-      });
+      })(surfaces[i]);
     }
   }
 
@@ -937,7 +974,9 @@
 
   initVolumetricBackdrop();
   initOrbSculpture();
-  initOrbitalRings();
+  initWhatTriptych();
+  initTurntableStage();
+  initTeamDeck();
   initChapterRail();
   initGlassEffects();
   initMobileDrawer();
