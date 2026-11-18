@@ -1,6 +1,14 @@
 @font-face {
+  font-family: "Cormorant Garamond";
+  src: url("../assets/fonts/cormorant-garamond-500.woff2?v=20261119-5") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "RealRain Serif SC";
-  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261119-4") format("woff2");
+  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261119-5") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -8,7 +16,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261119-4") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261119-5") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -16,7 +24,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261119-4") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261119-5") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -30,8 +38,8 @@
   --accent-mineral: #8CA29B;
 
   --font-display: "RealRain Serif SC", "Cormorant Garamond", "Songti SC", "Noto Serif SC", Georgia, serif;
-  --font-sans: "RealRain Sans SC", "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-  --font-eyebrow: "Inter", "RealRain Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: "RealRain Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei", sans-serif;
+  --font-eyebrow: -apple-system, BlinkMacSystemFont, "Segoe UI", "RealRain Sans SC", sans-serif;
 
   --container: 1220px;
   --header-h: 64px;
@@ -39,7 +47,7 @@
 
 html[lang="en"] {
   --font-display: "Cormorant Garamond", "RealRain Serif SC", Georgia, serif;
-  --font-sans: "Inter", "RealRain Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "RealRain Sans SC", sans-serif;
 }
 
 *,
@@ -418,6 +426,7 @@ button,
   display: inline-flex;
   align-items: center;
   gap: 9px;
+  color: #F5F6F4;
 }
 
 .drawer-wordmark {
@@ -425,6 +434,8 @@ button,
   width: 95px;
   display: block;
   flex-shrink: 0;
+  color: #F5F6F4;
+  overflow: visible;
 }
 
 .mobile-drawer-close {
@@ -1247,8 +1258,12 @@ html[lang="en"] .cover-title {
 }
 
 .colophon-wordmark {
+  width: 80px;
   height: 16px;
-  width: auto;
+  display: block;
+  flex-shrink: 0;
+  color: #F5F6F4;
+  overflow: visible;
 }
 
 .colophon-sep {
