@@ -618,9 +618,7 @@
     function layoutRing() {
       var stageW = cachedStageW;
       var isMobile = cachedIsMobile;
-      var rx = isMobile ? Math.round(stageW * 0.45) : Math.min(410, Math.round(stageW * 0.37));
-      var rz = isMobile ? 105 : 145;
-      var maxTilt = isMobile ? 12 : 14;
+      var rx = isMobile ? Math.round(stageW * 0.44) : Math.min(430, Math.round(stageW * 0.39));
       var stepAngle = (Math.PI * 2) / total;
 
       for (var i = 0; i < total; i++) {
@@ -628,19 +626,20 @@
         var theta = delta * stepAngle;
         var cosT = Math.cos(theta);
         var sinT = Math.sin(theta);
+        var normFront = (cosT + 1) * 0.5;
 
         var isFlankHover = hoveredIdx === i && Math.abs(delta) > 0.25;
         var x = sinT * rx;
-        // Center sits forward (+rz), primary neighbors (+/-72 deg, cosT = +0.309) sit cleanly in front (z >= 0)
-        var z = cosT * rz;
-        var y = Math.max(0, -cosT) * (isMobile ? -12 : -18);
-        var rotY = -sinT * maxTilt;
-        var scale = 0.66 + 0.24 * ((cosT + 1) * 0.5) + (isFlankHover ? 0.032 : 0);
+        // Center sits crisp at z = 0, scale = 1 (1:1 native UI rendering); flanking cards recede in depth
+        var z = (normFront - 1) * (isMobile ? 120 : 175);
+        var y = (1 - normFront) * (isMobile ? -8 : -12);
+        var rotY = -sinT * (isMobile ? 11 : 14);
+        var scale = (0.71 + 0.29 * normFront) + (isFlankHover ? 0.032 : 0);
 
         var dist = Math.abs(delta);
         var baseOpacity = dist < 0.05
           ? 1.0
-          : Math.max(isMobile ? 0.07 : 0.22, (isMobile ? 0.48 : 0.72) - dist * (isMobile ? 0.28 : 0.24));
+          : Math.max(isMobile ? 0.16 : 0.46, (isMobile ? 0.52 : 0.78) - dist * (isMobile ? 0.30 : 0.26));
         var opacity = isFlankHover ? Math.min(0.95, baseOpacity + 0.22) : baseOpacity;
         var zIdx = Math.round((cosT + 2) * 20);
 

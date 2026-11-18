@@ -1,6 +1,6 @@
 @font-face {
   font-family: "RealRain Serif SC";
-  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261119-2") format("woff2");
+  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261119-3") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261119-2") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261119-3") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261119-2") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261119-3") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -819,11 +819,11 @@ html[lang="en"] .cover-title {
 }
 
 .orbital-stage-quad {
-  height: clamp(275px, 46dvh, 415px);
+  height: clamp(290px, 47dvh, 430px);
 }
 
 .stage-plate {
-  width: min(74vw, 456px);
+  width: min(76vw, 524px);
   height: 100%;
   margin: 0;
   display: flex;
@@ -856,80 +856,16 @@ html[lang="en"] .cover-title {
   pointer-events: none;
 }
 
-.plate-art-worlds .main-art,
-.plate-art-kodo .main-art,
-.plate-art-daily .main-art {
+.plate-art .main-art {
   position: relative;
   z-index: 1;
-  max-width: 92%;
-  max-height: 94%;
+  max-width: 96%;
+  max-height: 95%;
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: 14px;
-  box-shadow: 0 26px 54px -18px rgba(0, 0, 0, 0.92), 0 0 0 1px rgba(255, 255, 255, 0.09);
-  pointer-events: none;
-}
-
-.plate-art-kodo .float-accent {
-  position: absolute;
-  z-index: 2;
-  right: 2%;
-  bottom: 2%;
-  width: clamp(104px, 31%, 168px);
-  pointer-events: none;
-  transform: rotate(-3deg);
-}
-
-.plate-art-cutout::after,
-.plate-art-duo::after {
-  content: "";
-  position: absolute;
-  bottom: 2%;
-  left: 16%;
-  right: 16%;
-  height: 26px;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.72), transparent);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.plate-art-cutout > img {
-  position: relative;
-  z-index: 1;
-  max-height: 95%;
-  max-width: 82%;
-  width: auto;
-  object-fit: contain;
-  pointer-events: none;
-}
-
-.plate-art-duo {
-  gap: 8px;
-}
-
-.plate-art-duo .duo-cards {
-  position: relative;
-  z-index: 1;
-  max-height: 82%;
-  max-width: 56%;
-  width: auto;
-  object-fit: contain;
-  border-radius: 10px;
-  box-shadow: 0 20px 36px -12px rgba(0, 0, 0, 0.88);
-  transform: rotate(-2deg);
-  pointer-events: none;
-}
-
-.plate-art-duo .duo-badges {
-  position: relative;
-  z-index: 1;
-  max-height: 70%;
-  max-width: 40%;
-  width: auto;
-  object-fit: contain;
-  transform: rotate(3deg) translateY(6%);
+  border-radius: 12px;
+  box-shadow: 0 26px 54px -18px rgba(0, 0, 0, 0.92), 0 0 0 1px rgba(255, 255, 255, 0.10);
   pointer-events: none;
 }
 
@@ -1370,11 +1306,11 @@ html[lang="en"] .cover-title {
   }
 
   .orbital-stage-quad {
-    height: clamp(235px, 39dvh, 320px);
+    height: clamp(240px, 40dvh, 330px);
   }
 
   .stage-plate {
-    width: min(82vw, 410px);
+    width: min(82vw, 430px);
     gap: 8px;
   }
 
@@ -1510,17 +1446,11 @@ html[lang="en"] .cover-title {
   }
 
   .orbital-stage-quad {
-    height: clamp(210px, 35dvh, 270px);
+    height: clamp(210px, 35dvh, 276px);
   }
 
   .stage-plate {
-    width: 84vw;
-  }
-
-  .plate-art-kodo .float-accent {
-    width: 34%;
-    right: 2%;
-    bottom: 2%;
+    width: 85vw;
   }
 
   .team-trio {
