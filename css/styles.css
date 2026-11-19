@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Cormorant Garamond";
-  src: url("../assets/fonts/cormorant-garamond-500.woff2?v=20261119-12") format("woff2");
+  src: url("../assets/fonts/cormorant-garamond-500.woff2?v=20261119-13") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: "RealRain Serif SC";
-  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261119-12") format("woff2");
+  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261119-13") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261119-12") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261119-13") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -24,7 +24,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261119-12") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261119-13") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -105,7 +105,6 @@ button {
 a,
 button,
 .triptych-panel,
-.ethos-item,
 .orbital-card,
 .orbital-stage,
 .orb-canvas,
@@ -121,8 +120,6 @@ button,
 
 .triptych-panel:focus,
 .triptych-panel:focus-visible,
-.ethos-item:focus,
-.ethos-item:focus-visible,
 .eco-tab:focus,
 .eco-tab:focus-visible,
 .dot-stop:focus-visible {
@@ -349,7 +346,7 @@ button,
   justify-content: space-between;
   align-items: center;
   width: 28px;
-  height: clamp(164px, 25dvh, 212px);
+  height: clamp(144px, 22dvh, 184px);
   padding-block: 10px;
   cursor: ns-resize;
 }
@@ -516,8 +513,7 @@ button,
 }
 
 .act-header,
-.orbital-stage,
-.about-grid {
+.orbital-stage {
   transition: opacity 300ms cubic-bezier(0.22, 1, 0.36, 1), transform 340ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -527,7 +523,6 @@ button,
 }
 
 .js-ready .act:not(.is-active) .orbital-stage,
-.js-ready .act:not(.is-active) .about-grid,
 .js-ready .act:not(.is-active) .contact-center {
   opacity: 0.54;
   transform: translate3d(0, 12px, 0);
@@ -1094,110 +1089,7 @@ html[lang="en"] .cover-title {
 }
 
 /* =========================================================
-   CHAPTER 04: ABOUT STUDIO & CRAFT ETHOS (#about)
-   ========================================================= */
-.about-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.about-grid {
-  width: min(100%, 1120px);
-  margin-inline: auto;
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: clamp(44px, 6.5vw, 96px);
-  align-items: center;
-}
-
-.about-intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-}
-
-.about-title {
-  font-size: clamp(1.75rem, 2.95vw, 2.7rem);
-  line-height: 1.22;
-}
-
-html[lang="en"] .about-title {
-  font-size: clamp(2.05rem, 3.6vw, 3.2rem);
-  line-height: 1.08;
-}
-
-.about-lead {
-  margin: clamp(16px, 2.2dvh, 24px) 0 0;
-  max-width: 42ch;
-  font-size: clamp(14px, 1.08vw, 15.5px);
-  line-height: 1.68;
-  color: var(--ink-muted);
-  text-wrap: balance;
-}
-
-.about-meta {
-  margin: clamp(22px, 3.2dvh, 34px) 0 0;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  font-family: var(--font-eyebrow);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-subtle);
-}
-
-.ethos-list {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.ethos-item {
-  display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
-  gap: 14px;
-  align-items: baseline;
-  padding: clamp(18px, 2.6dvh, 26px) 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.11);
-  transition: border-color 180ms ease;
-}
-
-.ethos-item:hover {
-  border-top-color: rgba(244, 243, 239, 0.36);
-}
-
-.ethos-num {
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.18rem;
-  font-weight: 500;
-  font-style: normal;
-  letter-spacing: 0.04em;
-  color: var(--accent-mineral);
-}
-
-.ethos-title {
-  margin: 0 0 6px;
-  font-family: var(--font-display);
-  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
-  font-weight: 500;
-  line-height: 1.24;
-  color: var(--ink-ivory);
-}
-
-.ethos-desc {
-  margin: 0;
-  font-size: 13.5px;
-  line-height: 1.56;
-  color: var(--ink-muted);
-  text-wrap: balance;
-}
-
-/* =========================================================
-   CHAPTER 05: SOLE VISION & COLOPHON
+   CHAPTER 04: SOLE VISION & COLOPHON
    ========================================================= */
 .contact-act {
   justify-content: space-between;
@@ -1417,61 +1309,6 @@ html[lang="en"] .about-title {
     width: min(82vw, 430px);
     gap: 8px;
   }
-
-  .about-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(20px, 3.2dvh, 30px);
-    max-width: 480px;
-  }
-
-  .about-intro {
-    align-items: center;
-    text-align: center;
-  }
-
-  .about-title {
-    font-size: clamp(1.48rem, 5.2vw, 1.95rem);
-  }
-
-  html[lang="en"] .about-title {
-    font-size: clamp(1.36rem, 5.2vw, 1.85rem);
-  }
-
-  .about-lead {
-    margin-top: 10px;
-    max-width: 40ch;
-    font-size: 13.5px;
-    line-height: 1.56;
-  }
-
-  .about-meta {
-    margin-top: 14px;
-    padding-top: 12px;
-    font-size: 10.5px;
-    text-align: center;
-  }
-
-  .ethos-list {
-    max-width: 360px;
-    margin-inline: auto;
-  }
-
-  .ethos-item {
-    grid-template-columns: 28px minmax(0, 1fr);
-    gap: 10px;
-    padding: 13px 0;
-    text-align: left;
-  }
-
-  .ethos-title {
-    font-size: 1.12rem;
-    margin-bottom: 3px;
-  }
-
-  .ethos-desc {
-    font-size: 12.8px;
-    line-height: 1.46;
-  }
 }
 
 @media (max-width: 640px) {
@@ -1506,7 +1343,7 @@ html[lang="en"] .about-title {
 
   .dots-track {
     width: 12px;
-    height: 112px;
+    height: 96px;
     padding-block: 4px;
   }
 
@@ -1654,52 +1491,6 @@ html[lang="en"] .about-title {
 
   .stage-link {
     font-size: 11.8px;
-  }
-
-  .about-grid {
-    gap: 16px;
-  }
-
-  .about-title {
-    font-size: clamp(1.38rem, 5.5vw, 1.75rem);
-  }
-
-  html[lang="en"] .about-title {
-    font-size: clamp(1.36rem, 5.4vw, 1.75rem);
-  }
-
-  .about-lead {
-    font-size: 13px;
-    line-height: 1.5;
-    margin-top: 8px;
-  }
-
-  .about-meta {
-    margin-top: 10px;
-    padding-top: 10px;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-  }
-
-  .ethos-list {
-    max-width: 336px;
-  }
-
-  .ethos-item {
-    padding: 11px 0;
-  }
-
-  .ethos-num {
-    font-size: 1.05rem;
-  }
-
-  .ethos-title {
-    font-size: 1.06rem;
-  }
-
-  .ethos-desc {
-    font-size: 12.2px;
-    line-height: 1.42;
   }
 
   .contact-center {
@@ -1879,31 +1670,6 @@ html[lang="en"] .about-title {
     font-size: clamp(1.2rem, 5.4vw, 1.7rem);
   }
 
-  .about-grid {
-    gap: 10px;
-  }
-
-  .about-lead {
-    font-size: 11.4px;
-    line-height: 1.36;
-    margin-top: 5px;
-  }
-
-  .about-meta {
-    display: none;
-  }
-
-  .ethos-item {
-    padding: 8px 0;
-    gap: 8px;
-  }
-
-  .ethos-title {
-    font-size: 0.98rem;
-    margin-bottom: 2px;
-  }
-
-  .ethos-desc,
   .plate-meta p {
     font-size: 11px;
     line-height: 1.32;

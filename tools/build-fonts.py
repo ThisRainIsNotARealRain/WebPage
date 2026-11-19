@@ -53,7 +53,6 @@ MEDIUM_CLASSES = {
     "card-en",
     "eco-tab",
     "stage-link",
-    "about-meta",
     "skip-link",
     "header-lang",
     "plate-kicker",

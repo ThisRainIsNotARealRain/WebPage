@@ -1631,15 +1631,7 @@
     });
 
     resizeRailCanvas();
-    if (location.hash === "#team" && acts[3]) {
-      window.scrollTo({ top: acts[3].offsetTop, behavior: "instant" });
-      if (history.replaceState) {
-        try { history.replaceState(null, "", "#about"); } catch (e) {}
-      }
-      sync(3);
-    } else {
-      detectCenter();
-    }
+    detectCenter();
     latestScrollY = window.scrollY;
     dropRatio = computeScrollRatio();
     targetRatio = dropRatio;
