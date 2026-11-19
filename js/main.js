@@ -583,17 +583,44 @@
     if (!ctx) return;
 
     var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var countPerStratum = 48;
+    var section = document.getElementById("what");
+    var hdrEl = section ? section.querySelector(".foundation-header") : null;
+    var deckEl = deck;
+
+    var primaryCount = 76;
+    var moteCount = 28;
     var nodes = [];
+    var projected = [];
+    var primaryPts = [[], [], []];
     for (var s = 0; s < 3; s++) {
-      for (var n = 0; n < countPerStratum; n++) {
-        var u = countPerStratum > 1 ? n / (countPerStratum - 1) : 0.5;
+      for (var n = 0; n < primaryCount; n++) {
+        var u = primaryCount > 1 ? n / (primaryCount - 1) : 0.5;
+        var edgeFade = Math.pow(Math.max(0, Math.sin(Math.PI * u)), 0.75);
         nodes.push({
           s: s,
+          kind: 0,
+          idxInStrata: n,
           u: u,
-          xNorm: u * 2 - 1,
-          phase: u * Math.PI * (s === 0 ? 3.2 : s === 1 ? 4.4 : 3.8) + s * 1.15
+          edgeFade: edgeFade,
+          moteSpread: 0,
+          phase: u * Math.PI * (s === 0 ? 3.2 : s === 1 ? 3.8 : 3.4) + s * 1.25
         });
+        primaryPts[s].push({ x: 0, y: 0 });
+        projected.push({ x: 0, y: 0, r: 1, z: 0, alpha: 0, normF: 0 });
+      }
+      for (var m = 0; m < moteCount; m++) {
+        var um = (m + 0.5) / moteCount;
+        var mFade = Math.pow(Math.max(0, Math.sin(Math.PI * um)), 0.85);
+        nodes.push({
+          s: s,
+          kind: 1,
+          idxInStrata: m,
+          u: um,
+          edgeFade: mFade,
+          moteSpread: Math.sin(m * 2.39996 + s * 1.7),
+          phase: um * Math.PI * (s === 0 ? 3.4 : s === 1 ? 4.1 : 3.7) + s * 1.6 + m * 0.45
+        });
+        projected.push({ x: 0, y: 0, r: 1, z: 0, alpha: 0, normF: 0 });
       }
     }
 
@@ -601,22 +628,73 @@
     var w = 0;
     var h = 0;
     var dpr = 1;
+    var horizonY = 420;
+    var openGap = 96;
+    var hdrBox = { left: 0, right: 0, top: 0, bottom: 0 };
+    var deckBox = { left: 0, right: 0, top: 0, bottom: 0 };
     var visible = false;
     var rafId = 0;
     var lastDraw = 0;
     var lastRenderTime = 0;
 
+    function measureBounds() {
+      var sRect = section ? section.getBoundingClientRect() : canvas.getBoundingClientRect();
+      var baseLeft = sRect ? sRect.left : 0;
+      var baseTop = sRect ? sRect.top : 0;
+      if (hdrEl) {
+        var hr = hdrEl.getBoundingClientRect();
+        hdrBox.left = hr.left - baseLeft;
+        hdrBox.right = hr.right - baseLeft;
+        hdrBox.top = hr.top - baseTop;
+        hdrBox.bottom = hr.bottom - baseTop;
+      } else {
+        hdrBox.left = w * 0.25;
+        hdrBox.right = w * 0.75;
+        hdrBox.top = h * 0.16;
+        hdrBox.bottom = h * 0.36;
+      }
+      if (deckEl) {
+        var dr = deckEl.getBoundingClientRect();
+        deckBox.left = dr.left - baseLeft;
+        deckBox.right = dr.right - baseLeft;
+        deckBox.top = dr.top - baseTop;
+        deckBox.bottom = dr.bottom - baseTop;
+      } else {
+        deckBox.left = w * 0.14;
+        deckBox.right = w * 0.86;
+        deckBox.top = h * 0.56;
+        deckBox.bottom = h * 0.82;
+      }
+      openGap = Math.max(24, deckBox.top - hdrBox.bottom);
+      horizonY = (hdrBox.bottom + deckBox.top) * 0.5;
+    }
+
+    function boxClearance(px, py, box, padX, padY, feather) {
+      var dx = Math.max(0, Math.max((box.left - padX) - px, px - (box.right + padX)));
+      var dy = Math.max(0, Math.max((box.top - padY) - py, py - (box.bottom + padY)));
+      var dist = Math.hypot(dx, dy);
+      var t = Math.min(1, dist / feather);
+      return 0.08 + 0.92 * t * t * (3 - 2 * t);
+    }
+
     function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      w = canvas.clientWidth || 720;
-      h = canvas.clientHeight || 96;
+      dpr = Math.min(window.devicePixelRatio || 1, 1.35);
+      w = canvas.clientWidth || window.innerWidth;
+      h = canvas.clientHeight || window.innerHeight;
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      measureBounds();
       lastStrataInteract = performance.now();
     }
     window.addEventListener("resize", resize, { passive: true });
     resize();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () {
+        measureBounds();
+        lastStrataInteract = performance.now();
+      });
+    }
 
     function renderStrata(now) {
       rafId = 0;
@@ -630,87 +708,111 @@
       var dt60 = lastRenderTime ? Math.min(2.5, Math.max(0.25, (tMs - lastRenderTime) / 16.667)) : 1;
       lastRenderTime = tMs;
 
-      var follow = 1 - Math.pow(1 - 0.14, dt60);
+      var follow = 1 - Math.pow(1 - 0.13, dt60);
       for (var fw = 0; fw < 3; fw++) {
         var targetW = fw === activeIdx ? 1.0 : 0.28;
         focusWeights[fw] += (targetW - focusWeights[fw]) * follow;
       }
 
       ctx.clearRect(0, 0, w, h);
-      var t = reducedMotion ? 0 : tMs * 0.0014;
-      var padX = Math.max(18, w * 0.045);
-      var spanW = Math.max(120, w - padX * 2);
-      var baseY = h * 0.56;
-      var ampY = Math.max(10, h * 0.22);
+      var t = reducedMotion ? 0 : tMs * 0.00115;
+      var isNarrow = w <= 640;
+      var ampY = isNarrow
+        ? Math.min(h * 0.055, Math.max(12, openGap * 0.44))
+        : Math.min(h * 0.095, Math.max(16, openGap * 0.56));
+      var wingDrift = isNarrow ? Math.min(18, openGap * 0.24) : Math.min(34, openGap * 0.32);
 
-      // Soft ambient glow anchored below the focused pillar's wave zone
-      var glowX = padX + spanW * (activeIdx === 0 ? 0.22 : activeIdx === 1 ? 0.50 : 0.78);
-      var glowR = Math.max(84, Math.min(220, w * 0.28));
-      var halo = ctx.createRadialGradient(glowX, baseY, 4, glowX, baseY, glowR);
-      halo.addColorStop(0, "rgba(140, 162, 155, 0.15)");
-      halo.addColorStop(0.55, "rgba(140, 162, 155, 0.045)");
-      halo.addColorStop(1, "rgba(0, 0, 0, 0)");
-      ctx.fillStyle = halo;
-      ctx.fillRect(0, 0, w, h);
-
-      // Faint perspective baseline
-      ctx.strokeStyle = "rgba(244, 243, 239, 0.065)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(padX, baseY + h * 0.20);
-      ctx.lineTo(padX + spanW, baseY + h * 0.20);
-      ctx.stroke();
-
-      for (var order = 0; order < 3; order++) {
-        var s = order === 2 ? activeIdx : (order === 0 ? (activeIdx + 1) % 3 : (activeIdx + 2) % 3);
-        var fW = focusWeights[s];
+      for (var i = 0; i < nodes.length; i++) {
+        var pt = nodes[i];
+        var str = pt.s;
+        var u = pt.u;
+        var fW = focusWeights[str];
         var normF = Math.max(0, Math.min(1, (fW - 0.28) / 0.72));
-        var centerU = s === 0 ? 0.22 : s === 1 ? 0.50 : 0.78;
-        var yTier = (s - 1) * (h * 0.11) - normF * 3.5;
+        var centerU = str === 0 ? 0.24 : str === 1 ? 0.50 : 0.76;
+        var bell = Math.exp(-Math.pow((u - centerU) / 0.21, 2));
 
-        // Subtle connecting hairline across each wave stratum
-        ctx.strokeStyle = normF > 0.45
-          ? "rgba(244, 243, 239, " + (0.06 + normF * 0.14).toFixed(3) + ")"
-          : "rgba(140, 162, 155, 0.075)";
-        ctx.lineWidth = 1;
+        var ySweep;
+        if (str === 0) {
+          ySweep = -Math.sin((u - 0.08) * Math.PI) * wingDrift * 0.65 + (u - 0.5) * wingDrift * 0.9;
+        } else if (str === 1) {
+          ySweep = -Math.sin(u * Math.PI) * wingDrift * 0.45 + Math.cos(u * Math.PI * 1.6) * wingDrift * 0.28;
+        } else {
+          ySweep = Math.cos(u * Math.PI * 1.25) * wingDrift * 0.48 - (u - 0.5) * wingDrift * 0.9;
+        }
+
+        var wave = Math.sin(pt.phase - t * (1.05 + str * 0.14)) * ampY * (0.36 + bell * 0.64);
+        var moteOffset = pt.kind === 1 ? pt.moteSpread * ampY * 0.72 : 0;
+        var zDepth = Math.cos(pt.phase - t * 0.9 + pt.kind * 0.7) * 0.45 + (pt.kind === 1 ? -0.15 : 0.12);
+        var persp = 1.0 / (1.0 - zDepth * 0.18);
+
+        var px = (-0.02 + u * 1.04) * w;
+        var py = horizonY + ySweep + wave + moteOffset - normF * 3.5;
+
+        if (pt.kind === 0) {
+          primaryPts[str][pt.idxInStrata].x = px;
+          primaryPts[str][pt.idxInStrata].y = py;
+        }
+
+        var clearH = boxClearance(px, py, hdrBox, 14, 10, 24);
+        var clearD = boxClearance(px, py, deckBox, 10, 8, 24);
+        var textClearance = Math.min(clearH, clearD);
+
+        var baseAlpha = pt.kind === 0
+          ? 0.15 + normF * 0.50 + bell * (0.10 + normF * 0.24)
+          : 0.06 + normF * 0.22 + bell * 0.08;
+        var alpha = baseAlpha * pt.edgeFade * textClearance;
+        var radius = (pt.kind === 0 ? 0.72 + normF * 0.58 + bell * 0.52 : 0.58 + normF * 0.35) * persp * (isNarrow ? 0.88 : 1.0);
+
+        var slot = projected[i];
+        slot.x = px;
+        slot.y = py;
+        slot.r = Math.max(0.55, Math.min(2.15, radius));
+        slot.z = zDepth;
+        slot.alpha = Math.min(0.88, Math.max(0.01, alpha));
+        slot.normF = normF;
+      }
+
+      // Draw whisper-soft edge-to-edge wave filaments before depth-sorted beads (zero baseline line)
+      for (var order = 0; order < 3; order++) {
+        var sIdx = order === 2 ? activeIdx : (order === 0 ? (activeIdx + 1) % 3 : (activeIdx + 2) % 3);
+        var wF = focusWeights[sIdx];
+        var nF = Math.max(0, Math.min(1, (wF - 0.28) / 0.72));
+        var lineGrad = ctx.createLinearGradient(0, 0, w, 0);
+        if (nF > 0.45) {
+          var peakA = (0.04 + nF * 0.075).toFixed(3);
+          lineGrad.addColorStop(0, "rgba(244, 243, 239, 0)");
+          lineGrad.addColorStop(0.14, "rgba(244, 243, 239, " + peakA + ")");
+          lineGrad.addColorStop(0.86, "rgba(244, 243, 239, " + peakA + ")");
+          lineGrad.addColorStop(1, "rgba(244, 243, 239, 0)");
+        } else {
+          lineGrad.addColorStop(0, "rgba(140, 162, 155, 0)");
+          lineGrad.addColorStop(0.16, "rgba(140, 162, 155, 0.035)");
+          lineGrad.addColorStop(0.84, "rgba(140, 162, 155, 0.035)");
+          lineGrad.addColorStop(1, "rgba(140, 162, 155, 0)");
+        }
+        ctx.strokeStyle = lineGrad;
+        ctx.lineWidth = 0.9;
         ctx.beginPath();
-        for (var k = 0; k < countPerStratum; k++) {
-          var node = nodes[s * countPerStratum + k];
-          var bell = Math.exp(-Math.pow((node.u - centerU) / 0.24, 2));
-          var wave = s === 0
-            ? Math.sin(node.phase - t * 1.15) * 0.55 + Math.cos(node.u * 9.0 + t * 0.7) * 0.35
-            : s === 1
-              ? Math.sin(node.phase - t * 1.35) * 0.75 + Math.sin(node.u * 12.0 - t * 0.9) * 0.25
-              : Math.cos(node.phase - t * 1.05) * 0.65 + Math.sin(node.u * 7.5 + t * 0.8) * 0.35;
-          var px = padX + node.u * spanW;
-          var py = baseY + yTier - bell * (4 + normF * 6) + wave * ampY * (0.45 + bell * 0.55);
-          if (k === 0) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
+        var strand = primaryPts[sIdx];
+        for (var p = 0; p < strand.length; p++) {
+          if (p === 0) ctx.moveTo(strand[p].x, strand[p].y);
+          else ctx.lineTo(strand[p].x, strand[p].y);
         }
         ctx.stroke();
+      }
 
-        // Dots along the stratum
-        for (var m = 0; m < countPerStratum; m++) {
-          var pt = nodes[s * countPerStratum + m];
-          var b = Math.exp(-Math.pow((pt.u - centerU) / 0.24, 2));
-          var wv = s === 0
-            ? Math.sin(pt.phase - t * 1.15) * 0.55 + Math.cos(pt.u * 9.0 + t * 0.7) * 0.35
-            : s === 1
-              ? Math.sin(pt.phase - t * 1.35) * 0.75 + Math.sin(pt.u * 12.0 - t * 0.9) * 0.25
-              : Math.cos(pt.phase - t * 1.05) * 0.65 + Math.sin(pt.u * 7.5 + t * 0.8) * 0.35;
-          var x = padX + pt.u * spanW;
-          var y = baseY + yTier - b * (4 + normF * 6) + wv * ampY * (0.45 + b * 0.55);
-          var edgeFade = 1 - Math.pow(Math.abs(pt.xNorm), 2.4) * 0.65;
-          var alpha = (0.16 + normF * 0.56 + b * (0.12 + normF * 0.22)) * edgeFade;
-          var radius = (0.95 + b * 0.9 + normF * 0.55) * (w < 480 ? 0.88 : 1.0);
-          var rr = Math.round(140 + normF * 104);
-          var gg = Math.round(162 + normF * 81);
-          var bb = Math.round(155 + normF * 84);
-          ctx.fillStyle = "rgba(" + rr + "," + gg + "," + bb + "," + Math.min(0.95, alpha).toFixed(3) + ")";
-          ctx.beginPath();
-          ctx.arc(x, y, radius, 0, Math.PI * 2);
-          ctx.fill();
-        }
+      projected.sort(function (a, b) { return a.z - b.z; });
+
+      for (var pIdx = 0; pIdx < projected.length; pIdx++) {
+        var dot = projected[pIdx];
+        if (dot.alpha < 0.015) continue;
+        var rr = Math.round(140 + dot.normF * 104);
+        var gg = Math.round(162 + dot.normF * 81);
+        var bb = Math.round(155 + dot.normF * 84);
+        ctx.fillStyle = "rgba(" + rr + "," + gg + "," + bb + "," + dot.alpha.toFixed(3) + ")";
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, dot.r, 0, Math.PI * 2);
+        ctx.fill();
       }
 
       if (visible && !document.hidden && !reducedMotion) {
@@ -718,7 +820,6 @@
       }
     }
 
-    var section = document.getElementById("what");
     if (section && typeof IntersectionObserver === "function") {
       new IntersectionObserver(function (entries) {
         visible = Boolean(entries[0] && entries[0].isIntersecting);
@@ -1089,11 +1190,6 @@
       }, { threshold: 0.45 }).observe(platform);
     }
   }
-
-  /* =========================================================
-     3C. Chapter 04: Open 3-Tier Team Hierarchy (#teamTrack)
-     ========================================================= */
-  function initTeamDeck() {}
 
   /* =========================================================
      4. Chapter Snap Sync & Liquid Rain Thread Rail (#rainRailCanvas)
@@ -1535,7 +1631,15 @@
     });
 
     resizeRailCanvas();
-    detectCenter();
+    if (location.hash === "#team" && acts[3]) {
+      window.scrollTo({ top: acts[3].offsetTop, behavior: "instant" });
+      if (history.replaceState) {
+        try { history.replaceState(null, "", "#about"); } catch (e) {}
+      }
+      sync(3);
+    } else {
+      detectCenter();
+    }
     latestScrollY = window.scrollY;
     dropRatio = computeScrollRatio();
     targetRatio = dropRatio;
@@ -1615,7 +1719,6 @@
   initOrbSculpture();
   initWhatTriptych();
   initTurntableStage();
-  initTeamDeck();
   initChapterRail();
   initMobileDrawer();
   initLanguageChoice();

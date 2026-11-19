@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Cormorant Garamond";
-  src: url("../assets/fonts/cormorant-garamond-500.woff2?v=20261119-10") format("woff2");
+  src: url("../assets/fonts/cormorant-garamond-500.woff2?v=20261119-11") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: "RealRain Serif SC";
-  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261119-10") format("woff2");
+  src: url("../assets/fonts/noto-serif-sc-500.woff2?v=20261119-11") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261119-10") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-400.woff2?v=20261119-11") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -24,7 +24,7 @@
 
 @font-face {
   font-family: "RealRain Sans SC";
-  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261119-10") format("woff2");
+  src: url("../assets/fonts/noto-sans-sc-500.woff2?v=20261119-11") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -105,7 +105,7 @@ button {
 a,
 button,
 .triptych-panel,
-.person-card,
+.ethos-item,
 .orbital-card,
 .orbital-stage,
 .orb-canvas,
@@ -121,8 +121,8 @@ button,
 
 .triptych-panel:focus,
 .triptych-panel:focus-visible,
-.person-card:focus,
-.person-card:focus-visible,
+.ethos-item:focus,
+.ethos-item:focus-visible,
 .eco-tab:focus,
 .eco-tab:focus-visible,
 .dot-stop:focus-visible {
@@ -516,7 +516,8 @@ button,
 }
 
 .act-header,
-.orbital-stage {
+.orbital-stage,
+.about-grid {
   transition: opacity 300ms cubic-bezier(0.22, 1, 0.36, 1), transform 340ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -526,6 +527,7 @@ button,
 }
 
 .js-ready .act:not(.is-active) .orbital-stage,
+.js-ready .act:not(.is-active) .about-grid,
 .js-ready .act:not(.is-active) .contact-center {
   opacity: 0.54;
   transform: translate3d(0, 12px, 0);
@@ -770,26 +772,21 @@ html[lang="en"] .cover-title {
 .foundation-header {
   text-align: center;
   max-width: 680px;
-  margin: 0 auto clamp(12px, 2dvh, 22px);
+  margin: 0 auto clamp(68px, 12.5dvh, 124px);
 }
 
 .foundation-header .act-lead {
   margin-inline: auto;
 }
 
-.foundation-visual {
-  width: min(100%, 760px);
-  height: clamp(84px, 13dvh, 120px);
-  margin: 0 auto clamp(10px, 1.6dvh, 18px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .strata-canvas {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   display: block;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .triptych-rail {
@@ -797,7 +794,7 @@ html[lang="en"] .cover-title {
   width: min(100%, 1040px);
   margin-inline: auto;
   height: 1px;
-  background: rgba(255, 255, 255, 0.09);
+  background: transparent;
   overflow: hidden;
 }
 
@@ -805,7 +802,7 @@ html[lang="en"] .cover-title {
   display: block;
   width: 33.3333%;
   height: 1px;
-  background: linear-gradient(90deg, rgba(244, 243, 239, 0) 0%, rgba(244, 243, 239, 0.9) 34%, rgba(140, 162, 155, 0.6) 76%, rgba(140, 162, 155, 0) 100%);
+  background: linear-gradient(90deg, rgba(244, 243, 239, 0) 8%, rgba(244, 243, 239, 0.56) 50%, rgba(140, 162, 155, 0) 92%);
   transform: translate3d(calc(var(--active-what, 0) * 100%), 0, 0);
   transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
@@ -842,7 +839,7 @@ html[lang="en"] .cover-title {
   top: 18px;
   bottom: 8px;
   width: 1px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
   pointer-events: none;
 }
 
@@ -1097,131 +1094,104 @@ html[lang="en"] .cover-title {
 }
 
 /* =========================================================
-   CHAPTER 04: TEAM (CENTERED 3-TIER EDITORIAL HIERARCHY)
+   CHAPTER 04: ABOUT STUDIO & CRAFT ETHOS (#about)
    ========================================================= */
-.team-container {
-  align-items: center;
-}
-
-.team-header {
-  text-align: center;
-  margin-inline: auto;
-  max-width: 780px;
-  margin-bottom: clamp(22px, 3.6dvh, 40px);
-}
-
-.team-trio {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(20px, 3vw, 44px);
-  width: 100%;
-  max-width: 1040px;
-  margin: 0 auto clamp(24px, 4dvh, 42px);
-}
-
-.team-trio .person-card {
+.about-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  gap: 0;
-  padding: clamp(20px, 2.6dvh, 28px) clamp(8px, 1vw, 14px) 4px;
-  background: transparent;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 0;
-  box-shadow: none;
-  transition: border-color 180ms ease;
 }
 
-.team-trio .person-card:hover {
-  border-top-color: rgba(244, 243, 239, 0.44);
+.about-grid {
+  width: min(100%, 1120px);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(44px, 6.5vw, 96px);
+  align-items: center;
 }
 
-.person-role {
-  margin: 0 0 8px;
+.about-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.about-title {
+  font-size: clamp(1.75rem, 2.95vw, 2.7rem);
+  line-height: 1.22;
+}
+
+html[lang="en"] .about-title {
+  font-size: clamp(2.05rem, 3.6vw, 3.2rem);
+  line-height: 1.08;
+}
+
+.about-lead {
+  margin: clamp(16px, 2.2dvh, 24px) 0 0;
+  max-width: 42ch;
+  font-size: clamp(14px, 1.08vw, 15.5px);
+  line-height: 1.68;
+  color: var(--ink-muted);
+  text-wrap: balance;
+}
+
+.about-meta {
+  margin: clamp(22px, 3.2dvh, 34px) 0 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   font-family: var(--font-eyebrow);
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.1em;
-  color: var(--accent-mineral);
-  white-space: nowrap;
-}
-
-.person-name {
-  margin: 0 0 12px;
-  font-family: var(--font-display);
-  font-size: clamp(1.48rem, 2.15vw, 1.92rem);
-  font-weight: 500;
-  line-height: 1.16;
-  letter-spacing: -0.015em;
-  color: var(--ink-ivory);
-}
-
-.person-pedigree {
-  margin: 0 0 6px;
-  font-size: 13.5px;
-  font-weight: 500;
-  line-height: 1.48;
-  color: rgba(244, 243, 239, 0.86);
-  text-wrap: balance;
-}
-
-.person-note {
-  margin: 0;
-  font-size: 12.5px;
-  line-height: 1.48;
-  color: var(--ink-subtle);
-  text-wrap: balance;
-}
-
-/* Understated Centered Advisor Ledger */
-.advisors-ledger {
-  width: 100%;
-  max-width: 920px;
-  margin: 0 auto;
-  padding-top: clamp(18px, 2.6dvh, 26px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-align: center;
-}
-
-.advisors-label {
-  margin: 0;
-  font-family: var(--font-eyebrow);
-  font-size: 10.5px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-subtle);
 }
 
-.advisors-pair {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px clamp(24px, 4vw, 56px);
-  width: 100%;
-}
-
-.advisor-row {
+.ethos-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 3px;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.advisor-name {
-  font-family: var(--font-display);
-  font-size: 1.04rem;
+.ethos-item {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
+  padding: clamp(18px, 2.6dvh, 26px) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.11);
+  transition: border-color 180ms ease;
+}
+
+.ethos-item:hover {
+  border-top-color: rgba(244, 243, 239, 0.36);
+}
+
+.ethos-num {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.18rem;
   font-weight: 500;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  color: var(--accent-mineral);
+}
+
+.ethos-title {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+  font-weight: 500;
+  line-height: 1.24;
   color: var(--ink-ivory);
 }
 
-.advisor-org {
+.ethos-desc {
   margin: 0;
-  font-size: 12.5px;
-  line-height: 1.46;
+  font-size: 13.5px;
+  line-height: 1.56;
   color: var(--ink-muted);
   text-wrap: balance;
 }
@@ -1393,14 +1363,7 @@ html[lang="en"] .cover-title {
   .foundation-header {
     align-items: center;
     text-align: center;
-  }
-
-  .foundation-visual {
-    display: flex;
-    justify-content: center;
-    width: min(100%, 340px);
-    height: clamp(62px, 11dvh, 88px);
-    margin: 0 auto clamp(10px, 1.8dvh, 16px);
+    margin-bottom: clamp(44px, 7.5dvh, 68px);
   }
 
   .triptych-deck {
@@ -1455,57 +1418,59 @@ html[lang="en"] .cover-title {
     gap: 8px;
   }
 
-  .team-header {
-    text-align: center;
-    margin-bottom: clamp(14px, 2.4dvh, 22px);
-  }
-
-  .team-trio {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: clamp(12px, 2dvh, 18px);
-    margin-bottom: clamp(14px, 2.4dvh, 22px);
-    border-bottom: 0;
-  }
-
-  .team-trio .person-card {
-    width: min(100%, 350px);
-    padding: 12px 0 0;
-    align-items: center;
-    text-align: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.09);
-  }
-
-  .person-role {
-    margin-bottom: 3px;
-    font-size: 10.5px;
-  }
-
-  .person-name {
-    margin-bottom: 5px;
-    font-size: 1.24rem;
-  }
-
-  .person-pedigree {
-    margin-bottom: 2px;
-    font-size: 12.8px;
-    line-height: 1.4;
-  }
-
-  .person-note {
-    font-size: 11.8px;
-    line-height: 1.4;
-  }
-
-  .advisors-ledger {
-    padding-top: 12px;
-    gap: 8px;
-  }
-
-  .advisors-pair {
+  .about-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
+    gap: clamp(20px, 3.2dvh, 30px);
+    max-width: 480px;
+  }
+
+  .about-intro {
+    align-items: center;
+    text-align: center;
+  }
+
+  .about-title {
+    font-size: clamp(1.48rem, 5.2vw, 1.95rem);
+  }
+
+  html[lang="en"] .about-title {
+    font-size: clamp(1.36rem, 5.2vw, 1.85rem);
+  }
+
+  .about-lead {
+    margin-top: 10px;
+    max-width: 40ch;
+    font-size: 13.5px;
+    line-height: 1.56;
+  }
+
+  .about-meta {
+    margin-top: 14px;
+    padding-top: 12px;
+    font-size: 10.5px;
+    text-align: center;
+  }
+
+  .ethos-list {
+    max-width: 360px;
+    margin-inline: auto;
+  }
+
+  .ethos-item {
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 10px;
+    padding: 13px 0;
+    text-align: left;
+  }
+
+  .ethos-title {
+    font-size: 1.12rem;
+    margin-bottom: 3px;
+  }
+
+  .ethos-desc {
+    font-size: 12.8px;
+    line-height: 1.46;
   }
 }
 
@@ -1611,15 +1576,12 @@ html[lang="en"] .cover-title {
 
   .act-header,
   .act-header-compact,
-  .stage-header,
-  .team-header {
+  .stage-header {
     margin-bottom: clamp(14px, 2.2dvh, 20px);
   }
 
-  .foundation-visual {
-    width: min(100%, 312px);
-    height: clamp(54px, 9.5dvh, 72px);
-    margin-bottom: clamp(8px, 1.5dvh, 12px);
+  .foundation-header {
+    margin-bottom: clamp(44px, 8dvh, 68px);
   }
 
   .triptych-deck {
@@ -1694,56 +1656,50 @@ html[lang="en"] .cover-title {
     font-size: 11.8px;
   }
 
-  .team-trio {
-    gap: 10px;
-    margin-bottom: 12px;
+  .about-grid {
+    gap: 16px;
   }
 
-  .team-trio .person-card {
-    width: min(100%, 336px);
-    padding: 10px 0 0;
+  .about-title {
+    font-size: clamp(1.38rem, 5.5vw, 1.75rem);
   }
 
-  .person-role {
-    font-size: 10px;
-    margin-bottom: 2px;
+  html[lang="en"] .about-title {
+    font-size: clamp(1.36rem, 5.4vw, 1.75rem);
   }
 
-  .person-name {
-    font-size: 1.18rem;
-    margin-bottom: 4px;
+  .about-lead {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 8px;
   }
 
-  .person-pedigree {
-    font-size: 12.2px;
-    line-height: 1.36;
-  }
-
-  .person-note {
-    font-size: 11.2px;
-    line-height: 1.36;
-  }
-
-  .advisors-ledger {
-    gap: 6px;
+  .about-meta {
+    margin-top: 10px;
     padding-top: 10px;
-  }
-
-  .advisors-label {
     font-size: 10px;
+    letter-spacing: 0.1em;
   }
 
-  .advisors-pair {
-    gap: 6px;
+  .ethos-list {
+    max-width: 336px;
   }
 
-  .advisor-name {
-    font-size: 0.96rem;
+  .ethos-item {
+    padding: 11px 0;
   }
 
-  .advisor-org {
-    font-size: 11.5px;
-    line-height: 1.36;
+  .ethos-num {
+    font-size: 1.05rem;
+  }
+
+  .ethos-title {
+    font-size: 1.06rem;
+  }
+
+  .ethos-desc {
+    font-size: 12.2px;
+    line-height: 1.42;
   }
 
   .contact-center {
@@ -1822,9 +1778,12 @@ html[lang="en"] .cover-title {
 
   .act-header,
   .act-header-compact,
-  .stage-header,
-  .team-header {
+  .stage-header {
     margin-bottom: 8px;
+  }
+
+  .foundation-header {
+    margin-bottom: 24px;
   }
 
   .cover-grid {
@@ -1856,7 +1815,9 @@ html[lang="en"] .cover-title {
     display: none;
   }
 
-  html[lang="en"] .act-title {
+  .about-title,
+  html[lang="en"] .act-title,
+  html[lang="en"] .about-title {
     font-size: clamp(1.16rem, 4.9vw, 1.55rem);
   }
 
@@ -1865,11 +1826,6 @@ html[lang="en"] .cover-title {
     font-size: 11.6px;
     line-height: 1.35;
     margin-top: 4px;
-  }
-
-  .foundation-visual {
-    height: 48px;
-    margin-bottom: 8px;
   }
 
   .triptych-deck {
@@ -1923,52 +1879,34 @@ html[lang="en"] .cover-title {
     font-size: clamp(1.2rem, 5.4vw, 1.7rem);
   }
 
-  .team-trio {
-    gap: 7px;
-    margin-bottom: 8px;
+  .about-grid {
+    gap: 10px;
   }
 
-  .team-trio .person-card {
-    padding: 7px 0 0;
+  .about-lead {
+    font-size: 11.4px;
+    line-height: 1.36;
+    margin-top: 5px;
   }
 
-  .person-role {
-    font-size: 9.5px;
-    margin-bottom: 1px;
+  .about-meta {
+    display: none;
   }
 
-  .person-name {
-    font-size: 1.06rem;
+  .ethos-item {
+    padding: 8px 0;
+    gap: 8px;
+  }
+
+  .ethos-title {
+    font-size: 0.98rem;
     margin-bottom: 2px;
   }
 
-  .person-pedigree {
-    font-size: 11.4px;
-    line-height: 1.3;
-  }
-
-  .person-note {
-    font-size: 10.6px;
-    line-height: 1.3;
-  }
-
-  .advisor-org,
+  .ethos-desc,
   .plate-meta p {
     font-size: 11px;
     line-height: 1.32;
-  }
-
-  .advisors-ledger {
-    gap: 4px;
-    padding-top: 7px;
-  }
-
-  .advisors-pair {
-    gap: 4px;
-  }
-
-  .advisor-name {
-    font-size: 0.92rem;
   }
 
   .colophon {

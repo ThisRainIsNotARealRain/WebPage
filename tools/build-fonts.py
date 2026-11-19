@@ -43,17 +43,17 @@ ASCII_CHARS = {chr(c) for c in range(0x20, 0x7F)}
 EDITORIAL_PUNCT = set("，。、；：？！“”‘’（）《》〈〉「」『』…·×Ø°±↗→↑–©")
 
 SERIF_TAGS = {"h1", "h2", "h3"}
-SERIF_CLASSES = {"advisor-name", "mobile-drawer-nav"}
+SERIF_CLASSES = {"mobile-drawer-nav"}
 MEDIUM_TAGS = {"nav", "button"}
 MEDIUM_CLASSES = {
     "btn",
     "eyebrow",
+    "card-kicker",
     "card-num",
     "card-en",
     "eco-tab",
     "stage-link",
-    "person-role",
-    "advisor-role",
+    "about-meta",
     "skip-link",
     "header-lang",
     "plate-kicker",
