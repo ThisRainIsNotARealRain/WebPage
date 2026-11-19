@@ -538,7 +538,7 @@
   }
 
   /* =========================================================
-     3A. Chapter 02: De-Boxed Architectural Triptych (#whatTriptych)
+     3A. Chapter 02: Centered Foundation & 3-Strata Dot-Horizon
          Fixed equal-width grid = zero downward title shift ever
      ========================================================= */
   function initWhatTriptych() {
@@ -546,14 +546,23 @@
     if (!deck) return;
     var panels = Array.prototype.slice.call(deck.querySelectorAll("[data-what-card]"));
     var beam = document.getElementById("whatBeam");
+    var canvas = document.getElementById("strataCanvas");
     if (!panels.length) return;
 
+    var activeIdx = 0;
+    var lastStrataInteract = performance.now();
+
     function setActive(idx) {
+      activeIdx = idx;
+      lastStrataInteract = performance.now();
       for (var i = 0; i < panels.length; i++) {
         panels[i].classList.toggle("is-expanded", i === idx);
       }
       if (beam) {
         beam.style.setProperty("--active-what", String(idx));
+      }
+      if (canvas) {
+        canvas.__activeStratum = idx;
       }
     }
 
@@ -567,6 +576,170 @@
         });
       })(i, panels[i]);
     }
+
+    if (!canvas) return;
+    canvas.__activeStratum = 0;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var countPerStratum = 48;
+    var nodes = [];
+    for (var s = 0; s < 3; s++) {
+      for (var n = 0; n < countPerStratum; n++) {
+        var u = countPerStratum > 1 ? n / (countPerStratum - 1) : 0.5;
+        nodes.push({
+          s: s,
+          u: u,
+          xNorm: u * 2 - 1,
+          phase: u * Math.PI * (s === 0 ? 3.2 : s === 1 ? 4.4 : 3.8) + s * 1.15
+        });
+      }
+    }
+
+    var focusWeights = [1.0, 0.28, 0.28];
+    var w = 0;
+    var h = 0;
+    var dpr = 1;
+    var visible = false;
+    var rafId = 0;
+    var lastDraw = 0;
+    var lastRenderTime = 0;
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      w = canvas.clientWidth || 720;
+      h = canvas.clientHeight || 96;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      lastStrataInteract = performance.now();
+    }
+    window.addEventListener("resize", resize, { passive: true });
+    resize();
+
+    function renderStrata(now) {
+      rafId = 0;
+      if (!visible || document.hidden) return;
+      var tMs = typeof now === "number" ? now : performance.now();
+      if (!reducedMotion && (tMs - lastStrataInteract) > 800 && (tMs - lastDraw) < 32) {
+        rafId = requestAnimationFrame(renderStrata);
+        return;
+      }
+      lastDraw = tMs;
+      var dt60 = lastRenderTime ? Math.min(2.5, Math.max(0.25, (tMs - lastRenderTime) / 16.667)) : 1;
+      lastRenderTime = tMs;
+
+      var follow = 1 - Math.pow(1 - 0.14, dt60);
+      for (var fw = 0; fw < 3; fw++) {
+        var targetW = fw === activeIdx ? 1.0 : 0.28;
+        focusWeights[fw] += (targetW - focusWeights[fw]) * follow;
+      }
+
+      ctx.clearRect(0, 0, w, h);
+      var t = reducedMotion ? 0 : tMs * 0.0014;
+      var padX = Math.max(18, w * 0.045);
+      var spanW = Math.max(120, w - padX * 2);
+      var baseY = h * 0.56;
+      var ampY = Math.max(10, h * 0.22);
+
+      // Soft ambient glow anchored below the focused pillar's wave zone
+      var glowX = padX + spanW * (activeIdx === 0 ? 0.22 : activeIdx === 1 ? 0.50 : 0.78);
+      var glowR = Math.max(84, Math.min(220, w * 0.28));
+      var halo = ctx.createRadialGradient(glowX, baseY, 4, glowX, baseY, glowR);
+      halo.addColorStop(0, "rgba(140, 162, 155, 0.15)");
+      halo.addColorStop(0.55, "rgba(140, 162, 155, 0.045)");
+      halo.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = halo;
+      ctx.fillRect(0, 0, w, h);
+
+      // Faint perspective baseline
+      ctx.strokeStyle = "rgba(244, 243, 239, 0.065)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padX, baseY + h * 0.20);
+      ctx.lineTo(padX + spanW, baseY + h * 0.20);
+      ctx.stroke();
+
+      for (var order = 0; order < 3; order++) {
+        var s = order === 2 ? activeIdx : (order === 0 ? (activeIdx + 1) % 3 : (activeIdx + 2) % 3);
+        var fW = focusWeights[s];
+        var normF = Math.max(0, Math.min(1, (fW - 0.28) / 0.72));
+        var centerU = s === 0 ? 0.22 : s === 1 ? 0.50 : 0.78;
+        var yTier = (s - 1) * (h * 0.11) - normF * 3.5;
+
+        // Subtle connecting hairline across each wave stratum
+        ctx.strokeStyle = normF > 0.45
+          ? "rgba(244, 243, 239, " + (0.06 + normF * 0.14).toFixed(3) + ")"
+          : "rgba(140, 162, 155, 0.075)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (var k = 0; k < countPerStratum; k++) {
+          var node = nodes[s * countPerStratum + k];
+          var bell = Math.exp(-Math.pow((node.u - centerU) / 0.24, 2));
+          var wave = s === 0
+            ? Math.sin(node.phase - t * 1.15) * 0.55 + Math.cos(node.u * 9.0 + t * 0.7) * 0.35
+            : s === 1
+              ? Math.sin(node.phase - t * 1.35) * 0.75 + Math.sin(node.u * 12.0 - t * 0.9) * 0.25
+              : Math.cos(node.phase - t * 1.05) * 0.65 + Math.sin(node.u * 7.5 + t * 0.8) * 0.35;
+          var px = padX + node.u * spanW;
+          var py = baseY + yTier - bell * (4 + normF * 6) + wave * ampY * (0.45 + bell * 0.55);
+          if (k === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+
+        // Dots along the stratum
+        for (var m = 0; m < countPerStratum; m++) {
+          var pt = nodes[s * countPerStratum + m];
+          var b = Math.exp(-Math.pow((pt.u - centerU) / 0.24, 2));
+          var wv = s === 0
+            ? Math.sin(pt.phase - t * 1.15) * 0.55 + Math.cos(pt.u * 9.0 + t * 0.7) * 0.35
+            : s === 1
+              ? Math.sin(pt.phase - t * 1.35) * 0.75 + Math.sin(pt.u * 12.0 - t * 0.9) * 0.25
+              : Math.cos(pt.phase - t * 1.05) * 0.65 + Math.sin(pt.u * 7.5 + t * 0.8) * 0.35;
+          var x = padX + pt.u * spanW;
+          var y = baseY + yTier - b * (4 + normF * 6) + wv * ampY * (0.45 + b * 0.55);
+          var edgeFade = 1 - Math.pow(Math.abs(pt.xNorm), 2.4) * 0.65;
+          var alpha = (0.16 + normF * 0.56 + b * (0.12 + normF * 0.22)) * edgeFade;
+          var radius = (0.95 + b * 0.9 + normF * 0.55) * (w < 480 ? 0.88 : 1.0);
+          var rr = Math.round(140 + normF * 104);
+          var gg = Math.round(162 + normF * 81);
+          var bb = Math.round(155 + normF * 84);
+          ctx.fillStyle = "rgba(" + rr + "," + gg + "," + bb + "," + Math.min(0.95, alpha).toFixed(3) + ")";
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      if (visible && !document.hidden && !reducedMotion) {
+        rafId = requestAnimationFrame(renderStrata);
+      }
+    }
+
+    var section = document.getElementById("what");
+    if (section && typeof IntersectionObserver === "function") {
+      new IntersectionObserver(function (entries) {
+        visible = Boolean(entries[0] && entries[0].isIntersecting);
+        if (visible && !document.hidden && !rafId) {
+          lastDraw = 0;
+          lastRenderTime = 0;
+          rafId = requestAnimationFrame(renderStrata);
+        }
+      }, { threshold: 0.05 }).observe(section);
+    } else {
+      visible = true;
+      renderStrata(performance.now());
+    }
+
+    document.addEventListener("visibilitychange", function () {
+      if (visible && !document.hidden && !reducedMotion && !rafId) {
+        lastDraw = 0;
+        lastRenderTime = 0;
+        rafId = requestAnimationFrame(renderStrata);
+      }
+    });
   }
 
   /* =========================================================
@@ -918,53 +1091,9 @@
   }
 
   /* =========================================================
-     3C. Chapter 04: Mobile Founding Team Hairline Accordion (#teamTrack)
+     3C. Chapter 04: Open 3-Tier Team Hierarchy (#teamTrack)
      ========================================================= */
-  function initTeamDeck() {
-    var track = document.getElementById("teamTrack");
-    var cards = track ? Array.prototype.slice.call(track.querySelectorAll("[data-team-card]")) : [];
-    if (!track || !cards.length) return;
-
-    function syncFocusable() {
-      var mobile = window.innerWidth <= 960;
-      for (var i = 0; i < cards.length; i++) {
-        if (mobile) {
-          cards[i].setAttribute("tabindex", "0");
-          cards[i].setAttribute("aria-expanded", cards[i].classList.contains("is-expanded") ? "true" : "false");
-        } else {
-          cards[i].removeAttribute("tabindex");
-          cards[i].removeAttribute("aria-expanded");
-        }
-      }
-    }
-
-    function setActive(idx) {
-      for (var i = 0; i < cards.length; i++) {
-        var expanded = i === idx;
-        cards[i].classList.toggle("is-expanded", expanded);
-        cards[i].setAttribute("aria-expanded", expanded ? "true" : "false");
-      }
-    }
-
-    for (var i = 0; i < cards.length; i++) {
-      (function (idx, el) {
-        el.addEventListener("click", function () {
-          if (window.innerWidth > 960) return;
-          setActive(idx);
-        });
-        el.addEventListener("keydown", function (e) {
-          if (window.innerWidth > 960) return;
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setActive(idx);
-          }
-        });
-      })(i, cards[i]);
-    }
-
-    window.addEventListener("resize", syncFocusable, { passive: true });
-    syncFocusable();
-  }
+  function initTeamDeck() {}
 
   /* =========================================================
      4. Chapter Snap Sync & Liquid Rain Thread Rail (#rainRailCanvas)
