@@ -123,13 +123,13 @@
         "    wave = exp(-abs(rd - radius) * 28.0) * exp(-uRippleAge * 1.4) * 0.30;",
         "  }",
         "",
-        "  vec3 baseObsidian = vec3(0.018, 0.020, 0.020);",
-        "  vec3 mineralStone = vec3(0.062, 0.088, 0.084);",
-        "  vec3 silverMist = vec3(0.30, 0.34, 0.33);",
+        "  vec3 baseObsidian = vec3(0.018, 0.021, 0.020);",
+        "  vec3 mineralStone = vec3(0.055, 0.098, 0.090);",
+        "  vec3 silverMist = vec3(0.27, 0.35, 0.335);",
         "",
         "  vec3 col = mix(baseObsidian, mineralStone, ribbon * 0.92);",
         "  col += silverMist * (filament * 0.25 + wave);",
-        "  col += vec3(0.18, 0.20, 0.19) * exp(-md * 2.8) * 0.22;",
+        "  col += vec3(0.15, 0.21, 0.195) * exp(-md * 2.8) * 0.22;",
         "  col *= 1.0 - smoothstep(0.34, 1.08 + portrait * 0.22, length(p * vec2(mix(0.78, 0.68, portrait), 0.95))) * mix(0.62, 0.44, portrait);",
         "  col += (hash(gl_FragCoord.xy) - 0.5) * 0.012;",
         "",
@@ -251,8 +251,8 @@
       ctx.fillStyle = "#050606";
       ctx.fillRect(0, 0, w, h);
       var g = ctx.createRadialGradient(w * state.mxTarget, h * (1 - state.myTarget), 20, w * 0.5, h * 0.5, Math.max(w, h) * 0.75);
-      g.addColorStop(0, "rgba(140, 162, 155, 0.16)");
-      g.addColorStop(0.55, "rgba(38, 46, 44, 0.07)");
+      g.addColorStop(0, "rgba(135, 164, 157, 0.17)");
+      g.addColorStop(0.55, "rgba(38, 56, 52, 0.075)");
       g.addColorStop(1, "rgba(5, 6, 6, 0)");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, w, h);
@@ -486,8 +486,8 @@
         cy,
         radius * 1.25
       );
-      halo.addColorStop(0, "rgba(218, 220, 215, 0.14)");
-      halo.addColorStop(0.6, "rgba(140, 162, 155, 0.045)");
+      halo.addColorStop(0, "rgba(224, 232, 229, 0.135)");
+      halo.addColorStop(0.58, "rgba(122, 152, 145, 0.068)");
       halo.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = halo;
       ctx.beginPath();
@@ -520,9 +520,9 @@
       for (var j = 0; j < projected.length; j++) {
         var p = projected[j];
         var mixLight = Math.max(0, Math.min(1, p.z + 0.4 + p.lit * 0.7));
-        var rCol = Math.round(142 + mixLight * 98);
-        var gCol = Math.round(146 + mixLight * 95);
-        var bCol = Math.round(142 + mixLight * 92);
+        var rCol = Math.round(136 + mixLight * 106);
+        var gCol = Math.round(151 + mixLight * 92);
+        var bCol = Math.round(147 + mixLight * 92);
         ctx.fillStyle = "rgba(" + rCol + "," + gCol + "," + bCol + "," + p.alpha.toFixed(3) + ")";
         ctx.beginPath();
         ctx.arc(p.sx, p.sy, p.r, 0, Math.PI * 2);
