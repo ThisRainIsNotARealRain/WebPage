@@ -251,7 +251,7 @@
       ctx.fillStyle = "#050606";
       ctx.fillRect(0, 0, w, h);
       var g = ctx.createRadialGradient(w * state.mxTarget, h * (1 - state.myTarget), 20, w * 0.5, h * 0.5, Math.max(w, h) * 0.75);
-      g.addColorStop(0, "rgba(135, 164, 157, 0.17)");
+      g.addColorStop(0, "rgba(140, 162, 155, 0.17)");
       g.addColorStop(0.55, "rgba(38, 56, 52, 0.075)");
       g.addColorStop(1, "rgba(5, 6, 6, 0)");
       ctx.fillStyle = g;
@@ -889,10 +889,23 @@
     var dragVel = 0;
     var dragStartIdx = 0;
 
+    var stageGlowHex = ["#84B0CA", "#9AB0D9", "#E54D3E"];
+    var stageGlowRgb = ["132, 176, 202", "154, 176, 217", "229, 77, 62"];
+
     function syncTabs(idx) {
       var mod = ((idx % total) + total) % total;
       activeIdx = mod;
-      if (tabBar) tabBar.style.setProperty("--stage-idx", String(mod));
+      var glowHex = stageGlowHex[mod] || stageGlowHex[0];
+      var glowRgb = stageGlowRgb[mod] || stageGlowRgb[0];
+      if (platform) {
+        platform.style.setProperty("--stage-glow", glowHex);
+        platform.style.setProperty("--stage-glow-rgb", glowRgb);
+      }
+      if (tabBar) {
+        tabBar.style.setProperty("--stage-idx", String(mod));
+        tabBar.style.setProperty("--stage-glow", glowHex);
+        tabBar.style.setProperty("--stage-glow-rgb", glowRgb);
+      }
       for (var t = 0; t < tabs.length; t++) {
         var tabIdx = parseInt(tabs[t].getAttribute("data-stage-tab"), 10);
         var match = tabIdx === mod;
@@ -1613,16 +1626,20 @@
     }
 
     document.addEventListener("keydown", function (e) {
-      var tag = (document.activeElement && document.activeElement.tagName) || "";
-      if (/INPUT|TEXTAREA|SELECT|BUTTON/.test(tag)) return;
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      var active = document.activeElement;
+      var tag = (active && active.tagName) || "";
+      var onChapterControl = !!(active && active.closest && active.closest(".dot-stop, .eco-tab"));
+      if (!onChapterControl && /INPUT|TEXTAREA|SELECT|BUTTON/.test(tag)) return;
+      if (active && active.isContentEditable) return;
       var drawer = document.getElementById("mobileDrawer");
       if (drawer && !drawer.hidden) return;
-      if (e.key === "PageDown" || (e.key === "ArrowDown" && !e.altKey)) {
+      if (e.key === "PageDown" || e.key === "ArrowDown") {
         if (current < acts.length - 1) {
           e.preventDefault();
           scrollToChapter(current + 1, false);
         }
-      } else if (e.key === "PageUp" || (e.key === "ArrowUp" && !e.altKey)) {
+      } else if (e.key === "PageUp" || e.key === "ArrowUp") {
         if (current > 0) {
           e.preventDefault();
           scrollToChapter(current - 1, false);
@@ -1650,42 +1667,143 @@
     if (!toggle || !drawer) return;
 
     var links = drawer.querySelectorAll("a[href]");
+    var root = document.documentElement;
+    var reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var EXIT_MS = 140;
+    var backdropEls = Array.prototype.slice.call(
+      document.querySelectorAll("#main, .site-header, .chapter-dots, .skip-link")
+    );
 
-    function setOpen(open) {
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      drawer.setAttribute("aria-hidden", open ? "false" : "true");
-      drawer.hidden = !open;
-      document.documentElement.style.overflow = open ? "hidden" : "";
-      if (open && closeBtn) closeBtn.focus();
+    var state = "closed";
+    var closeTimer = 0;
+    var onExitEnd = null;
+
+    function setBackdropInert(on) {
+      for (var i = 0; i < backdropEls.length; i++) {
+        if (on) backdropEls[i].setAttribute("inert", "");
+        else backdropEls[i].removeAttribute("inert");
+      }
+    }
+
+    function setState(next) {
+      state = next;
+      drawer.setAttribute("data-state", next);
+    }
+
+    function focusables() {
+      var all = drawer.querySelectorAll("a[href], button:not([disabled])");
+      var list = [];
+      for (var i = 0; i < all.length; i++) {
+        if (all[i].offsetParent !== null || all[i] === document.activeElement) list.push(all[i]);
+      }
+      return list;
+    }
+
+    function openDrawer() {
+      if (state === "open") return;
+      window.clearTimeout(closeTimer);
+      if (onExitEnd) {
+        drawer.removeEventListener("transitionend", onExitEnd);
+        onExitEnd = null;
+      }
+      drawer.hidden = false;
+      drawer.setAttribute("aria-hidden", "false");
+      drawer.classList.remove("is-closing");
+      // Commit the closed frame so the enter transition always has a start state.
+      void drawer.offsetWidth;
+      drawer.classList.add("is-open");
+      setState("open");
+      toggle.setAttribute("aria-expanded", "true");
+      root.style.overflow = "hidden";
+      setBackdropInert(true);
+      if (closeBtn) {
+        try { closeBtn.focus({ preventScroll: true }); } catch (err) { closeBtn.focus(); }
+      }
+    }
+
+    function closeDrawer(restoreFocus, instant) {
+      if (state !== "open") return;
+      var hadFocus = drawer.contains(document.activeElement);
+      setState("closing");
+      toggle.setAttribute("aria-expanded", "false");
+      drawer.classList.remove("is-open");
+      drawer.classList.add("is-closing");
+
+      function finish() {
+        window.clearTimeout(closeTimer);
+        if (onExitEnd) {
+          drawer.removeEventListener("transitionend", onExitEnd);
+          onExitEnd = null;
+        }
+        if (state !== "closing") return;
+        drawer.classList.remove("is-closing");
+        drawer.hidden = true;
+        drawer.setAttribute("aria-hidden", "true");
+        setState("closed");
+        root.style.overflow = "";
+        setBackdropInert(false);
+        if (restoreFocus && hadFocus) {
+          try { toggle.focus({ preventScroll: true }); } catch (err) { toggle.focus(); }
+        }
+      }
+
+      if (instant || reducedMotionQuery.matches) {
+        finish();
+        return;
+      }
+      onExitEnd = function (e) {
+        if (e.target === drawer && e.propertyName === "opacity") finish();
+      };
+      drawer.addEventListener("transitionend", onExitEnd);
+      closeTimer = window.setTimeout(finish, EXIT_MS + 40);
     }
 
     toggle.addEventListener("click", function () {
-      setOpen(toggle.getAttribute("aria-expanded") !== "true");
+      if (state === "open") closeDrawer(true);
+      else openDrawer();
     });
 
     if (closeBtn) {
-      closeBtn.addEventListener("click", function (e) {
-        setOpen(false);
-        if (e.detail === 0) toggle.focus();
+      closeBtn.addEventListener("click", function () {
+        closeDrawer(true);
       });
     }
 
     for (var i = 0; i < links.length; i++) {
       links[i].addEventListener("click", function () {
-        setOpen(false);
+        closeDrawer(true);
       });
     }
 
     document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape" && !drawer.hidden) {
-        setOpen(false);
-        toggle.focus();
+      if (state !== "open") return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeDrawer(true);
+        return;
+      }
+      if (event.key !== "Tab") return;
+      var list = focusables();
+      if (!list.length) {
+        event.preventDefault();
+        return;
+      }
+      var first = list[0];
+      var last = list[list.length - 1];
+      var active = document.activeElement;
+      var inside = drawer.contains(active);
+      if (event.shiftKey && (!inside || active === first)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (!inside || active === last)) {
+        event.preventDefault();
+        first.focus();
       }
     });
 
     window.addEventListener("resize", function () {
-      if (window.innerWidth > 960 && !drawer.hidden) {
-        setOpen(false);
+      if (window.innerWidth > 960 && state === "open") {
+        closeDrawer(false, true);
       }
     }, { passive: true });
   }
