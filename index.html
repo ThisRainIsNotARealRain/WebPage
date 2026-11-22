@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>非雨 RealRain｜Hack to the Wonderland · 让想象世界，进入现实生活</title>
-  <meta name="description" content="非雨 RealRain 连接数字想象与物理现实，以多模态智能、可编程权利契约与柔性造物网络，贯通交汇之地 Crossroads、造物工房 Merch Kodo 与 ACG Daily。唯一愿景：Hack to the Wonderland。" />
+  <meta name="description" content="非雨 RealRain 搭建数字创作与实体消费之间的桥梁，以统一账户与授权契约、多模态创作引擎与柔性供应链，贯通交汇之地 Crossroads、造物工房 Merch Kodo 与 ACG Daily 三条产品主线。唯一愿景：Hack to the Wonderland。" />
   <meta name="theme-color" content="#050606" />
   <link rel="canonical" href="https://realrain.co/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://realrain.co/" />
@@ -59,17 +59,70 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "非雨 RealRain",
-      "url": "https://realrain.co/",
-      "email": "contact@realrain.co",
-      "logo": "https://realrain.co/assets/logo/realrain-favicon-celadon.png",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "北京市海淀区成府路 28 号 优盛大厦",
-        "addressLocality": "北京",
-        "addressCountry": "CN"
-      }
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://realrain.co/#organization",
+          "name": "非雨 RealRain",
+          "alternateName": ["RealRain", "非雨"],
+          "slogan": "Hack to the Wonderland",
+          "description": "非雨 RealRain 搭建数字创作与实体消费之间的桥梁，贯通交汇之地 Crossroads、造物工房 Merch Kodo 与 ACG Daily 三条核心产品主线。",
+          "url": "https://realrain.co/",
+          "email": "contact@realrain.co",
+          "logo": "https://realrain.co/assets/logo/realrain-favicon-celadon.png",
+          "sameAs": [
+            "https://realrain.art/",
+            "https://github.com/ThisRainIsNotARealRain"
+          ],
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "北京市海淀区成府路 28 号 优盛大厦",
+            "addressLocality": "北京",
+            "addressCountry": "CN"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://realrain.co/#website",
+          "name": "非雨 RealRain",
+          "url": "https://realrain.co/",
+          "inLanguage": ["zh-Hans", "en"],
+          "publisher": { "@id": "https://realrain.co/#organization" }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://realrain.art/#app",
+          "name": "交汇之地 Crossroads",
+          "alternateName": ["交汇之地", "Crossroads"],
+          "url": "https://realrain.art/",
+          "applicationCategory": "ShoppingApplication",
+          "operatingSystem": "Web, WeChat Mini-Program, Android",
+          "description": "面向用户与创作者的网页、小程序及客户端消费与共创渠道，浏览精选系列、微调定制并选购正版实体周边。",
+          "publisher": { "@id": "https://realrain.co/#organization" }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://kodo.realrain.art/#app",
+          "name": "造物工房 Merch Kodo",
+          "alternateName": ["造物工房", "Merch Kodo", "Rain Shop"],
+          "url": "https://kodo.realrain.art/",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web, Android",
+          "description": "面向 IP 方、原创品牌与主催的一站式商家与多渠道周边发行平台，涵盖商品开发、独立品牌建店、按需生产与多渠道履约核算。",
+          "publisher": { "@id": "https://realrain.co/#organization" }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://daily.realrain.art/#app",
+          "name": "ACG Daily",
+          "alternateName": ["Rain Daily"],
+          "url": "https://daily.realrain.art/",
+          "applicationCategory": "EntertainmentApplication",
+          "operatingSystem": "Web, Android",
+          "description": "聚合数万部番剧、游戏与漫画图鉴的可编程个人日报、线下漫展街区、日程日历与智能助手。",
+          "publisher": { "@id": "https://realrain.co/#organization" }
+        }
+      ]
     }
   </script>
   <!--/email_off-->

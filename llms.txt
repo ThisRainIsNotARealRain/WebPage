@@ -1,0 +1,40 @@
+# 非雨 RealRain
+
+> Hack to the Wonderland · 让想象世界，进入现实生活 / Where imagined worlds enter everyday life.
+
+非雨（RealRain）连接数字创作与实体消费，以统一身份与授权契约、多模态创作运行时与柔性按需造物网络为共享底座，贯通三条平级核心产品主线：**交汇之地 Crossroads**、**造物工房 Merch Kodo** 与 **ACG Daily**。
+
+RealRain bridges digital creation and everyday physical goods on one shared foundation (unified identity and licensing contracts, multimodal creative runtime, and flexible on-demand manufacturing) across three peer product lines: **Crossroads**, **Merch Kodo**, and **ACG Daily**.
+
+## 官方入口 / Official Links
+
+- 公司官网（中文）: https://realrain.co/
+- Official Website (English): https://realrain.co/en/
+- 交汇之地 Crossroads: https://realrain.art/
+- 造物工房 Merch Kodo: https://kodo.realrain.art/
+- ACG Daily: https://daily.realrain.art/
+- 商务与合作联系 / Contact: mailto:contact@realrain.co
+
+## 共享底层底座 / Shared Foundation
+
+1. **统一账户与授权契约 (Identity & Licensing Contracts)**：统一 RealRain Account 身份、组织权限与清晰的作品署名及商业化授权记录。
+2. **多模态创作引擎 (Multimodal Creative Runtime)**：自研视觉与版式生成运行时，辅助将角色与插画资产转化为出版级印前工艺稿。
+3. **柔性实体造物 (Flexible Tactile Manufacturing)**：贯通参数化刀版、按需生产（POD）与多品类实体周边供应链（徽章、立牌、纸品与织物等）。
+
+## 三大核心产品主线 / Three Core Product Lines
+
+1. **交汇之地 Crossroads** (`https://realrain.art/`)
+   - 定位：自有消费与共创渠道（覆盖 Web、微信小程序与 Android 客户端）。
+   - 功能：面向爱好者与创作者，浏览精选作品系列、微调定制并选购正版实体周边与独立店铺商品。
+2. **造物工房 Merch Kodo** (`https://kodo.realrain.art/`)
+   - 定位：商家与多渠道周边发行平台（工程代号 RainShop，覆盖 Web 商家工作台与 Android 客户端）。
+   - 功能：面向 IP 方、原创品牌与周边主催的一站式经营平台，涵盖商品化素材整理、周边设计打样、独立品牌店铺装修、供应链/POD 对接及多渠道刊登履约核算。
+3. **ACG Daily** (`https://daily.realrain.art/`)
+   - 定位：可编程内容与日常陪伴入口（覆盖 Web 与 Android 客户端）。
+   - 功能：聚合 28,000+ 部动画、漫画与游戏作品图鉴、个人可编程日报、发售与漫展日程日历、线下街区指南及智能助手。
+
+## 口径说明与消歧 / Current Scope & Disambiguation
+
+- 当前战略聚焦于实体周边开发、多渠道发行、消费体验与日常内容陪伴；独立版权发行交易市场暂不立项。
+- 本定义已全面取代早期路演报道中的历史表述（如 "An alternative production infrastructure for anime IP"、旧简称「交汇地」或早期五项代理授权分类）。
+- 非雨（RealRain, `realrain.co` / `realrain.art`，总部位于北京海淀优盛大厦）与第三方域名 `realrain.ai` 及曾使用 `realrain.co` 的海外服饰品牌无关联。

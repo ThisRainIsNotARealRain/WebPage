@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>RealRain | Hack to the Wonderland · Where Imagined Worlds Become Real</title>
-  <meta name="description" content="RealRain bridges digital imagination and physical craft through multimodal intelligence, programmable rights, and tactile publishing across Crossroads, Merch Kodo, and ACG Daily. Sole vision: Hack to the Wonderland." />
+  <meta name="description" content="RealRain bridges digital creation and physical goods through unified identity and licensing contracts, multimodal creative runtime, and flexible supply chains across Crossroads, Merch Kodo, and ACG Daily. Sole vision: Hack to the Wonderland." />
   <meta name="theme-color" content="#050606" />
   <link rel="canonical" href="https://realrain.co/en/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://realrain.co/" />
@@ -49,18 +49,70 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "RealRain",
-      "alternateName": "非雨",
-      "url": "https://realrain.co/en/",
-      "email": "contact@realrain.co",
-      "logo": "https://realrain.co/assets/logo/realrain-favicon-celadon.png",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "U-Center, 28 Chengfu Road, Haidian District",
-        "addressLocality": "Beijing",
-        "addressCountry": "CN"
-      }
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://realrain.co/#organization",
+          "name": "RealRain",
+          "alternateName": ["非雨", "非雨 RealRain"],
+          "slogan": "Hack to the Wonderland",
+          "description": "RealRain bridges digital creation and physical goods across three peer product lines: Crossroads, Merch Kodo, and ACG Daily.",
+          "url": "https://realrain.co/",
+          "email": "contact@realrain.co",
+          "logo": "https://realrain.co/assets/logo/realrain-favicon-celadon.png",
+          "sameAs": [
+            "https://realrain.art/",
+            "https://github.com/ThisRainIsNotARealRain"
+          ],
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "U-Center, 28 Chengfu Road, Haidian District",
+            "addressLocality": "Beijing",
+            "addressCountry": "CN"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://realrain.co/#website",
+          "name": "RealRain",
+          "url": "https://realrain.co/",
+          "inLanguage": ["en", "zh-Hans"],
+          "publisher": { "@id": "https://realrain.co/#organization" }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://realrain.art/#app",
+          "name": "Crossroads",
+          "alternateName": ["交汇之地", "RealRain Crossroads"],
+          "url": "https://realrain.art/?lang=en",
+          "applicationCategory": "ShoppingApplication",
+          "operatingSystem": "Web, WeChat Mini-Program, Android",
+          "description": "Consumer and co-creation channel across web, mini-program, and mobile where fans explore curated series, customize designs, and collect physical editions.",
+          "publisher": { "@id": "https://realrain.co/#organization" }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://kodo.realrain.art/#app",
+          "name": "Merch Kodo",
+          "alternateName": ["造物工房", "Rain Shop"],
+          "url": "https://kodo.realrain.art/",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web, Android",
+          "description": "End-to-end merchant and multichannel merchandise publishing platform for IP holders, independent brands, and creators across product studio, branded storefronts, POD, and fulfillment.",
+          "publisher": { "@id": "https://realrain.co/#organization" }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://daily.realrain.art/#app",
+          "name": "ACG Daily",
+          "alternateName": ["Rain Daily"],
+          "url": "https://daily.realrain.art/",
+          "applicationCategory": "EntertainmentApplication",
+          "operatingSystem": "Web, Android",
+          "description": "Programmable personal ACG daily feed, 28,000+ work encyclopedia, release calendar, offline district guide, and AI companion.",
+          "publisher": { "@id": "https://realrain.co/#organization" }
+        }
+      ]
     }
   </script>
   <!--/email_off-->
