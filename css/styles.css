@@ -207,16 +207,16 @@ button,
 }
 
 .brand-emblem {
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   display: block;
   flex-shrink: 0;
-  color: #E1EAE7;
+  color: var(--ink-ivory);
 }
 
 .brand-wordmark {
-  width: 100px;
-  height: 20px;
+  width: 105px;
+  height: 21px;
   display: block;
   flex-shrink: 0;
   color: var(--ink-ivory);
@@ -1130,18 +1130,18 @@ html[lang="en"] .cover-title {
 }
 
 .plate-logo--crossroads {
-  width: 25px;
-  height: 25px;
+  width: 26px;
+  height: 26px;
 }
 
 .plate-logo--merchkodo {
-  width: 23.5px;
-  height: 23.5px;
+  width: 24px;
+  height: 24px;
 }
 
 .plate-logo--acgdaily {
-  width: 21.5px;
-  height: 21.5px;
+  width: 22px;
+  height: 22px;
 }
 
 .plate-meta h3 {
@@ -1231,18 +1231,18 @@ html[lang="en"] .cover-title {
 }
 
 .eco-tab-logo--crossroads {
+  width: 18px;
+  height: 18px;
+}
+
+.eco-tab-logo--merchkodo {
   width: 17px;
   height: 17px;
 }
 
-.eco-tab-logo--merchkodo {
+.eco-tab-logo--acgdaily {
   width: 16px;
   height: 16px;
-}
-
-.eco-tab-logo--acgdaily {
-  width: 14.5px;
-  height: 14.5px;
 }
 
 .eco-tab.is-active .eco-tab-logo {
@@ -1524,13 +1524,13 @@ html[lang="en"] .cover-title {
   }
 
   .brand-emblem {
-    width: 26px;
-    height: 26px;
+    width: 29px;
+    height: 29px;
   }
 
   .brand-wordmark {
-    width: 90px;
-    height: 18px;
+    width: 92px;
+    height: 18.5px;
   }
 
   .chapter-dots {

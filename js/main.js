@@ -1709,6 +1709,7 @@
       drawer.hidden = false;
       drawer.setAttribute("aria-hidden", "false");
       drawer.classList.remove("is-closing");
+      snapBrandEmblems();
       // Commit the closed frame so the enter transition always has a start state.
       void drawer.offsetWidth;
       drawer.classList.add("is-open");
@@ -1825,6 +1826,58 @@
     }
   }
 
+  function snapBrandEmblems() {
+    var emblems = document.querySelectorAll("svg.brand-emblem");
+    var dpr = window.devicePixelRatio || 1;
+    var isMobile = window.innerWidth <= 640;
+    for (var i = 0; i < emblems.length; i++) {
+      var svg = emblems[i];
+      var inDrawer = !!svg.closest(".mobile-drawer");
+      var basePx = inDrawer ? 29 : (isMobile ? 29 : 36);
+      var pitchDev = Math.max(3, Math.round((basePx * dpr) / 14.6));
+      var boxDev = Math.ceil(14.6 * pitchDev);
+      if (boxDev % 2 === 0) boxDev += 1;
+      var cssSize = (boxDev / dpr).toFixed(4) + "px";
+      svg.style.width = cssSize;
+      svg.style.height = cssSize;
+      var rect = svg.getBoundingClientRect();
+      if (rect.width < 8 || rect.height < 8) continue;
+      var leftDev = rect.left * dpr;
+      var topDev = rect.top * dpr;
+      var wDev = rect.width * dpr;
+      var hDev = rect.height * dpr;
+      var cxDev = Math.round(leftDev + wDev * 0.5 - 0.5) + 0.5;
+      var cyDev = Math.round(topDev + hDev * 0.5 - 0.5) + 0.5;
+      var minX = 9 - (cxDev - leftDev) / pitchDev;
+      var minY = 9 - (cyDev - topDev) / pitchDev;
+      var spanX = wDev / pitchDev;
+      var spanY = hDev / pitchDev;
+      svg.setAttribute(
+        "viewBox",
+        minX.toFixed(4) + " " + minY.toFixed(4) + " " + spanX.toFixed(4) + " " + spanY.toFixed(4)
+      );
+    }
+  }
+
+  function initCrispBrandEmblem() {
+    snapBrandEmblems();
+    window.addEventListener("resize", snapBrandEmblems, { passive: true });
+    if (window.matchMedia) {
+      var mq = null;
+      var bindDpr = function () {
+        if (mq && mq.removeEventListener) mq.removeEventListener("change", onDpr);
+        mq = window.matchMedia("(resolution: " + (window.devicePixelRatio || 1) + "dppx)");
+        if (mq && mq.addEventListener) mq.addEventListener("change", onDpr);
+      };
+      var onDpr = function () {
+        snapBrandEmblems();
+        bindDpr();
+      };
+      bindDpr();
+    }
+  }
+
+  initCrispBrandEmblem();
   initVolumetricBackdrop();
   initOrbSculpture();
   initWhatTriptych();
