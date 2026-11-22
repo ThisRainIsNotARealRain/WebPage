@@ -1833,28 +1833,23 @@
     for (var i = 0; i < emblems.length; i++) {
       var svg = emblems[i];
       var inDrawer = !!svg.closest(".mobile-drawer");
-      var basePx = inDrawer ? 29 : (isMobile ? 29 : 36);
-      var pitchDev = Math.max(3, Math.round((basePx * dpr) / 14.6));
-      var boxDev = Math.ceil(14.6 * pitchDev);
+      var basePx = inDrawer ? 24 : (isMobile ? 24 : 28);
+      var targetDev = Math.round(basePx * dpr);
+      var pitchDev = Math.max(2, Math.floor((targetDev + 1) / 14.3));
+      var boxDev = Math.max(targetDev, Math.ceil(14.3 * pitchDev));
       if (boxDev % 2 === 0) boxDev += 1;
       var cssSize = (boxDev / dpr).toFixed(4) + "px";
       svg.style.width = cssSize;
       svg.style.height = cssSize;
       var rect = svg.getBoundingClientRect();
-      if (rect.width < 8 || rect.height < 8) continue;
-      var leftDev = rect.left * dpr;
-      var topDev = rect.top * dpr;
-      var wDev = rect.width * dpr;
-      var hDev = rect.height * dpr;
-      var cxDev = Math.round(leftDev + wDev * 0.5 - 0.5) + 0.5;
-      var cyDev = Math.round(topDev + hDev * 0.5 - 0.5) + 0.5;
-      var minX = 9 - (cxDev - leftDev) / pitchDev;
-      var minY = 9 - (cyDev - topDev) / pitchDev;
-      var spanX = wDev / pitchDev;
-      var spanY = hDev / pitchDev;
+      var topDev = rect.height > 0 ? rect.top * dpr : 0;
+      var span = boxDev / pitchDev;
+      var cyLocal = Math.floor(topDev + boxDev * 0.5) + 0.5 - topDev;
+      var minX = 9 - span * 0.5;
+      var minY = 9 - cyLocal / pitchDev;
       svg.setAttribute(
         "viewBox",
-        minX.toFixed(4) + " " + minY.toFixed(4) + " " + spanX.toFixed(4) + " " + spanY.toFixed(4)
+        minX.toFixed(4) + " " + minY.toFixed(4) + " " + span.toFixed(4) + " " + span.toFixed(4)
       );
     }
   }

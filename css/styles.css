@@ -207,16 +207,16 @@ button,
 }
 
 .brand-emblem {
-  width: 35px;
-  height: 35px;
+  width: 28px;
+  height: 28px;
   display: block;
   flex-shrink: 0;
   color: var(--ink-ivory);
 }
 
 .brand-wordmark {
-  width: 105px;
-  height: 21px;
+  width: 100px;
+  height: 20px;
   display: block;
   flex-shrink: 0;
   color: var(--ink-ivory);
@@ -1524,13 +1524,13 @@ html[lang="en"] .cover-title {
   }
 
   .brand-emblem {
-    width: 29px;
-    height: 29px;
+    width: 24px;
+    height: 24px;
   }
 
   .brand-wordmark {
-    width: 92px;
-    height: 18.5px;
+    width: 90px;
+    height: 18px;
   }
 
   .chapter-dots {
