@@ -1062,7 +1062,7 @@ html[lang="en"] .cover-title {
 }
 
 [data-ring-card="1"] .plate-art::before {
-  background: radial-gradient(closest-side, rgba(154, 176, 217, 0.14), transparent 76%);
+  background: radial-gradient(closest-side, rgba(204, 166, 123, 0.15), transparent 76%);
 }
 
 [data-ring-card="2"] .plate-art::before {
@@ -1110,7 +1110,7 @@ html[lang="en"] .cover-title {
 }
 
 [data-ring-card="1"] .plate-kicker {
-  color: #9AB0D9;
+  color: #CCA67B;
 }
 
 [data-ring-card="2"] .plate-kicker {

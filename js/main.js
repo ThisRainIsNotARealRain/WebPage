@@ -889,8 +889,8 @@
     var dragVel = 0;
     var dragStartIdx = 0;
 
-    var stageGlowHex = ["#84B0CA", "#9AB0D9", "#E54D3E"];
-    var stageGlowRgb = ["132, 176, 202", "154, 176, 217", "229, 77, 62"];
+    var stageGlowHex = ["#84B0CA", "#CCA67B", "#E54D3E"];
+    var stageGlowRgb = ["132, 176, 202", "204, 166, 123", "229, 77, 62"];
 
     function syncTabs(idx) {
       var mod = ((idx % total) + total) % total;
