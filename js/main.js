@@ -1842,10 +1842,12 @@
       svg.style.width = cssSize;
       svg.style.height = cssSize;
       var rect = svg.getBoundingClientRect();
-      var topDev = rect.height > 0 ? rect.top * dpr : 0;
+      var leftDev = rect.width > 0 ? Math.round(rect.left) * dpr : 0;
+      var topDev = rect.height > 0 ? Math.round(rect.top) * dpr : 0;
       var span = boxDev / pitchDev;
+      var cxLocal = Math.floor(leftDev + boxDev * 0.5) + 0.5 - leftDev;
       var cyLocal = Math.floor(topDev + boxDev * 0.5) + 0.5 - topDev;
-      var minX = 9 - span * 0.5;
+      var minX = 9 - cxLocal / pitchDev;
       var minY = 9 - cyLocal / pitchDev;
       svg.setAttribute(
         "viewBox",
