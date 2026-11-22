@@ -211,7 +211,7 @@ button,
   height: 28px;
   display: block;
   flex-shrink: 0;
-  color: var(--ink-ivory);
+  color: #E1EAE7;
 }
 
 .brand-wordmark {
