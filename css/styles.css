@@ -207,11 +207,11 @@ button,
 }
 
 .brand-emblem {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   display: block;
   flex-shrink: 0;
-  color: var(--accent-mineral);
+  color: #E1EAE7;
 }
 
 .brand-wordmark {
@@ -1524,8 +1524,8 @@ html[lang="en"] .cover-title {
   }
 
   .brand-emblem {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
   }
 
   .brand-wordmark {
